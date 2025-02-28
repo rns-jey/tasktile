@@ -16,7 +16,8 @@ datasource db {
 model Profile {
   id String @id @default(uuid())
   userID String @unique
-  name String
+  firstName String
+  lastName String
   imageUrl String @db.Text
   email String @db.Text @unique
   
