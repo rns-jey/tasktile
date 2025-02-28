@@ -15,9 +15,11 @@ export default function Home() {
 
           <div className="flex gap-2">
             <Button variant="outline" size="sm" className="ml-4">
-              Log in
+              <Link href={"/sign-in"}>Log in</Link>
             </Button>
-            <Button size="sm">Sign up</Button>
+            <Button size="sm">
+              <Link href={"/sign-up"}>Sign up</Link>
+            </Button>
           </div>
         </div>
       </header>
