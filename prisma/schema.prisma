@@ -30,8 +30,8 @@ model Profile {
 model Task {
   id String @id @default(uuid())
   name String
-  complete Boolean @default(false)
-  dueDate DateTime
+  completed Boolean @default(false)
+  dueDate DateTime?
 
   userId String
   user Profile @relation(fields: [userId], references: [id])

@@ -14,12 +14,12 @@ export async function PATCH(req: Request, props: { params: tParams }) {
 
     if (!taskId) return new NextResponse("Task ID is required", { status: 404 });
 
-    const { complete } = await req.json();
+    const { completed } = await req.json();
 
     const newTask = await db.task.update({
       where: { id: taskId, userId: profile.id },
       data: {
-        complete,
+        completed,
       },
     });
 
