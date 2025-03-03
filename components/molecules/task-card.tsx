@@ -23,7 +23,9 @@ export default function TaskCard({ task }: TaskCardProps) {
     setIsVisible(false);
 
     try {
-      await axios.patch(`/api/task/${task.id}`, { complete: !task.complete });
+      await axios.patch(`/api/task/${task.id}`, { complete: !task.completed });
+
+      router.refresh();
     } catch (error) {
       console.error("Failed to update task", error);
       setIsVisible(false);
@@ -34,19 +36,20 @@ export default function TaskCard({ task }: TaskCardProps) {
     <AnimatePresence initial={false}>
       {isVisible ? (
         <motion.div
-          initial={{ opacity: 0, x: 100 }} // Slightly offset at the start
-          animate={{ opacity: 1, x: 0 }} // Move to its position
-          exit={{ opacity: 0, x: 100 }} // Slide out while fading
+          initial={{ x: -20, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          exit={{ x: 100, opacity: 0 }}
+          transition={{ duration: 0.3 }}
           className="w-full"
         >
           <Card className="w-full">
             <CardContent className="flex items-center space-x-2">
               <div className="flex items-center space-x-2">
-                <Checkbox id="terms" checked={task.complete} onCheckedChange={handleClick} />
+                <Checkbox id="terms" checked={task.completed} onCheckedChange={handleClick} />
                 <label
                   htmlFor="terms"
                   className={cn(
-                    task.complete && "line-through text-foreground/50",
+                    task.completed && "line-through text-foreground/50",
                     " text-sm s font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                   )}
                 >
