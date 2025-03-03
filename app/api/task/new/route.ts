@@ -10,7 +10,7 @@ export async function POST(req: Request) {
 
     const { name, dueDate } = await req.json();
 
-    const exam = await db.task.create({
+    const task = await db.task.create({
       data: {
         name,
         dueDate,
@@ -18,7 +18,7 @@ export async function POST(req: Request) {
       },
     });
 
-    return NextResponse.json(exam);
+    return NextResponse.json(task);
   } catch (error) {
     console.log(error);
     return new NextResponse("Internal Server Error", { status: 500 });
