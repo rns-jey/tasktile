@@ -11,7 +11,7 @@ export default async function TaskSection() {
 
   const tasks = await db.task.findMany({
     where: { userId: profile.id },
-    orderBy: { dueDate: "asc" },
+    orderBy: [{ createdAt: "desc" }],
   });
 
   return (
@@ -22,7 +22,7 @@ export default async function TaskSection() {
       <CardContent>
         <NewTaskForm />
       </CardContent>
-      <TaskList tasks={tasks} />
+      {tasks && <TaskList tasks={tasks} />}
     </Card>
   );
 }
