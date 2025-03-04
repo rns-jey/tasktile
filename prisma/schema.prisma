@@ -30,6 +30,7 @@ model Profile {
 model Task {
   id String @id @default(uuid())
   name String
+  description String @default("")
   completed Boolean @default(false)
   dueDate DateTime?
 
