@@ -6,7 +6,7 @@ import { Checkbox } from "../atoms/checkbox";
 import { Task } from "@prisma/client";
 import axios from "axios";
 import { Button } from "../atoms/button";
-import { Trash2 } from "lucide-react";
+import { Trash2, Undo2 } from "lucide-react";
 
 interface TaskCardProps {
   task: Task;
@@ -49,15 +49,30 @@ export default function TaskCard({ task, tasks, setTasks }: TaskCardProps) {
           {task.name}
         </label>
       </div>
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={() => deleteTask(task.id)}
-        disabled={isLoading}
-        className="h-8 w-8 text-muted-foreground hover:text-destructive"
-      >
-        <Trash2 className="h-4 w-4" />
-      </Button>
+
+      <div className="flex gap-1">
+        {task.completed && (
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => handleClick(task.id)}
+            disabled={isLoading}
+            className="h-8 w-8 text-muted-foreground hover:text-primary"
+          >
+            <Undo2 className="h-4 w-4" />
+          </Button>
+        )}
+
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => deleteTask(task.id)}
+          disabled={isLoading}
+          className="h-8 w-8 text-muted-foreground hover:text-destructive"
+        >
+          <Trash2 className="h-4 w-4" />
+        </Button>
+      </div>
     </>
   );
 }

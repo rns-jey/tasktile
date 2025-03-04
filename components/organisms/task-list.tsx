@@ -73,37 +73,7 @@ export default function TaskList({ data }: TaskListProps) {
                 transition={{ duration: 0.3 }}
                 className="flex items-center justify-between p-3 bg-muted rounded-md border"
               >
-                <div className="flex items-center gap-3">
-                  <Checkbox
-                    id={`task-${task.id}`}
-                    checked={task.completed}
-                    onCheckedChange={() => toggleTaskStatus(task.id)}
-                  />
-                  <label
-                    htmlFor={`task-${task.id}`}
-                    className="text-sm font-medium line-through text-muted-foreground cursor-pointer"
-                  >
-                    {task.name}
-                  </label>
-                </div>
-                <div className="flex gap-1">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => toggleTaskStatus(task.id)}
-                    className="h-8 w-8 text-muted-foreground hover:text-primary"
-                  >
-                    <Undo2 className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => deleteTask(task.id)}
-                    className="h-8 w-8 text-muted-foreground hover:text-destructive"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
+                <TaskCard task={task} tasks={tasks} setTasks={setTasks} />
               </motion.div>
             ))}
           </AnimatePresence>
