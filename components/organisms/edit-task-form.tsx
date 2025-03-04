@@ -12,7 +12,7 @@ import { Button } from "../atoms/button";
 import { cn } from "@/lib/utils";
 
 import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, X } from "lucide-react";
 import { Calendar } from "../atoms/calendar";
 import { Textarea } from "../atoms/textarea";
 import { Separator } from "../atoms/separator";
@@ -117,27 +117,32 @@ export default function EditTaskForm({ task, tasks, setTasks, setOpen }: EditTas
           render={({ field }) => (
             <FormItem className="flex flex-col">
               <FormLabel>Due date</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button
-                      variant={"outline"}
-                      className={cn("w-[240px] pl-3 text-left font-normal", !field.value && "text-muted-foreground")}
-                    >
-                      {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
-                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={field.value ?? undefined}
-                    onSelect={field.onChange}
-                    disabled={(date) => date < new Date(new Date().setDate(new Date().getDate() - 1))}
-                  />
-                </PopoverContent>
-              </Popover>
+              <div className="flex items-center space-x-1">
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant={"outline"}
+                        className={cn("w-[240px] pl-3 text-left font-normal", !field.value && "text-muted-foreground")}
+                      >
+                        {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
+                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={field.value ?? undefined}
+                      onSelect={field.onChange}
+                      disabled={(date) => date < new Date(new Date().setDate(new Date().getDate() - 1))}
+                    />
+                  </PopoverContent>
+                </Popover>
+                {field.value && (
+                  <X onClick={() => form.setValue(field.name, null)} className="h-5 w-5 text-red-500 cursor-pointer" />
+                )}
+              </div>
               <FormMessage />
             </FormItem>
           )}

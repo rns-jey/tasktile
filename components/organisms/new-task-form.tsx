@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Form, FormControl, FormField, FormItem, FormMessage } from "../atoms/form";
 import { Input } from "../atoms/input";
-import { CalendarIcon, Plus } from "lucide-react";
+import { CalendarIcon, Plus, X } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "../atoms/popover";
 import { Calendar } from "../atoms/calendar";
 import { Button } from "../atoms/button";
@@ -116,7 +116,12 @@ export default function NewTaskForm({ tasks, setTasks }: NewTaskFormProps) {
           </Button>
         </div>
 
-        {selectedDate && <Label>Selected date: {format(selectedDate, "PPP")}</Label>}
+        {selectedDate && (
+          <div className="flex space-x-1 items-center">
+            <Label>Selected date: {format(selectedDate, "PPP")}</Label>
+            <X onClick={() => form.setValue("dueDate", null)} className="h-5 w-5 text-red-500 cursor-pointer" />
+          </div>
+        )}
       </form>
     </Form>
   );
