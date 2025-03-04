@@ -23,6 +23,7 @@ interface EditTaskFormProps {
   task: Task;
   tasks: Task[];
   setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const formSchema = z.object({
@@ -38,7 +39,7 @@ const formSchema = z.object({
     }),
 });
 
-export default function EditTaskForm({ task, tasks, setTasks }: EditTaskFormProps) {
+export default function EditTaskForm({ task, tasks, setTasks, setOpen }: EditTaskFormProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -64,6 +65,8 @@ export default function EditTaskForm({ task, tasks, setTasks }: EditTaskFormProp
             : task
         )
       );
+
+      setOpen(false);
       toast("Task updated.");
       form.reset();
     } catch (error) {
@@ -135,6 +138,7 @@ export default function EditTaskForm({ task, tasks, setTasks }: EditTaskFormProp
                   />
                 </PopoverContent>
               </Popover>
+              <FormMessage />
             </FormItem>
           )}
         />

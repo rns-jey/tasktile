@@ -54,6 +54,7 @@ function formatDueDate(dueDate: Date) {
 
 export default function TaskCard({ task, tasks, setTasks }: TaskCardProps) {
   const [isLoading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
 
   async function deleteTask(id: string) {
     try {
@@ -94,7 +95,7 @@ export default function TaskCard({ task, tasks, setTasks }: TaskCardProps) {
           className="cursor-pointer"
         />
 
-        <Drawer>
+        <Drawer open={open} onOpenChange={setOpen}>
           <DrawerTrigger disabled={task.completed} className="w-full ">
             <div className="space-y-1 cursor-pointer">
               <Label
@@ -122,7 +123,7 @@ export default function TaskCard({ task, tasks, setTasks }: TaskCardProps) {
               <DrawerTitle>Edit task</DrawerTitle>
               <DrawerDescription>Modify your task details here. Click 'Save' to update your changes.</DrawerDescription>
             </DrawerHeader>
-            <EditTaskForm task={task} tasks={tasks} setTasks={setTasks} />
+            <EditTaskForm task={task} tasks={tasks} setTasks={setTasks} setOpen={setOpen} />
             <DrawerFooter className="pt-2">
               <DrawerClose asChild>
                 <Button variant="outline">Cancel</Button>
