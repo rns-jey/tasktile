@@ -4,7 +4,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../atoms/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../atoms/form";
 import { Task } from "@prisma/client";
 import { Input } from "../atoms/input";
 import { Popover, PopoverContent, PopoverTrigger } from "../atoms/popover";
@@ -16,6 +16,8 @@ import { CalendarIcon } from "lucide-react";
 import { Calendar } from "../atoms/calendar";
 import { Textarea } from "../atoms/textarea";
 import { Separator } from "../atoms/separator";
+import axios from "axios";
+import { toast } from "sonner";
 
 interface EditTaskFormProps {
   task: Task;
@@ -48,9 +50,30 @@ export default function EditTaskForm({ task, tasks, setTasks }: EditTaskFormProp
 
   const isLoading = form.formState.isSubmitting;
 
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      const id = task.id;
+
+      const response = await axios.patch(`/api/task/${task.id}`, values);
+      const updatedTask = response.data;
+
+      setTasks(
+        tasks.map((task) =>
+          task.id === id
+            ? { ...task, name: updatedTask.name, description: updatedTask.description, dueDate: updatedTask.dueDate }
+            : task
+        )
+      );
+      toast("Task updated.");
+      form.reset();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <Form {...form}>
-      <form className="px-4 flex flex-col space-y-4">
+      <form className="px-4 flex flex-col space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
           control={form.control}
           name="name"
@@ -108,7 +131,7 @@ export default function EditTaskForm({ task, tasks, setTasks }: EditTaskFormProp
                     mode="single"
                     selected={field.value ?? undefined}
                     onSelect={field.onChange}
-                    disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
+                    disabled={(date) => date < new Date(new Date().setDate(new Date().getDate() - 1))}
                   />
                 </PopoverContent>
               </Popover>
