@@ -8,6 +8,7 @@ import NewTaskForm from "./new-task-form";
 import { ScrollArea } from "../atoms/scroll-area";
 import TaskCard from "../molecules/task-card";
 import { cn } from "@/lib/utils";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../atoms/accordion";
 
 interface TaskListProps {
   data: Task[];
@@ -27,7 +28,7 @@ export default function TaskList({ data }: TaskListProps) {
       <NewTaskForm tasks={tasks} setTasks={setTasks} />
 
       {/* Active tasks */}
-      <div className="mb-8">
+      <div>
         <h2 className="text-lg font-semibold mb-3 text-primary">Active Tasks</h2>
         {activeTasks.length > 0 && (
           <ScrollArea className={cn(activeTasks.length >= 5 ? "h-[300px]" : "h-fit")}>
@@ -57,28 +58,36 @@ export default function TaskList({ data }: TaskListProps) {
       </div>
 
       {/* Completed tasks */}
-      <div>
-        <h2 className="text-lg font-semibold mb-3 text-primary">Completed Tasks</h2>
-        <div className="space-y-1">
-          <AnimatePresence>
-            {completedTasks.map((task) => (
-              <motion.div
-                key={task.id}
-                initial={{ x: -100, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                exit={{ x: 100, opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                className="flex items-center justify-between p-3 bg-muted rounded-md border"
-              >
-                <TaskCard task={task} tasks={tasks} setTasks={setTasks} />
-              </motion.div>
-            ))}
-          </AnimatePresence>
-          {completedTasks.length === 0 && (
-            <p className="text-sm text-muted-foreground text-center py-3">No completed tasks yet.</p>
-          )}
-        </div>
-      </div>
+      <Accordion type="single" collapsible>
+        <AccordionItem value="completed-tasks">
+          <AccordionTrigger>
+            <h2 className="text-lg font-semibold text-primary">Completed Tasks</h2>
+          </AccordionTrigger>
+          <AccordionContent>
+            <ScrollArea className={cn(completedTasks.length >= 5 ? "h-[300px]" : "h-fit")}>
+              <AnimatePresence>
+                <div className="space-y-1">
+                  {completedTasks.map((task) => (
+                    <motion.div
+                      key={task.id}
+                      initial={{ x: -100, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      exit={{ x: 100, opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="flex items-center justify-between p-3 bg-muted rounded-md border"
+                    >
+                      <TaskCard task={task} tasks={tasks} setTasks={setTasks} />
+                    </motion.div>
+                  ))}
+                </div>
+              </AnimatePresence>
+            </ScrollArea>
+            {completedTasks.length === 0 && (
+              <p className="text-sm text-muted-foreground text-center py-3">No completed tasks yet.</p>
+            )}
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
     </div>
   );
 }
