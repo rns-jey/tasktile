@@ -3,11 +3,7 @@
 import { useState } from "react";
 import { Task } from "@prisma/client";
 
-import { Button } from "../atoms/button";
-import { Trash2, Undo2 } from "lucide-react";
-
 import { AnimatePresence, motion } from "motion/react";
-import { Checkbox } from "../atoms/checkbox";
 import NewTaskForm from "./new-task-form";
 import { ScrollArea } from "../atoms/scroll-area";
 import TaskCard from "../molecules/task-card";
