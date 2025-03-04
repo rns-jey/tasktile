@@ -6,7 +6,7 @@ import { Checkbox } from "../atoms/checkbox";
 import { Task } from "@prisma/client";
 import axios from "axios";
 import { Button } from "../atoms/button";
-import { Trash2, Undo2 } from "lucide-react";
+import { Clock, Trash2, Undo2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   AlertDialog,
@@ -20,11 +20,24 @@ import {
   AlertDialogTrigger,
 } from "../atoms/alert-dialog";
 import { toast } from "sonner";
+import { Label } from "../atoms/label";
+import { differenceInCalendarDays } from "date-fns";
 
 interface TaskCardProps {
   task: Task;
   tasks: Task[];
   setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
+}
+
+function formatDueDate(dueDate: Date) {
+  const difference = differenceInCalendarDays(dueDate, new Date());
+  const formatter = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
+  const label = {
+    label: "Due " + formatter.format(difference, "day"),
+    color: difference === 0 ? "text-orange-400" : difference > 0 ? "text-blue-500" : difference < 0 && "text-red-500",
+  };
+
+  return label;
 }
 
 export default function TaskCard({ task, tasks, setTasks }: TaskCardProps) {
@@ -68,12 +81,26 @@ export default function TaskCard({ task, tasks, setTasks }: TaskCardProps) {
           disabled={isLoading}
           className="cursor-pointer"
         />
-        <label
-          htmlFor={`task-${task.id}`}
-          className={cn(task.completed && "line-through text-foreground/50", "text-sm font-medium cursor-pointer")}
-        >
-          {task.name}
-        </label>
+
+        <div className="space-y-1">
+          <Label
+            htmlFor={`task-${task.id}`}
+            className={cn(task.completed && "line-through text-foreground/50", "text-sm font-semibold cursor-pointer")}
+          >
+            {task.name}
+          </Label>
+          <p className={cn(task.completed && "line-through text-foreground/50", "text-xs")}>Task Description</p>
+          <div
+            className={cn(
+              task.dueDate && formatDueDate(task.dueDate).color,
+              task.completed && "line-through text-foreground/50",
+              "flex gap-1 items-center text-xs"
+            )}
+          >
+            <Clock className="h-3 w-3" />
+            <span>{task.dueDate ? formatDueDate(task.dueDate).label : "No due date"}</span>
+          </div>
+        </div>
       </div>
 
       <div className="flex gap-1">
