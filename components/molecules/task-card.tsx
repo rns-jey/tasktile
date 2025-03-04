@@ -1,65 +1,63 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 
-import { AnimatePresence, motion } from "motion/react";
-import { Card, CardContent } from "../atoms/card";
 import { Checkbox } from "../atoms/checkbox";
-import { useRouter } from "next/navigation";
 import { Task } from "@prisma/client";
 import axios from "axios";
-import { cn } from "@/lib/utils";
+import { Button } from "../atoms/button";
+import { Trash2 } from "lucide-react";
 
 interface TaskCardProps {
   task: Task;
+  tasks: Task[];
+  setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
 }
 
-export default function TaskCard({ task }: TaskCardProps) {
-  const [isVisible, setIsVisible] = useState(true);
+export default function TaskCard({ task, tasks, setTasks }: TaskCardProps) {
+  const [isLoading, setLoading] = useState(false);
 
-  const router = useRouter();
+  const deleteTask = (id: string) => {
+    setTasks(tasks.filter((task) => task.id !== id));
+  };
 
-  async function handleClick() {
-    setIsVisible(false);
-
+  async function handleClick(id: string) {
     try {
-      await axios.patch(`/api/task/${task.id}`, { complete: !task.completed });
+      setLoading(true);
+      await axios.patch(`/api/task/${task.id}`, { completed: !task.completed });
 
-      router.refresh();
+      setTasks(tasks.map((task) => (task.id === id ? { ...task, completed: !task.completed } : task)));
+
+      setLoading(false);
     } catch (error) {
       console.error("Failed to update task", error);
-      setIsVisible(false);
+      setLoading(false);
     }
   }
 
   return (
-    <AnimatePresence initial={false}>
-      {isVisible ? (
-        <motion.div
-          initial={{ x: -20, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          exit={{ x: 100, opacity: 0 }}
-          transition={{ duration: 0.3 }}
-          className="w-full"
-        >
-          <Card className="w-full">
-            <CardContent className="flex items-center space-x-2">
-              <div className="flex items-center space-x-2">
-                <Checkbox id="terms" checked={task.completed} onCheckedChange={handleClick} />
-                <label
-                  htmlFor="terms"
-                  className={cn(
-                    task.completed && "line-through text-foreground/50",
-                    " text-sm s font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  )}
-                >
-                  {task.name}
-                </label>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
-      ) : null}
-    </AnimatePresence>
+    <>
+      <div className="flex items-center gap-3">
+        <Checkbox
+          id={`task-${task.id}`}
+          checked={task.completed}
+          onCheckedChange={() => handleClick(task.id)}
+          disabled={isLoading}
+          className="cursor-pointer"
+        />
+        <label htmlFor={`task-${task.id}`} className="text-sm font-medium cursor-pointer">
+          {task.name}
+        </label>
+      </div>
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={() => deleteTask(task.id)}
+        disabled={isLoading}
+        className="h-8 w-8 text-muted-foreground hover:text-destructive"
+      >
+        <Trash2 className="h-4 w-4" />
+      </Button>
+    </>
   );
 }
