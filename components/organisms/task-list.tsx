@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from "motion/react";
 import NewTaskForm from "./new-task-form";
 import { ScrollArea } from "../atoms/scroll-area";
 import TaskCard from "../molecules/task-card";
+import { cn } from "@/lib/utils";
 
 interface TaskListProps {
   data: Task[];
@@ -29,7 +30,7 @@ export default function TaskList({ data }: TaskListProps) {
       <div className="mb-8">
         <h2 className="text-lg font-semibold mb-3 text-primary">Active Tasks</h2>
         {activeTasks.length > 0 && (
-          <ScrollArea className="h-[280px] w-full">
+          <ScrollArea className={cn(activeTasks.length >= 5 ? "h-[300px]" : "h-fit")}>
             <AnimatePresence>
               <div className="space-y-1">
                 {activeTasks.map((task) => (
