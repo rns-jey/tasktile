@@ -7,6 +7,7 @@ import { Task } from "@prisma/client";
 import axios from "axios";
 import { Button } from "../atoms/button";
 import { Trash2, Undo2 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface TaskCardProps {
   task: Task;
@@ -55,7 +56,10 @@ export default function TaskCard({ task, tasks, setTasks }: TaskCardProps) {
           disabled={isLoading}
           className="cursor-pointer"
         />
-        <label htmlFor={`task-${task.id}`} className="text-sm font-medium cursor-pointer">
+        <label
+          htmlFor={`task-${task.id}`}
+          className={cn(task.completed && "line-through text-foreground/50", "text-sm font-medium cursor-pointer")}
+        >
           {task.name}
         </label>
       </div>
