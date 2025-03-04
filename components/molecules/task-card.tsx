@@ -17,9 +17,19 @@ interface TaskCardProps {
 export default function TaskCard({ task, tasks, setTasks }: TaskCardProps) {
   const [isLoading, setLoading] = useState(false);
 
-  const deleteTask = (id: string) => {
-    setTasks(tasks.filter((task) => task.id !== id));
-  };
+  async function deleteTask(id: string) {
+    try {
+      setLoading(true);
+      await axios.delete(`/api/task/${task.id}`);
+
+      setTasks(tasks.filter((task) => task.id !== id));
+
+      setLoading(false);
+    } catch (error) {
+      console.error("Failed to delete task", error);
+      setLoading(false);
+    }
+  }
 
   async function handleClick(id: string) {
     try {
