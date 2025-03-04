@@ -4,7 +4,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../atoms/form";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "../atoms/form";
 import { Input } from "../atoms/input";
 import { CalendarIcon, Plus } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "../atoms/popover";

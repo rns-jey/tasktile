@@ -19,6 +19,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "../atoms/alert-dialog";
+import { toast } from "sonner";
 
 interface TaskCardProps {
   task: Task;
@@ -35,8 +36,8 @@ export default function TaskCard({ task, tasks, setTasks }: TaskCardProps) {
       await axios.delete(`/api/task/${task.id}`);
 
       setTasks(tasks.filter((task) => task.id !== id));
-
       setLoading(false);
+      toast("Task deleted.");
     } catch (error) {
       console.error("Failed to delete task", error);
       setLoading(false);
@@ -101,10 +102,9 @@ export default function TaskCard({ task, tasks, setTasks }: TaskCardProps) {
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogTitle>Are you sure?</AlertDialogTitle>
               <AlertDialogDescription>
-                This action cannot be undone. This will permanently delete your account and remove your data from our
-                servers.
+                This action cannot be undone. This will permanently delete the task and remove it from your task list.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
