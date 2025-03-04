@@ -22,6 +22,18 @@ import {
 import { toast } from "sonner";
 import { Label } from "../atoms/label";
 import { differenceInCalendarDays } from "date-fns";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "../atoms/drawer";
+import NewTaskForm from "../organisms/new-task-form";
+import EditTaskForm from "../organisms/edit-task-form";
 
 interface TaskCardProps {
   task: Task;
@@ -60,7 +72,7 @@ export default function TaskCard({ task, tasks, setTasks }: TaskCardProps) {
   async function handleClick(id: string) {
     try {
       setLoading(true);
-      await axios.patch(`/api/task/${task.id}`, { completed: !task.completed });
+      await axios.patch(`/api/task/${task.id}/toggle`, { completed: !task.completed });
 
       setTasks(tasks.map((task) => (task.id === id ? { ...task, completed: !task.completed } : task)));
 
@@ -82,25 +94,42 @@ export default function TaskCard({ task, tasks, setTasks }: TaskCardProps) {
           className="cursor-pointer"
         />
 
-        <div className="space-y-1">
-          <Label
-            htmlFor={`task-${task.id}`}
-            className={cn(task.completed && "line-through text-foreground/50", "text-sm font-semibold cursor-pointer")}
-          >
-            {task.name}
-          </Label>
-          <p className={cn(task.completed && "line-through text-foreground/50", "text-xs")}>Task Description</p>
-          <div
-            className={cn(
-              task.dueDate && formatDueDate(task.dueDate).color,
-              task.completed && "line-through text-foreground/50",
-              "flex gap-1 items-center text-xs"
-            )}
-          >
-            <Clock className="h-3 w-3" />
-            <span>{task.dueDate ? formatDueDate(task.dueDate).label : "No due date"}</span>
-          </div>
-        </div>
+        <Drawer>
+          <DrawerTrigger disabled={task.completed} className="w-full ">
+            <div className="space-y-1 cursor-pointer">
+              <Label
+                className={cn(task.completed && "line-through text-foreground/50", "text-sm font-semibold text-left")}
+              >
+                {task.name}
+              </Label>
+              <p className={cn(task.completed && "line-through text-foreground/50", "text-xs text-left")}>
+                {task.description}
+              </p>
+              <div
+                className={cn(
+                  task.dueDate && formatDueDate(task.dueDate).color,
+                  task.completed && "line-through text-foreground/50",
+                  "flex gap-1 items-center text-xs"
+                )}
+              >
+                <Clock className="h-3 w-3" />
+                <span>{task.dueDate ? formatDueDate(task.dueDate).label : "No due date"}</span>
+              </div>
+            </div>
+          </DrawerTrigger>
+          <DrawerContent>
+            <DrawerHeader className="text-left">
+              <DrawerTitle>Edit task</DrawerTitle>
+              <DrawerDescription>Modify your task details here. Click 'Save' to update your changes.</DrawerDescription>
+            </DrawerHeader>
+            <EditTaskForm task={task} tasks={tasks} setTasks={setTasks} />
+            <DrawerFooter className="pt-2">
+              <DrawerClose asChild>
+                <Button variant="outline">Cancel</Button>
+              </DrawerClose>
+            </DrawerFooter>
+          </DrawerContent>
+        </Drawer>
       </div>
 
       <div className="flex gap-1">
