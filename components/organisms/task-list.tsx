@@ -29,7 +29,7 @@ export default function TaskList({ data }: TaskListProps) {
       <div className="mb-8">
         <h2 className="text-lg font-semibold mb-3 text-primary">Active Tasks</h2>
         {activeTasks.length > 0 && (
-          <ScrollArea className="h-[300px] w-full">
+          <ScrollArea className="h-[280px] w-full">
             <AnimatePresence>
               <div className="space-y-1">
                 {activeTasks.map((task) => (
