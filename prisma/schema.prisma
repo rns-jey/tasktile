@@ -47,6 +47,7 @@ model Task {
 model Category {
   id String @id @default(uuid())
   name String
+  color String
   tasks Task[]
 
   createdAt DateTime @default(now())
