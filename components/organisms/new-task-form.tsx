@@ -20,14 +20,7 @@ import axios from "axios";
 import { Task } from "@prisma/client";
 
 import { Separator } from "../atoms/separator";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../atoms/dropdown-menu";
+
 import NewCategoryForm from "../molecules/new-category-form";
 
 const formSchema = z.object({
