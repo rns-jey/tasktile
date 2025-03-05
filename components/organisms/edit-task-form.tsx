@@ -45,7 +45,7 @@ export default function EditTaskForm({ task, tasks, setTasks, setOpen }: EditTas
     defaultValues: {
       name: task.name,
       description: task.description,
-      dueDate: task.dueDate,
+      dueDate: task.dueDate && new Date(task.dueDate),
     },
   });
 
@@ -139,6 +139,7 @@ export default function EditTaskForm({ task, tasks, setTasks, setOpen }: EditTas
                     />
                   </PopoverContent>
                 </Popover>
+
                 {field.value && (
                   <X onClick={() => form.setValue(field.name, null)} className="h-5 w-5 text-red-500 cursor-pointer" />
                 )}
