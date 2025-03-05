@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Form, FormControl, FormField, FormItem, FormMessage } from "../atoms/form";
 import { Input } from "../atoms/input";
-import { CalendarIcon, Plus, Text, X } from "lucide-react";
+import { CalendarIcon, Plus, Tag, Text, X } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "../atoms/popover";
 import { Calendar } from "../atoms/calendar";
 import { Button } from "../atoms/button";
@@ -18,17 +18,29 @@ import { format } from "date-fns";
 import axios from "axios";
 
 import { Task } from "@prisma/client";
-import { Label } from "../atoms/label";
+
 import { Separator } from "../atoms/separator";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../atoms/dropdown-menu";
+import NewCategoryForm from "../molecules/new-category-form";
 
 const formSchema = z.object({
   name: z.string().min(3),
+  description: z.string(),
+  categoryId: z.string().nullish(),
   dueDate: z.union([
     z.date(),
     z.null(),
     z.undefined(), // Allow null values
   ]),
 });
+
 interface NewTaskFormProps {
   tasks: Task[];
   setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
@@ -39,11 +51,12 @@ export default function NewTaskForm({ tasks, setTasks }: NewTaskFormProps) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
+      description: "",
+      categoryId: null,
       dueDate: null,
     },
   });
 
-  const selectedDate = form.watch("dueDate");
   const isLoading = form.formState.isSubmitting;
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -95,6 +108,41 @@ export default function NewTaskForm({ tasks, setTasks }: NewTaskFormProps) {
 
           <FormField
             control={form.control}
+            name="categoryId"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button variant={"outline"} size={"xs"} disabled={isLoading} className="flex items-center">
+                        <Tag />
+                        <span className="text-xs">Add category</span>
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-2 space-y-2" align="start">
+                    <div className="flex items-center gap-1">
+                      <div className="rounded-full bg-red-500 h-3 w-3" />
+                      <span className="text-sm">category</span>
+                    </div>
+
+                    <Separator />
+
+                    <NewCategoryForm />
+
+                    <div className="flex items-center gap-1">
+                      <Plus className="h-3 w-3" />
+                      <span className="text-sm">New category</span>
+                    </div>
+                  </PopoverContent>
+                </Popover>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
             name="dueDate"
             render={({ field }) => (
               <FormItem className="flex flex-col">
@@ -102,7 +150,7 @@ export default function NewTaskForm({ tasks, setTasks }: NewTaskFormProps) {
                   <PopoverTrigger asChild>
                     <FormControl>
                       <Button variant={"outline"} size={"xs"} disabled={isLoading} className="flex items-center">
-                        <CalendarIcon className="h-4 w-4 opacity-50" />
+                        <CalendarIcon />
                         <span className="text-xs">{field.value ? format(field.value, "LLL dd") : "Pick a date"}</span>
                       </Button>
                     </FormControl>

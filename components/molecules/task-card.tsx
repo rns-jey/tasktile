@@ -85,8 +85,8 @@ export default function TaskCard({ task, tasks, setTasks }: TaskCardProps) {
   }
 
   return (
-    <>
-      <div className="flex items-center gap-3">
+    <div className="flex items-center justify-between p-3">
+      <div className="flex items-center gap-3 ">
         <Checkbox
           id={`task-${task.id}`}
           checked={task.completed}
@@ -171,6 +171,6 @@ export default function TaskCard({ task, tasks, setTasks }: TaskCardProps) {
           </AlertDialogContent>
         </AlertDialog>
       </div>
-    </>
+    </div>
   );
 }

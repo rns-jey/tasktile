@@ -41,8 +41,9 @@ export default function TaskList({ data }: TaskListProps) {
                     animate={{ x: 0, opacity: 1 }}
                     exit={{ x: 100, opacity: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="flex items-center justify-between p-3 bg-card rounded-md border"
+                    className="bg-card rounded-md border overflow-hidden relative"
                   >
+                    <div className="absolute h-[100px] bg-red-500 w-2" />
                     <TaskCard task={task} tasks={tasks} setTasks={setTasks} />
                   </motion.div>
                 ))}
