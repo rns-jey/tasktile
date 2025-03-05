@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Form, FormControl, FormField, FormItem, FormMessage } from "../atoms/form";
 import { Input } from "../atoms/input";
-import { CalendarIcon, Plus, X } from "lucide-react";
+import { CalendarIcon, Plus, Text, X } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "../atoms/popover";
 import { Calendar } from "../atoms/calendar";
 import { Button } from "../atoms/button";
@@ -19,17 +19,15 @@ import axios from "axios";
 
 import { Task } from "@prisma/client";
 import { Label } from "../atoms/label";
+import { Separator } from "../atoms/separator";
 
 const formSchema = z.object({
   name: z.string().min(3),
-  dueDate: z
-    .union([
-      z.date(),
-      z.null(), // Allow null values
-    ])
-    .refine((date) => date === null || date >= new Date(new Date().setDate(new Date().getDate() - 1)), {
-      message: "Due date cannot be in the past",
-    }),
+  dueDate: z.union([
+    z.date(),
+    z.null(),
+    z.undefined(), // Allow null values
+  ]),
 });
 interface NewTaskFormProps {
   tasks: Task[];
@@ -84,6 +82,17 @@ export default function NewTaskForm({ tasks, setTasks }: NewTaskFormProps) {
             )}
           />
 
+          <Button type="submit" size="icon" disabled={isLoading}>
+            <Plus className="h-4 w-4" />
+          </Button>
+        </div>
+
+        <div className="flex gap-2">
+          <Button type="button" variant={"outline"} size={"xs"}>
+            <Text />
+            <span className="text-xs">Add description</span>
+          </Button>
+
           <FormField
             control={form.control}
             name="dueDate"
@@ -92,8 +101,9 @@ export default function NewTaskForm({ tasks, setTasks }: NewTaskFormProps) {
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>
-                      <Button variant={"outline"} disabled={isLoading}>
+                      <Button variant={"outline"} size={"xs"} disabled={isLoading} className="flex items-center">
                         <CalendarIcon className="h-4 w-4 opacity-50" />
+                        <span className="text-xs">{field.value ? format(field.value, "LLL dd") : "Pick a date"}</span>
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
@@ -103,6 +113,45 @@ export default function NewTaskForm({ tasks, setTasks }: NewTaskFormProps) {
                       selected={field.value ?? undefined}
                       onSelect={field.onChange}
                       disabled={(date) => date < new Date(new Date().setDate(new Date().getDate() - 1))}
+                      footer={
+                        <>
+                          <Separator className="my-2" />
+
+                          <div className="flex justify-between">
+                            <Button
+                              type="button"
+                              variant={"outline"}
+                              size={"xs"}
+                              className="p-1"
+                              onClick={() => form.setValue("dueDate", null)}
+                            >
+                              <span className="text-xs">No due date</span>
+                            </Button>
+
+                            <Button
+                              type="button"
+                              variant={"outline"}
+                              size={"xs"}
+                              className="p-1"
+                              onClick={() => form.setValue("dueDate", new Date())}
+                            >
+                              <span className="text-xs">Today</span>
+                            </Button>
+
+                            <Button
+                              type="button"
+                              variant={"outline"}
+                              size={"xs"}
+                              className="p-1"
+                              onClick={() =>
+                                form.setValue("dueDate", new Date(new Date().setDate(new Date().getDate() + 1)))
+                              }
+                            >
+                              <span className="text-xs">Tomorrow</span>
+                            </Button>
+                          </div>
+                        </>
+                      }
                     />
                   </PopoverContent>
                 </Popover>
@@ -110,18 +159,7 @@ export default function NewTaskForm({ tasks, setTasks }: NewTaskFormProps) {
               </FormItem>
             )}
           />
-
-          <Button type="submit" size="icon" disabled={isLoading}>
-            <Plus className="h-4 w-4" />
-          </Button>
         </div>
-
-        {selectedDate && (
-          <div className="flex space-x-1 items-center">
-            <Label>Selected date: {format(selectedDate, "PPP")}</Label>
-            <X onClick={() => form.setValue("dueDate", null)} className="h-5 w-5 text-red-500 cursor-pointer" />
-          </div>
-        )}
       </form>
     </Form>
   );
