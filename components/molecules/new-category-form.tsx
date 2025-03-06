@@ -4,6 +4,8 @@ import { Input } from "../atoms/input";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { Button } from "../atoms/button";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 const colors = [
   "bg-gray-500",
@@ -21,16 +23,19 @@ export default function NewCategoryForm() {
   const [name, setName] = useState("");
   const [selectedColor, setColor] = useState("bg-gray-500");
 
+  const router = useRouter();
+
   async function handleAddCategory() {
-    // try {
-    //   const response = await axios.post("api/task/new", values);
-    //   const newTask = response.data;
-    //   setTasks([newTask, ...tasks]);
-    //   toast("Task created.");
-    //   form.reset();
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    try {
+      await axios.post("api/category/new", { name, color: selectedColor });
+
+      setName("");
+      setColor("bg-gray-500");
+
+      router.refresh();
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
@@ -56,7 +61,7 @@ export default function NewCategoryForm() {
         ))}
       </div>
 
-      <Button variant={"outline"} type="submit">
+      <Button variant={"outline"} onClick={() => handleAddCategory()}>
         Add category
       </Button>
     </div>
