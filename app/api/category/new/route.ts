@@ -10,7 +10,7 @@ export async function POST(req: Request) {
 
     const { name, color } = await req.json();
 
-    const task = await db.category.create({
+    const newCategory = await db.category.create({
       data: {
         name,
         color,
@@ -18,9 +18,12 @@ export async function POST(req: Request) {
       },
     });
 
-    return NextResponse.json(task);
+    return NextResponse.json(newCategory);
   } catch (error) {
-    console.log(error);
-    return new NextResponse("Internal Server Error", { status: 500 });
+    if (error instanceof Error && "code" in error && error.code === "P2002") {
+      return new NextResponse("Category name already exists", { status: 409 });
+    }
+
+    return new NextResponse("Internal Server Errorsss", { status: 500 });
   }
 }
