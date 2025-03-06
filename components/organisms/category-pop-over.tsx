@@ -30,7 +30,12 @@ export default function CategoryPopOver({ categories }: CategoryPopOverProps) {
         <AnimatePresence>
           <div className="flex flex-col">
             {categoryList.map((category) => (
-              <CategoryItem key={`category_${category.id}`} category={category} />
+              <CategoryItem
+                key={`category_${category.id}`}
+                category={category}
+                categories={categoryList}
+                setCategories={setCategories}
+              />
             ))}
           </div>
         </AnimatePresence>
