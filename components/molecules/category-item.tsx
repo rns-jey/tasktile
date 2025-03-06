@@ -12,9 +12,10 @@ interface CategoryItemProps {
   category: Category;
   categories: Category[];
   setCategories: React.Dispatch<React.SetStateAction<Category[]>>;
+  setSelectedCategory: React.Dispatch<React.SetStateAction<Category | null>>;
 }
 
-export default function CategoryItem({ category, categories, setCategories }: CategoryItemProps) {
+export default function CategoryItem({ category, categories, setCategories, setSelectedCategory }: CategoryItemProps) {
   const [isLoading, setLoading] = useState(false);
 
   async function deleteCategory(id: string) {
@@ -25,6 +26,7 @@ export default function CategoryItem({ category, categories, setCategories }: Ca
       setCategories(categories.filter((category) => category.id !== id));
 
       setLoading(false);
+      setSelectedCategory(null);
     } catch (error) {
       console.error("Failed to delete task", error);
       setLoading(false);
@@ -38,11 +40,12 @@ export default function CategoryItem({ category, categories, setCategories }: Ca
       exit={{ x: 100, opacity: 0 }}
       transition={{ duration: 0.3 }}
       className="flex justify-between p-1 rounded cursor-pointer hover:bg-accent"
+      onClick={() => setSelectedCategory(category)}
     >
-      <Button variant={"ghost"} size={"xs"} className="p-0 flex items-center gap-1" disabled={isLoading}>
-        <div className={`rounded-full ${category.color} h-3 w-3`} />
+      <div className="p-0 flex items-center gap-1">
+        <div className={`rounded-full bg-${category.color} h-3 w-3`} />
         <span className="text-sm">{category.name}</span>
-      </Button>
+      </div>
 
       <Button
         variant={"ghost"}

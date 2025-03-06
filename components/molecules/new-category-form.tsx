@@ -10,17 +10,7 @@ import { Category } from "@prisma/client";
 import { toast } from "sonner";
 import { X } from "lucide-react";
 
-const colors = [
-  "bg-gray-500",
-  "bg-red-500",
-  "bg-orange-500",
-  "bg-yellow-500",
-  "bg-green-500",
-  "bg-blue-500",
-  "bg-indigo-500",
-  "bg-purple-500",
-  "bg-pink-500",
-];
+const colors = ["red-500", "orange-500", "yellow-500", "green-500", "blue-500", "indigo-500", "purple-500", "pink-500"];
 
 interface NewCategoryFormProps {
   categoryList: Category[];
@@ -88,7 +78,7 @@ export default function NewCategoryForm({ categoryList, setCategories, setIsAddi
             className={cn(selectedColor !== color && "border-transparent", "border-2 rounded-full p-1")}
             onClick={() => !isSubmitting && setColor(color)}
           >
-            <div className={cn(color, "rounded-full h-5 w-5 cursor-pointer")} />
+            <div className={`bg-${color} rounded-full h-5 w-5 cursor-pointer`} />
           </div>
         ))}
       </div>
