@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Form, FormControl, FormField, FormItem, FormMessage } from "../atoms/form";
 import { Input } from "../atoms/input";
-import { CalendarIcon, Plus, Text } from "lucide-react";
+import { CalendarIcon, Plus, Tag, Text } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "../atoms/popover";
 import { Calendar } from "../atoms/calendar";
 import { Button } from "../atoms/button";
@@ -22,7 +22,7 @@ import { Category, Task } from "@prisma/client";
 import { Separator } from "../atoms/separator";
 
 import CategoryPopOver from "./category-pop-over";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const formSchema = z.object({
   name: z.string().min(3),
@@ -42,6 +42,8 @@ interface NewTaskFormProps {
 }
 
 export default function NewTaskForm({ tasks, categories, setTasks }: NewTaskFormProps) {
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -52,6 +54,10 @@ export default function NewTaskForm({ tasks, categories, setTasks }: NewTaskForm
     },
   });
 
+  useEffect(() => {
+    form.setValue("categoryId", selectedCategory?.id);
+  }, [selectedCategory]);
+
   const isLoading = form.formState.isSubmitting;
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -59,9 +65,12 @@ export default function NewTaskForm({ tasks, categories, setTasks }: NewTaskForm
       const response = await axios.post("api/task/new", values);
       const newTask = response.data;
 
+      console.log(values);
+
       setTasks([newTask, ...tasks]);
       toast("Task created.");
       form.reset();
+      setSelectedCategory(null);
     } catch (error) {
       console.log(error);
     }
@@ -101,7 +110,19 @@ export default function NewTaskForm({ tasks, categories, setTasks }: NewTaskForm
             <span className="text-xs">Add description</span>
           </Button>
 
-          <CategoryPopOver categories={categories} />
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant={"outline"} size={"xs"} className="flex items-center" disabled={isLoading}>
+                <Tag />
+                <span className="text-xs">{selectedCategory ? selectedCategory.name : "Add category"}</span>
+              </Button>
+            </PopoverTrigger>
+            <CategoryPopOver
+              categories={categories}
+              selectedCategory={selectedCategory}
+              setSelectedCategory={setSelectedCategory}
+            />
+          </Popover>
 
           <FormField
             control={form.control}

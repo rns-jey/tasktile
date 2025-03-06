@@ -37,13 +37,14 @@ export async function PATCH(req: Request, props: { params: tParams }) {
 
     if (!taskId) return new NextResponse("Task ID is required", { status: 404 });
 
-    const { name, description, dueDate } = await req.json();
+    const { name, description, categoryId, dueDate } = await req.json();
 
     const newTask = await db.task.update({
       where: { id: taskId, userId: profile.id },
       data: {
         name,
         description,
+        categoryId,
         dueDate,
       },
     });
