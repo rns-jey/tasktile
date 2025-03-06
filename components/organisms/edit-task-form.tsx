@@ -46,7 +46,7 @@ const formSchema = z.object({
 });
 
 export default function EditTaskForm({ task, tasks, setTasks, categories, setCategories, setOpen }: EditTaskFormProps) {
-  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(task.category);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
