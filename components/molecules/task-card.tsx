@@ -37,7 +37,7 @@ import EditTaskForm from "../organisms/edit-task-form";
 import { TaskWithCategory } from "@/types";
 
 interface TaskCardProps {
-  task: Task;
+  task: TaskWithCategory;
   tasks: TaskWithCategory[];
   setTasks: React.Dispatch<React.SetStateAction<TaskWithCategory[]>>;
 }
@@ -86,92 +86,98 @@ export default function TaskCard({ task, tasks, setTasks }: TaskCardProps) {
   }
 
   return (
-    <div className="flex items-center justify-between p-3">
-      <div className="flex items-center gap-3 ">
-        <Checkbox
-          id={`task-${task.id}`}
-          checked={task.completed}
-          onCheckedChange={() => handleClick(task.id)}
-          disabled={isLoading}
-          className="cursor-pointer"
-        />
+    <>
+      <div className={`bg-${task.category?.color} absolute h-[100px] w-2`} />
 
-        <Drawer open={open} onOpenChange={setOpen}>
-          <DrawerTrigger disabled={task.completed} className="w-full ">
-            <div className="space-y-1 cursor-pointer">
-              <Label
-                className={cn(task.completed && "line-through text-foreground/50", "text-sm font-semibold text-left")}
-              >
-                {task.name}
-              </Label>
-              <p className={cn(task.completed && "line-through text-foreground/50", "text-xs text-left")}>
-                {task.description}
-              </p>
-              <div
-                className={cn(
-                  task.dueDate && formatDueDate(task.dueDate).color,
-                  task.completed && "line-through text-foreground/50",
-                  "flex gap-1 items-center text-xs"
-                )}
-              >
-                <Clock className="h-3 w-3" />
-                <span>{task.dueDate ? formatDueDate(task.dueDate).label : "No due date"}</span>
-              </div>
-            </div>
-          </DrawerTrigger>
-          <DrawerContent>
-            <DrawerHeader className="text-left">
-              <DrawerTitle>Edit task</DrawerTitle>
-              <DrawerDescription>Modify your task details here. Click 'Save' to update your changes.</DrawerDescription>
-            </DrawerHeader>
-            <EditTaskForm task={task} tasks={tasks} setTasks={setTasks} setOpen={setOpen} />
-            <DrawerFooter className="pt-2">
-              <DrawerClose asChild>
-                <Button variant="outline">Cancel</Button>
-              </DrawerClose>
-            </DrawerFooter>
-          </DrawerContent>
-        </Drawer>
-      </div>
-
-      <div className="flex gap-1">
-        {task.completed && (
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => handleClick(task.id)}
+      <div className="flex items-center justify-between p-3">
+        <div className="flex items-center gap-3 ">
+          <Checkbox
+            id={`task-${task.id}`}
+            checked={task.completed}
+            onCheckedChange={() => handleClick(task.id)}
             disabled={isLoading}
-            className="h-8 w-8 text-muted-foreground hover:text-primary"
-          >
-            <Undo2 className="h-4 w-4" />
-          </Button>
-        )}
+            className="cursor-pointer"
+          />
 
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
+          <Drawer open={open} onOpenChange={setOpen}>
+            <DrawerTrigger disabled={task.completed} className="w-full ">
+              <div className="space-y-1 cursor-pointer">
+                <Label
+                  className={cn(task.completed && "line-through text-foreground/50", "text-sm font-semibold text-left")}
+                >
+                  {task.name}
+                </Label>
+                <p className={cn(task.completed && "line-through text-foreground/50", "text-xs text-left")}>
+                  {task.description}
+                </p>
+                <div
+                  className={cn(
+                    task.dueDate && formatDueDate(task.dueDate).color,
+                    task.completed && "line-through text-foreground/50",
+                    "flex gap-1 items-center text-xs"
+                  )}
+                >
+                  <Clock className="h-3 w-3" />
+                  <span>{task.dueDate ? formatDueDate(task.dueDate).label : "No due date"}</span>
+                </div>
+              </div>
+            </DrawerTrigger>
+            <DrawerContent>
+              <DrawerHeader className="text-left">
+                <DrawerTitle>Edit task</DrawerTitle>
+                <DrawerDescription>
+                  Modify your task details here. Click 'Save' to update your changes.
+                </DrawerDescription>
+              </DrawerHeader>
+              <EditTaskForm task={task} tasks={tasks} setTasks={setTasks} setOpen={setOpen} />
+              <DrawerFooter className="pt-2">
+                <DrawerClose asChild>
+                  <Button variant="outline">Cancel</Button>
+                </DrawerClose>
+              </DrawerFooter>
+            </DrawerContent>
+          </Drawer>
+        </div>
+
+        <div className="flex gap-1">
+          {task.completed && (
             <Button
               variant="ghost"
               size="icon"
+              onClick={() => handleClick(task.id)}
               disabled={isLoading}
-              className="h-8 w-8 text-muted-foreground hover:text-destructive"
+              className="h-8 w-8 text-muted-foreground hover:text-primary"
             >
-              <Trash2 className="h-4 w-4" />
+              <Undo2 className="h-4 w-4" />
             </Button>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-              <AlertDialogDescription>
-                This action cannot be undone. This will permanently delete the task and remove it from your task list.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction onClick={() => deleteTask(task.id)}>Continue</AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+          )}
+
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                disabled={isLoading}
+                className="h-8 w-8 text-muted-foreground hover:text-destructive"
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently delete the task and remove it from your task list.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={() => deleteTask(task.id)}>Continue</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

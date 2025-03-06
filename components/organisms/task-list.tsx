@@ -10,6 +10,7 @@ import TaskCard from "../molecules/task-card";
 import { cn } from "@/lib/utils";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../atoms/accordion";
 import { TaskWithCategory } from "@/types";
+import SlideAnimation from "../atoms/slide-animation";
 
 interface TaskListProps {
   taskList: TaskWithCategory[];
@@ -37,17 +38,9 @@ export default function TaskList({ taskList, categories }: TaskListProps) {
             <AnimatePresence>
               <div className="space-y-1">
                 {activeTasks.map((task) => (
-                  <motion.div
-                    key={task.id}
-                    initial={{ x: -20, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    exit={{ x: 100, opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="bg-card rounded-md border overflow-hidden relative"
-                  >
-                    <div className={`bg-${task.category?.color} absolute h-[100px] w-2`} />
+                  <SlideAnimation key={task.id}>
                     <TaskCard task={task} tasks={tasks} setTasks={setTasks} />
-                  </motion.div>
+                  </SlideAnimation>
                 ))}
               </div>
             </AnimatePresence>
@@ -71,16 +64,9 @@ export default function TaskList({ taskList, categories }: TaskListProps) {
               <AnimatePresence>
                 <div className="space-y-1">
                   {completedTasks.map((task) => (
-                    <motion.div
-                      key={task.id}
-                      initial={{ x: -100, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      exit={{ x: 100, opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="flex items-center justify-between p-3 bg-muted rounded-md border"
-                    >
+                    <SlideAnimation key={task.id}>
                       <TaskCard task={task} tasks={tasks} setTasks={setTasks} />
-                    </motion.div>
+                    </SlideAnimation>
                   ))}
                 </div>
               </AnimatePresence>
