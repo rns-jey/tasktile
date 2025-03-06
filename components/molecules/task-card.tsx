@@ -34,11 +34,12 @@ import {
 } from "../atoms/drawer";
 import NewTaskForm from "../organisms/new-task-form";
 import EditTaskForm from "../organisms/edit-task-form";
+import { TaskWithCategory } from "@/types";
 
 interface TaskCardProps {
   task: Task;
-  tasks: Task[];
-  setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
+  tasks: TaskWithCategory[];
+  setTasks: React.Dispatch<React.SetStateAction<TaskWithCategory[]>>;
 }
 
 function formatDueDate(dueDate: Date) {

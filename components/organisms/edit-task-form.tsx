@@ -18,11 +18,12 @@ import { Textarea } from "../atoms/textarea";
 import { Separator } from "../atoms/separator";
 import axios from "axios";
 import { toast } from "sonner";
+import { TaskWithCategory } from "@/types";
 
 interface EditTaskFormProps {
   task: Task;
-  tasks: Task[];
-  setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
+  tasks: TaskWithCategory[];
+  setTasks: React.Dispatch<React.SetStateAction<TaskWithCategory[]>>;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 

@@ -23,6 +23,7 @@ import { Separator } from "../atoms/separator";
 
 import CategoryPopOver from "./category-pop-over";
 import { useEffect, useState } from "react";
+import { TaskWithCategory } from "@/types";
 
 const formSchema = z.object({
   name: z.string().min(3),
@@ -36,9 +37,9 @@ const formSchema = z.object({
 });
 
 interface NewTaskFormProps {
-  tasks: Task[];
+  tasks: TaskWithCategory[];
   categories: Category[];
-  setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
+  setTasks: React.Dispatch<React.SetStateAction<TaskWithCategory[]>>;
 }
 
 export default function NewTaskForm({ tasks, categories, setTasks }: NewTaskFormProps) {
@@ -64,8 +65,6 @@ export default function NewTaskForm({ tasks, categories, setTasks }: NewTaskForm
     try {
       const response = await axios.post("api/task/new", values);
       const newTask = response.data;
-
-      console.log(values);
 
       setTasks([newTask, ...tasks]);
       toast("Task created.");

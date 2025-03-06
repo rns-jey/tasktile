@@ -9,6 +9,7 @@ export default async function TaskSection() {
 
   const tasks = await db.task.findMany({
     where: { userId: profile.id },
+    include: { category: true },
     orderBy: [{ createdAt: "desc" }],
   });
 

@@ -9,14 +9,15 @@ import { ScrollArea } from "../atoms/scroll-area";
 import TaskCard from "../molecules/task-card";
 import { cn } from "@/lib/utils";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../atoms/accordion";
+import { TaskWithCategory } from "@/types";
 
 interface TaskListProps {
-  taskList: Task[];
+  taskList: TaskWithCategory[];
   categories: Category[];
 }
 
 export default function TaskList({ taskList, categories }: TaskListProps) {
-  const [tasks, setTasks] = useState<Task[]>(taskList);
+  const [tasks, setTasks] = useState<TaskWithCategory[]>(taskList);
 
   const activeTasks = tasks.filter((task) => !task.completed);
   const completedTasks = tasks.filter((task) => task.completed);
@@ -44,7 +45,7 @@ export default function TaskList({ taskList, categories }: TaskListProps) {
                     transition={{ duration: 0.3 }}
                     className="bg-card rounded-md border overflow-hidden relative"
                   >
-                    <div className="absolute h-[100px] bg-red-500 w-2" />
+                    <div className={`bg-${task.category?.color} absolute h-[100px] w-2`} />
                     <TaskCard task={task} tasks={tasks} setTasks={setTasks} />
                   </motion.div>
                 ))}
