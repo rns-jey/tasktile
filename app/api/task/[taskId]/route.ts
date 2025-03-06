@@ -16,11 +16,11 @@ export async function DELETE(req: Request, props: { params: tParams }) {
 
     if (!taskId) return new NextResponse("Task ID is required", { status: 404 });
 
-    const server = await db.task.delete({
+    const task = await db.task.delete({
       where: { id: taskId, userId: profile.id },
     });
 
-    return NextResponse.json(server);
+    return NextResponse.json(task);
   } catch (error) {
     console.log("[TASK_ID_DELETE]", error);
     return new NextResponse("Internal Server Error", { status: 500 });
