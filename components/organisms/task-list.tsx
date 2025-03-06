@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Task } from "@prisma/client";
+import { Category, Task } from "@prisma/client";
 
 import { AnimatePresence, motion } from "motion/react";
 import NewTaskForm from "./new-task-form";
@@ -11,11 +11,12 @@ import { cn } from "@/lib/utils";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../atoms/accordion";
 
 interface TaskListProps {
-  data: Task[];
+  taskList: Task[];
+  categories: Category[];
 }
 
-export default function TaskList({ data }: TaskListProps) {
-  const [tasks, setTasks] = useState<Task[]>(data);
+export default function TaskList({ taskList, categories }: TaskListProps) {
+  const [tasks, setTasks] = useState<Task[]>(taskList);
 
   const activeTasks = tasks.filter((task) => !task.completed);
   const completedTasks = tasks.filter((task) => task.completed);
@@ -25,7 +26,7 @@ export default function TaskList({ data }: TaskListProps) {
       <h1 className="text-2xl font-bold mb-6 text-center">Todo List</h1>
 
       {/* Add new task */}
-      <NewTaskForm tasks={tasks} setTasks={setTasks} />
+      <NewTaskForm tasks={tasks} categories={categories} setTasks={setTasks} />
 
       {/* Active tasks */}
       <div>

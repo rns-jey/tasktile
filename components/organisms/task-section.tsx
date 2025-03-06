@@ -12,5 +12,9 @@ export default async function TaskSection() {
     orderBy: [{ createdAt: "desc" }],
   });
 
-  return <TaskList data={tasks} />;
+  const categories = await db.category.findMany({
+    where: { userId: profile.id },
+  });
+
+  return <TaskList taskList={tasks} categories={categories} />;
 }

@@ -4,6 +4,8 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { useQuery } from "@tanstack/react-query";
+
 import { Form, FormControl, FormField, FormItem, FormMessage } from "../atoms/form";
 import { Input } from "../atoms/input";
 import { CalendarIcon, Plus, Tag, Text, X } from "lucide-react";
@@ -17,7 +19,7 @@ import { format } from "date-fns";
 
 import axios from "axios";
 
-import { Task } from "@prisma/client";
+import { Category, Task } from "@prisma/client";
 
 import { Separator } from "../atoms/separator";
 
@@ -36,10 +38,11 @@ const formSchema = z.object({
 
 interface NewTaskFormProps {
   tasks: Task[];
+  categories: Category[];
   setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
 }
 
-export default function NewTaskForm({ tasks, setTasks }: NewTaskFormProps) {
+export default function NewTaskForm({ tasks, categories, setTasks }: NewTaskFormProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -114,12 +117,14 @@ export default function NewTaskForm({ tasks, setTasks }: NewTaskFormProps) {
                     </FormControl>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-2 space-y-2" align="start">
-                    <div className="flex items-center gap-1">
-                      <div className="rounded-full bg-red-500 h-3 w-3" />
-                      <span className="text-sm">category</span>
-                    </div>
+                    {categories.map((category) => (
+                      <div key={`category_${category.id}`} className="flex items-center gap-1">
+                        <div className={`rounded-full ${category.color} h-3 w-3`} />
+                        <span className="text-sm">{category.name}</span>
+                      </div>
+                    ))}
 
-                    <Separator />
+                    {categories && <Separator />}
 
                     <NewCategoryForm />
 
