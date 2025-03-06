@@ -37,6 +37,7 @@ export default function NewCategoryForm({ categoryList, setCategories, setIsAddi
         setColor("red-500");
 
         setSubmitting(false);
+        setIsAdding(false);
       } catch (error) {
         if (axios.isAxiosError(error)) {
           toast.error(error.response?.data); // Customize further if needed
