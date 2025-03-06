@@ -22,6 +22,7 @@ model Profile {
   email String @db.Text @unique
 
   tasks Task[]
+  categories Category[]
   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -49,6 +50,9 @@ model Category {
   name String
   color String
   tasks Task[]
+
+  userId String
+  user Profile @relation(fields: [userId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
