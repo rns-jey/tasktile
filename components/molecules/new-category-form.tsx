@@ -20,7 +20,7 @@ interface NewCategoryFormProps {
 
 export default function NewCategoryForm({ categoryList, setCategories, setIsAdding }: NewCategoryFormProps) {
   const [name, setName] = useState("");
-  const [selectedColor, setColor] = useState("bg-gray-500");
+  const [selectedColor, setColor] = useState("red-500");
   const [isSubmitting, setSubmitting] = useState(false);
 
   async function handleAddCategory() {
@@ -34,7 +34,7 @@ export default function NewCategoryForm({ categoryList, setCategories, setIsAddi
         setCategories([newTask, ...categoryList]);
 
         setName("");
-        setColor("bg-gray-500");
+        setColor("red-500");
 
         setSubmitting(false);
       } catch (error) {
