@@ -7,15 +7,10 @@ export default async function TaskSection() {
 
   if (!profile) return null;
 
-  const tasks = await db.task.findMany({
-    where: { userId: profile.id },
-    include: { category: true },
-    orderBy: [{ createdAt: "desc" }],
-  });
-
-  const categories = await db.category.findMany({
-    where: { userId: profile.id },
-  });
+  const [tasks, categories] = await Promise.all([
+    db.task.findMany({ where: { userId: profile.id }, include: { category: true }, orderBy: [{ createdAt: "desc" }] }),
+    db.category.findMany({ where: { userId: profile.id } }),
+  ]);
 
   return <TaskList taskList={tasks} categories={categories} />;
 }
