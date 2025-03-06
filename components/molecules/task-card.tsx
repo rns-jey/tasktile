@@ -39,8 +39,9 @@ import { TaskWithCategory } from "@/types";
 interface TaskCardProps {
   task: TaskWithCategory;
   tasks: TaskWithCategory[];
-  categories: Category[];
   setTasks: React.Dispatch<React.SetStateAction<TaskWithCategory[]>>;
+  categories: Category[];
+  setCategories: React.Dispatch<React.SetStateAction<Category[]>>;
 }
 
 function formatDueDate(dueDate: Date) {
@@ -54,7 +55,7 @@ function formatDueDate(dueDate: Date) {
   return label;
 }
 
-export default function TaskCard({ task, tasks, categories, setTasks }: TaskCardProps) {
+export default function TaskCard({ task, tasks, setTasks, categories, setCategories }: TaskCardProps) {
   const [isLoading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -130,7 +131,14 @@ export default function TaskCard({ task, tasks, categories, setTasks }: TaskCard
                   Modify your task details here. Click 'Save' to update your changes.
                 </DrawerDescription>
               </DrawerHeader>
-              <EditTaskForm task={task} tasks={tasks} setTasks={setTasks} categories={categories} setOpen={setOpen} />
+              <EditTaskForm
+                task={task}
+                tasks={tasks}
+                setTasks={setTasks}
+                setOpen={setOpen}
+                categories={categories}
+                setCategories={setCategories}
+              />
               <DrawerFooter className="pt-2">
                 <DrawerClose asChild>
                   <Button variant="outline">Cancel</Button>

@@ -12,5 +12,5 @@ export default async function TaskSection() {
     db.category.findMany({ where: { userId: profile.id } }),
   ]);
 
-  return <TaskList taskList={tasks} categories={categories} />;
+  return <TaskList taskList={tasks} categoryList={categories} />;
 }

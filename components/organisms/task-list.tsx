@@ -14,11 +14,12 @@ import SlideAnimation from "../atoms/slide-animation";
 
 interface TaskListProps {
   taskList: TaskWithCategory[];
-  categories: Category[];
+  categoryList: Category[];
 }
 
-export default function TaskList({ taskList, categories }: TaskListProps) {
+export default function TaskList({ taskList, categoryList }: TaskListProps) {
   const [tasks, setTasks] = useState<TaskWithCategory[]>(taskList);
+  const [categories, setCategories] = useState<Category[]>(categoryList);
 
   const activeTasks = tasks.filter((task) => !task.completed);
   const completedTasks = tasks.filter((task) => task.completed);
@@ -28,7 +29,7 @@ export default function TaskList({ taskList, categories }: TaskListProps) {
       <h1 className="text-2xl font-bold mb-6 text-center">Todo List</h1>
 
       {/* Add new task */}
-      <NewTaskForm tasks={tasks} categories={categories} setTasks={setTasks} />
+      <NewTaskForm tasks={tasks} setTasks={setTasks} categories={categories} setCategories={setCategories} />
 
       {/* Active tasks */}
       <div>
@@ -39,7 +40,13 @@ export default function TaskList({ taskList, categories }: TaskListProps) {
               <div className="space-y-1">
                 {activeTasks.map((task) => (
                   <SlideAnimation key={task.id}>
-                    <TaskCard task={task} tasks={tasks} categories={categories} setTasks={setTasks} />
+                    <TaskCard
+                      task={task}
+                      tasks={tasks}
+                      setTasks={setTasks}
+                      categories={categories}
+                      setCategories={setCategories}
+                    />
                   </SlideAnimation>
                 ))}
               </div>
@@ -65,7 +72,13 @@ export default function TaskList({ taskList, categories }: TaskListProps) {
                 <div className="space-y-1">
                   {completedTasks.map((task) => (
                     <SlideAnimation key={task.id}>
-                      <TaskCard task={task} tasks={tasks} categories={categories} setTasks={setTasks} />
+                      <TaskCard
+                        task={task}
+                        tasks={tasks}
+                        setTasks={setTasks}
+                        categories={categories}
+                        setCategories={setCategories}
+                      />
                     </SlideAnimation>
                   ))}
                 </div>

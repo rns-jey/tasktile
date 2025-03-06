@@ -25,8 +25,9 @@ import { useEffect, useState } from "react";
 interface EditTaskFormProps {
   task: TaskWithCategory;
   tasks: TaskWithCategory[];
-  categories: Category[];
   setTasks: React.Dispatch<React.SetStateAction<TaskWithCategory[]>>;
+  categories: Category[];
+  setCategories: React.Dispatch<React.SetStateAction<Category[]>>;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -44,8 +45,8 @@ const formSchema = z.object({
     }),
 });
 
-export default function EditTaskForm({ task, tasks, categories, setTasks, setOpen }: EditTaskFormProps) {
-  const [selectedCategory, setSelectedCategory] = useState<Category | null>(task.category);
+export default function EditTaskForm({ task, tasks, setTasks, categories, setCategories, setOpen }: EditTaskFormProps) {
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -131,8 +132,9 @@ export default function EditTaskForm({ task, tasks, categories, setTasks, setOpe
 
         <CategoryPopOver
           isLoading={isLoading}
-          selectedCategory={selectedCategory}
           categories={categories}
+          setCategories={setCategories}
+          selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}
         />
 

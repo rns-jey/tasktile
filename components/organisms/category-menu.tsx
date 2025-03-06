@@ -10,25 +10,30 @@ import { AnimatePresence } from "motion/react";
 
 import CategoryItem from "../molecules/category-item";
 
-interface CategoryPopOverProps {
+interface CategoryMenuProps {
   categories: Category[];
+  setCategories: React.Dispatch<React.SetStateAction<Category[]>>;
   selectedCategory: Category | null;
   setSelectedCategory: React.Dispatch<React.SetStateAction<Category | null>>;
 }
 
-export default function CategoryMenu({ categories, selectedCategory, setSelectedCategory }: CategoryPopOverProps) {
-  const [categoryList, setCategories] = useState<Category[]>(categories);
+export default function CategoryMenu({
+  categories,
+  setCategories,
+  selectedCategory,
+  setSelectedCategory,
+}: CategoryMenuProps) {
   const [isAdding, setIsAdding] = useState(false);
 
   return (
     <PopoverContent className="w-auto p-2 space-y-2" align="start">
       <AnimatePresence>
         <div className="flex flex-col">
-          {categoryList.map((category) => (
+          {categories.map((category) => (
             <CategoryItem
               key={`category_${category.id}`}
               category={category}
-              categories={categoryList}
+              categories={categories}
               setCategories={setCategories}
               setSelectedCategory={setSelectedCategory}
             />
@@ -36,11 +41,9 @@ export default function CategoryMenu({ categories, selectedCategory, setSelected
         </div>
       </AnimatePresence>
 
-      {categoryList.length > 0 && <Separator />}
+      {categories.length > 0 && <Separator />}
 
-      {isAdding && (
-        <NewCategoryForm categoryList={categoryList} setCategories={setCategories} setIsAdding={setIsAdding} />
-      )}
+      {isAdding && <NewCategoryForm categories={categories} setCategories={setCategories} setIsAdding={setIsAdding} />}
 
       {!isAdding && (
         <Button

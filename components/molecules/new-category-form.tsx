@@ -13,12 +13,12 @@ import { X } from "lucide-react";
 const colors = ["red-500", "orange-500", "yellow-500", "green-500", "blue-500", "indigo-500", "purple-500", "pink-500"];
 
 interface NewCategoryFormProps {
-  categoryList: Category[];
+  categories: Category[];
   setCategories: React.Dispatch<React.SetStateAction<Category[]>>;
   setIsAdding: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function NewCategoryForm({ categoryList, setCategories, setIsAdding }: NewCategoryFormProps) {
+export default function NewCategoryForm({ categories, setCategories, setIsAdding }: NewCategoryFormProps) {
   const [name, setName] = useState("");
   const [selectedColor, setColor] = useState("red-500");
   const [isSubmitting, setSubmitting] = useState(false);
@@ -31,7 +31,7 @@ export default function NewCategoryForm({ categoryList, setCategories, setIsAddi
         const response = await axios.post("api/category/new", { name, color: selectedColor });
         const newTask = response.data;
 
-        setCategories([newTask, ...categoryList]);
+        setCategories([newTask, ...categories]);
 
         setName("");
         setColor("red-500");

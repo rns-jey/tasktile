@@ -39,11 +39,12 @@ const formSchema = z.object({
 
 interface NewTaskFormProps {
   tasks: TaskWithCategory[];
-  categories: Category[];
   setTasks: React.Dispatch<React.SetStateAction<TaskWithCategory[]>>;
+  categories: Category[];
+  setCategories: React.Dispatch<React.SetStateAction<Category[]>>;
 }
 
-export default function NewTaskForm({ tasks, categories, setTasks }: NewTaskFormProps) {
+export default function NewTaskForm({ tasks, setTasks, categories, setCategories }: NewTaskFormProps) {
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -112,8 +113,9 @@ export default function NewTaskForm({ tasks, categories, setTasks }: NewTaskForm
 
           <CategoryPopOver
             isLoading={isLoading}
-            selectedCategory={selectedCategory}
             categories={categories}
+            setCategories={setCategories}
+            selectedCategory={selectedCategory}
             setSelectedCategory={setSelectedCategory}
           />
 
