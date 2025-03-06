@@ -30,16 +30,18 @@ export default function NewCategoryForm({ categoryList, setCategories }: NewCate
   const [selectedColor, setColor] = useState("bg-gray-500");
 
   async function handleAddCategory() {
-    try {
-      const response = await axios.post("api/category/new", { name, color: selectedColor });
-      const newTask = response.data;
+    if (name.trim()) {
+      try {
+        const response = await axios.post("api/category/new", { name, color: selectedColor });
+        const newTask = response.data;
 
-      setCategories([newTask, ...categoryList]);
+        setCategories([newTask, ...categoryList]);
 
-      setName("");
-      setColor("bg-gray-500");
-    } catch (error) {
-      console.log(error);
+        setName("");
+        setColor("bg-gray-500");
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 
@@ -50,7 +52,7 @@ export default function NewCategoryForm({ categoryList, setCategories }: NewCate
         placeholder="Input category name..."
         autoComplete="off"
         value={name}
-        onChange={(e) => setName(e.target.value)}
+        onChange={(e) => setName(e.target.value.toLowerCase())}
         className="flex-1 h-8 text-xs"
       />
 
