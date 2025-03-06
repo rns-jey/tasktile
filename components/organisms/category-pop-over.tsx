@@ -1,57 +1,36 @@
-"use client";
-
-import React, { useState } from "react";
-import { PopoverContent } from "../atoms/popover";
+import React from "react";
+import { Popover, PopoverTrigger } from "../atoms/popover";
 import { Button } from "../atoms/button";
+import { Tag } from "lucide-react";
+import CategoryMenu from "./category-menu";
 import { Category } from "@prisma/client";
-import { Separator } from "../atoms/separator";
-import NewCategoryForm from "../molecules/new-category-form";
-import { AnimatePresence } from "motion/react";
-
-import CategoryItem from "../molecules/category-item";
 
 interface CategoryPopOverProps {
-  categories: Category[];
+  isLoading: boolean;
   selectedCategory: Category | null;
+  categories: Category[];
   setSelectedCategory: React.Dispatch<React.SetStateAction<Category | null>>;
 }
 
-export default function CategoryPopOver({ categories, selectedCategory, setSelectedCategory }: CategoryPopOverProps) {
-  const [categoryList, setCategories] = useState<Category[]>(categories);
-  const [isAdding, setIsAdding] = useState(false);
-
+export default function CategoryPopOver({
+  isLoading,
+  selectedCategory,
+  categories,
+  setSelectedCategory,
+}: CategoryPopOverProps) {
   return (
-    <PopoverContent className="w-auto p-2 space-y-2" align="start">
-      <AnimatePresence>
-        <div className="flex flex-col">
-          {categoryList.map((category) => (
-            <CategoryItem
-              key={`category_${category.id}`}
-              category={category}
-              categories={categoryList}
-              setCategories={setCategories}
-              setSelectedCategory={setSelectedCategory}
-            />
-          ))}
-        </div>
-      </AnimatePresence>
-
-      {categoryList.length > 0 && <Separator />}
-
-      {isAdding && (
-        <NewCategoryForm categoryList={categoryList} setCategories={setCategories} setIsAdding={setIsAdding} />
-      )}
-
-      {!isAdding && (
-        <Button
-          variant={"ghost"}
-          size={"xs"}
-          className="w-full flex items-center gap-1"
-          onClick={() => setIsAdding(true)}
-        >
-          <span className="text-sm">New category</span>
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button variant={"outline"} size={"xs"} className="flex items-center" disabled={isLoading}>
+          <Tag />
+          <span className="text-xs">{selectedCategory ? selectedCategory.name : "Add category"}</span>
         </Button>
-      )}
-    </PopoverContent>
+      </PopoverTrigger>
+      <CategoryMenu
+        categories={categories}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+      />
+    </Popover>
   );
 }

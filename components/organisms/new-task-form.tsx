@@ -21,9 +21,10 @@ import { Category, Task } from "@prisma/client";
 
 import { Separator } from "../atoms/separator";
 
-import CategoryPopOver from "./category-pop-over";
 import { useEffect, useState } from "react";
 import { TaskWithCategory } from "@/types";
+
+import CategoryPopOver from "./category-pop-over";
 
 const formSchema = z.object({
   name: z.string().min(3),
@@ -109,19 +110,12 @@ export default function NewTaskForm({ tasks, categories, setTasks }: NewTaskForm
             <span className="text-xs">Add description</span>
           </Button>
 
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button variant={"outline"} size={"xs"} className="flex items-center" disabled={isLoading}>
-                <Tag />
-                <span className="text-xs">{selectedCategory ? selectedCategory.name : "Add category"}</span>
-              </Button>
-            </PopoverTrigger>
-            <CategoryPopOver
-              categories={categories}
-              selectedCategory={selectedCategory}
-              setSelectedCategory={setSelectedCategory}
-            />
-          </Popover>
+          <CategoryPopOver
+            isLoading={isLoading}
+            selectedCategory={selectedCategory}
+            categories={categories}
+            setSelectedCategory={setSelectedCategory}
+          />
 
           <FormField
             control={form.control}
