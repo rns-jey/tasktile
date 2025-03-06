@@ -40,9 +40,8 @@ export default function CategoryItem({ category, categories, setCategories, setS
       exit={{ x: 100, opacity: 0 }}
       transition={{ duration: 0.3 }}
       className="flex justify-between p-1 rounded cursor-pointer hover:bg-accent"
-      onClick={() => setSelectedCategory(category)}
     >
-      <div className="p-0 flex items-center gap-1">
+      <div className="p-0 flex items-center gap-1 w-full" onClick={() => setSelectedCategory(category)}>
         <div className={`rounded-full bg-${category.color} h-3 w-3`} />
         <span className="text-sm">{category.name}</span>
       </div>
