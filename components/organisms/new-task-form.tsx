@@ -25,6 +25,7 @@ import { useEffect, useState } from "react";
 import { TaskWithCategory } from "@/types";
 
 import CategoryPopOver from "./category-pop-over";
+import { Textarea } from "../atoms/textarea";
 
 const formSchema = z.object({
   name: z.string().min(3),
@@ -45,6 +46,7 @@ interface NewTaskFormProps {
 }
 
 export default function NewTaskForm({ tasks, setTasks, categories, setCategories }: NewTaskFormProps) {
+  const [describing, setDescribing] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -72,6 +74,7 @@ export default function NewTaskForm({ tasks, setTasks, categories, setCategories
       toast("Task created.");
       form.reset();
       setSelectedCategory(null);
+      setDescribing(false);
     } catch (error) {
       console.log(error);
     }
@@ -106,9 +109,15 @@ export default function NewTaskForm({ tasks, setTasks, categories, setCategories
         </div>
 
         <div className="flex gap-2">
-          <Button type="button" variant={"outline"} size={"xs"}>
+          <Button
+            type="button"
+            variant={"outline"}
+            size={"xs"}
+            onClick={() => setDescribing(!describing)}
+            disabled={isLoading}
+          >
             <Text />
-            <span className="text-xs">Add description</span>
+            <span className="text-xs">{describing ? "Hide description" : "Add description"}</span>
           </Button>
 
           <CategoryPopOver
@@ -186,6 +195,26 @@ export default function NewTaskForm({ tasks, setTasks, categories, setCategories
             )}
           />
         </div>
+
+        {describing && (
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Textarea
+                    placeholder="Provide a brief description of the task..."
+                    className="resize-none"
+                    disabled={isLoading}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
       </form>
     </Form>
   );

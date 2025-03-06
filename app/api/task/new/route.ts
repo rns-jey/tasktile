@@ -8,11 +8,12 @@ export async function POST(req: Request) {
 
     if (!profile) return new NextResponse("Unauthorized", { status: 401 });
 
-    const { name, categoryId, dueDate } = await req.json();
+    const { name, description, categoryId, dueDate } = await req.json();
 
     const task = await db.task.create({
       data: {
         name,
+        description,
         categoryId,
         dueDate,
         userId: profile.id,
