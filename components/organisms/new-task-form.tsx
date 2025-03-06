@@ -4,11 +4,9 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useQuery } from "@tanstack/react-query";
-
 import { Form, FormControl, FormField, FormItem, FormMessage } from "../atoms/form";
 import { Input } from "../atoms/input";
-import { CalendarIcon, Plus, Tag, Text, X } from "lucide-react";
+import { CalendarIcon, Plus, Text } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "../atoms/popover";
 import { Calendar } from "../atoms/calendar";
 import { Button } from "../atoms/button";
@@ -23,7 +21,8 @@ import { Category, Task } from "@prisma/client";
 
 import { Separator } from "../atoms/separator";
 
-import NewCategoryForm from "../molecules/new-category-form";
+import CategoryPopOver from "./category-pop-over";
+import { useState } from "react";
 
 const formSchema = z.object({
   name: z.string().min(3),
@@ -102,42 +101,7 @@ export default function NewTaskForm({ tasks, categories, setTasks }: NewTaskForm
             <span className="text-xs">Add description</span>
           </Button>
 
-          <FormField
-            control={form.control}
-            name="categoryId"
-            render={({ field }) => (
-              <FormItem className="flex flex-col">
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button variant={"outline"} size={"xs"} disabled={isLoading} className="flex items-center">
-                        <Tag />
-                        <span className="text-xs">Add category</span>
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-2 space-y-2" align="start">
-                    {categories.map((category) => (
-                      <div key={`category_${category.id}`} className="flex items-center gap-1">
-                        <div className={`rounded-full ${category.color} h-3 w-3`} />
-                        <span className="text-sm">{category.name}</span>
-                      </div>
-                    ))}
-
-                    {categories.length > 0 && <Separator />}
-
-                    <NewCategoryForm />
-
-                    <div className="flex items-center gap-1">
-                      <Plus className="h-3 w-3" />
-                      <span className="text-sm">New category</span>
-                    </div>
-                  </PopoverContent>
-                </Popover>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <CategoryPopOver categories={categories} />
 
           <FormField
             control={form.control}

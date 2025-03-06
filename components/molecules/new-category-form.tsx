@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Button } from "../atoms/button";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { Category } from "@prisma/client";
 
 const colors = [
   "bg-gray-500",
@@ -19,20 +20,24 @@ const colors = [
   "bg-pink-500",
 ];
 
-export default function NewCategoryForm() {
+interface NewCategoryFormProps {
+  categoryList: Category[];
+  setCategories: React.Dispatch<React.SetStateAction<Category[]>>;
+}
+
+export default function NewCategoryForm({ categoryList, setCategories }: NewCategoryFormProps) {
   const [name, setName] = useState("");
   const [selectedColor, setColor] = useState("bg-gray-500");
 
-  const router = useRouter();
-
   async function handleAddCategory() {
     try {
-      await axios.post("api/category/new", { name, color: selectedColor });
+      const response = await axios.post("api/category/new", { name, color: selectedColor });
+      const newTask = response.data;
+
+      setCategories([newTask, ...categoryList]);
 
       setName("");
       setColor("bg-gray-500");
-
-      router.refresh();
     } catch (error) {
       console.log(error);
     }
