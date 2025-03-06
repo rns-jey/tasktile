@@ -52,6 +52,17 @@ export default function CategoryMenu({ categories, selectedCategory, setSelected
           <span className="text-sm">New category</span>
         </Button>
       )}
+
+      {selectedCategory && (
+        <Button
+          variant={"ghost"}
+          size={"xs"}
+          className="w-full flex items-center gap-1 px-1"
+          onClick={() => setSelectedCategory(null)}
+        >
+          <span className="text-sm">Remove category</span>
+        </Button>
+      )}
     </PopoverContent>
   );
 }

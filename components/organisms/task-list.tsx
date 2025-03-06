@@ -39,7 +39,7 @@ export default function TaskList({ taskList, categories }: TaskListProps) {
               <div className="space-y-1">
                 {activeTasks.map((task) => (
                   <SlideAnimation key={task.id}>
-                    <TaskCard task={task} tasks={tasks} setTasks={setTasks} />
+                    <TaskCard task={task} tasks={tasks} categories={categories} setTasks={setTasks} />
                   </SlideAnimation>
                 ))}
               </div>
@@ -65,7 +65,7 @@ export default function TaskList({ taskList, categories }: TaskListProps) {
                 <div className="space-y-1">
                   {completedTasks.map((task) => (
                     <SlideAnimation key={task.id}>
-                      <TaskCard task={task} tasks={tasks} setTasks={setTasks} />
+                      <TaskCard task={task} tasks={tasks} categories={categories} setTasks={setTasks} />
                     </SlideAnimation>
                   ))}
                 </div>

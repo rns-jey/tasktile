@@ -21,7 +21,7 @@ export default function CategoryPopOver({
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant={"outline"} size={"xs"} className="flex items-center" disabled={isLoading}>
+        <Button variant={"outline"} size={"xs"} className="flex items-center w-fit" disabled={isLoading}>
           <Tag />
           <span className="text-xs">{selectedCategory ? selectedCategory.name : "Add category"}</span>
         </Button>

@@ -47,6 +47,7 @@ export async function PATCH(req: Request, props: { params: tParams }) {
         categoryId,
         dueDate,
       },
+      include: { category: true },
     });
 
     return NextResponse.json(newTask);

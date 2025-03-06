@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 import { Checkbox } from "../atoms/checkbox";
-import { Task } from "@prisma/client";
+import { Category, Task } from "@prisma/client";
 import axios from "axios";
 import { Button } from "../atoms/button";
 import { Clock, Trash2, Undo2 } from "lucide-react";
@@ -39,6 +39,7 @@ import { TaskWithCategory } from "@/types";
 interface TaskCardProps {
   task: TaskWithCategory;
   tasks: TaskWithCategory[];
+  categories: Category[];
   setTasks: React.Dispatch<React.SetStateAction<TaskWithCategory[]>>;
 }
 
@@ -53,7 +54,7 @@ function formatDueDate(dueDate: Date) {
   return label;
 }
 
-export default function TaskCard({ task, tasks, setTasks }: TaskCardProps) {
+export default function TaskCard({ task, tasks, categories, setTasks }: TaskCardProps) {
   const [isLoading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -90,7 +91,7 @@ export default function TaskCard({ task, tasks, setTasks }: TaskCardProps) {
       <div className={`bg-${task.category?.color} absolute h-[100px] w-2`} />
 
       <div className="flex items-center justify-between p-3">
-        <div className="flex items-center gap-3 ">
+        <div className="flex items-center gap-3 w-full">
           <Checkbox
             id={`task-${task.id}`}
             checked={task.completed}
@@ -100,13 +101,13 @@ export default function TaskCard({ task, tasks, setTasks }: TaskCardProps) {
           />
 
           <Drawer open={open} onOpenChange={setOpen}>
-            <DrawerTrigger disabled={task.completed} className="w-full ">
-              <div className="space-y-1 cursor-pointer">
-                <Label
+            <DrawerTrigger disabled={task.completed} className="w-full cursor-pointer">
+              <div className="flex flex-col gap-1  ">
+                <div
                   className={cn(task.completed && "line-through text-foreground/50", "text-sm font-semibold text-left")}
                 >
                   {task.name}
-                </Label>
+                </div>
                 <p className={cn(task.completed && "line-through text-foreground/50", "text-xs text-left")}>
                   {task.description}
                 </p>
@@ -129,7 +130,7 @@ export default function TaskCard({ task, tasks, setTasks }: TaskCardProps) {
                   Modify your task details here. Click 'Save' to update your changes.
                 </DrawerDescription>
               </DrawerHeader>
-              <EditTaskForm task={task} tasks={tasks} setTasks={setTasks} setOpen={setOpen} />
+              <EditTaskForm task={task} tasks={tasks} setTasks={setTasks} categories={categories} setOpen={setOpen} />
               <DrawerFooter className="pt-2">
                 <DrawerClose asChild>
                   <Button variant="outline">Cancel</Button>

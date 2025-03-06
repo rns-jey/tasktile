@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../atoms/form";
-import { Task } from "@prisma/client";
+import { Category, Task } from "@prisma/client";
 import { Input } from "../atoms/input";
 import { Popover, PopoverContent, PopoverTrigger } from "../atoms/popover";
 import { Button } from "../atoms/button";
@@ -19,10 +19,13 @@ import { Separator } from "../atoms/separator";
 import axios from "axios";
 import { toast } from "sonner";
 import { TaskWithCategory } from "@/types";
+import CategoryPopOver from "./category-pop-over";
+import { useEffect, useState } from "react";
 
 interface EditTaskFormProps {
-  task: Task;
+  task: TaskWithCategory;
   tasks: TaskWithCategory[];
+  categories: Category[];
   setTasks: React.Dispatch<React.SetStateAction<TaskWithCategory[]>>;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -30,6 +33,7 @@ interface EditTaskFormProps {
 const formSchema = z.object({
   name: z.string().min(3),
   description: z.string(),
+  categoryId: z.string().nullish(),
   dueDate: z
     .union([
       z.date(),
@@ -40,15 +44,22 @@ const formSchema = z.object({
     }),
 });
 
-export default function EditTaskForm({ task, tasks, setTasks, setOpen }: EditTaskFormProps) {
+export default function EditTaskForm({ task, tasks, categories, setTasks, setOpen }: EditTaskFormProps) {
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(task.category);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: task.name,
       description: task.description,
+      categoryId: task.categoryId,
       dueDate: task.dueDate && new Date(task.dueDate),
     },
   });
+
+  useEffect(() => {
+    form.setValue("categoryId", selectedCategory?.id);
+  }, [selectedCategory]);
 
   const isLoading = form.formState.isSubmitting;
 
@@ -62,7 +73,13 @@ export default function EditTaskForm({ task, tasks, setTasks, setOpen }: EditTas
       setTasks(
         tasks.map((task) =>
           task.id === id
-            ? { ...task, name: updatedTask.name, description: updatedTask.description, dueDate: updatedTask.dueDate }
+            ? {
+                ...task,
+                name: updatedTask.name,
+                description: updatedTask.description,
+                category: updatedTask.category,
+                dueDate: updatedTask.dueDate,
+              }
             : task
         )
       );
@@ -110,6 +127,13 @@ export default function EditTaskForm({ task, tasks, setTasks, setOpen }: EditTas
               <FormMessage />
             </FormItem>
           )}
+        />
+
+        <CategoryPopOver
+          isLoading={isLoading}
+          selectedCategory={selectedCategory}
+          categories={categories}
+          setSelectedCategory={setSelectedCategory}
         />
 
         <FormField
