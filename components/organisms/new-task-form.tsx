@@ -124,7 +124,7 @@ export default function NewTaskForm({ tasks, categories, setTasks }: NewTaskForm
                       </div>
                     ))}
 
-                    {categories && <Separator />}
+                    {categories.length > 0 && <Separator />}
 
                     <NewCategoryForm />
 
