@@ -8,6 +8,7 @@ import axios from "axios";
 
 import { Category } from "@prisma/client";
 import { toast } from "sonner";
+import { X } from "lucide-react";
 
 const colors = [
   "bg-gray-500",
@@ -24,9 +25,10 @@ const colors = [
 interface NewCategoryFormProps {
   categoryList: Category[];
   setCategories: React.Dispatch<React.SetStateAction<Category[]>>;
+  setIsAdding: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function NewCategoryForm({ categoryList, setCategories }: NewCategoryFormProps) {
+export default function NewCategoryForm({ categoryList, setCategories, setIsAdding }: NewCategoryFormProps) {
   const [name, setName] = useState("");
   const [selectedColor, setColor] = useState("bg-gray-500");
   const [isSubmitting, setSubmitting] = useState(false);
@@ -57,17 +59,29 @@ export default function NewCategoryForm({ categoryList, setCategories }: NewCate
 
   return (
     <div className="flex flex-col gap-2">
-      <Input
-        type="text"
-        placeholder="Input category name..."
-        autoComplete="off"
-        value={name}
-        onChange={(e) => setName(e.target.value.toLowerCase())}
-        className="flex-1 h-8 text-xs"
-        disabled={isSubmitting}
-      />
+      <div className="flex items-center gap-1 pr-1">
+        <Input
+          type="text"
+          placeholder="Input category name..."
+          autoComplete="off"
+          value={name}
+          onChange={(e) => setName(e.target.value.toLowerCase())}
+          className="flex-1 h-8 text-xs w-[170px]"
+          disabled={isSubmitting}
+        />
 
-      <div className="grid grid-cols-5 gap-1">
+        <Button
+          variant={"ghost"}
+          size={"xs"}
+          className="hover:text-red-500"
+          onClick={() => setIsAdding(false)}
+          disabled={isSubmitting}
+        >
+          <X />
+        </Button>
+      </div>
+
+      <div className="grid grid-cols-6 gap-1">
         {colors.map((color, id) => (
           <div
             key={`color_${id}`}

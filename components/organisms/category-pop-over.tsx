@@ -17,6 +17,7 @@ interface CategoryPopOverProps {
 
 export default function CategoryPopOver({ categories }: CategoryPopOverProps) {
   const [categoryList, setCategories] = useState<Category[]>(categories);
+  const [isAdding, setIsAdding] = useState(false);
 
   return (
     <Popover>
@@ -42,12 +43,20 @@ export default function CategoryPopOver({ categories }: CategoryPopOverProps) {
 
         {categoryList.length > 0 && <Separator />}
 
-        <NewCategoryForm categoryList={categoryList} setCategories={setCategories} />
+        {isAdding && (
+          <NewCategoryForm categoryList={categoryList} setCategories={setCategories} setIsAdding={setIsAdding} />
+        )}
 
-        <div className="flex items-center gap-1">
-          <Plus className="h-3 w-3" />
-          <span className="text-sm">New category</span>
-        </div>
+        {!isAdding && (
+          <Button
+            variant={"ghost"}
+            size={"xs"}
+            className="w-full flex items-center gap-1"
+            onClick={() => setIsAdding(true)}
+          >
+            <span className="text-sm">New category</span>
+          </Button>
+        )}
       </PopoverContent>
     </Popover>
   );
