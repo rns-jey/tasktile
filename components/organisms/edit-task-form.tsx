@@ -21,6 +21,7 @@ import { toast } from "sonner";
 import { TaskWithCategory } from "@/types";
 import CategoryPopOver from "./category-pop-over";
 import { useEffect, useState } from "react";
+import { DrawerClose } from "../atoms/drawer";
 
 interface EditTaskFormProps {
   task: TaskWithCategory;
@@ -95,7 +96,7 @@ export default function EditTaskForm({ task, tasks, setTasks, categories, setCat
 
   return (
     <Form {...form}>
-      <form className="px-4 flex flex-col space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
+      <form className="px-4 flex flex-col space-y-4 grow overflow-y-auto" onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
           control={form.control}
           name="name"
@@ -120,7 +121,7 @@ export default function EditTaskForm({ task, tasks, setTasks, categories, setCat
           control={form.control}
           name="description"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="grow">
               <FormLabel>Description</FormLabel>
               <FormControl>
                 <Textarea placeholder="Provide a brief description of the task..." className="resize-none" {...field} />
@@ -178,7 +179,12 @@ export default function EditTaskForm({ task, tasks, setTasks, categories, setCat
 
         <Separator />
 
-        <Button type="submit">Submit</Button>
+        <div className="flex flex-col gap-2 mb-4">
+          <Button type="submit">Submit</Button>
+          <DrawerClose asChild>
+            <Button variant="outline">Cancel</Button>
+          </DrawerClose>
+        </div>
       </form>
     </Form>
   );

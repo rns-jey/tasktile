@@ -109,7 +109,12 @@ export default function TaskCard({ task, tasks, setTasks, categories, setCategor
                 >
                   {task.name}
                 </div>
-                <p className={cn(task.completed && "line-through text-foreground/50", "text-xs text-left")}>
+                <p
+                  className={cn(
+                    task.completed && "line-through text-foreground/50",
+                    "text-xs text-left truncate w-60 md:w-72"
+                  )}
+                >
                   {task.description}
                 </p>
                 <div
@@ -139,11 +144,6 @@ export default function TaskCard({ task, tasks, setTasks, categories, setCategor
                 categories={categories}
                 setCategories={setCategories}
               />
-              <DrawerFooter className="pt-2">
-                <DrawerClose asChild>
-                  <Button variant="outline">Cancel</Button>
-                </DrawerClose>
-              </DrawerFooter>
             </DrawerContent>
           </Drawer>
         </div>
