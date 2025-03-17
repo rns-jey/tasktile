@@ -5,7 +5,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { ScrollArea } from "../atoms/scroll-area";
 import { cn } from "@/lib/utils";
-import { AnimatePresence } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import SlideAnimation from "../atoms/slide-animation";
 import { Checkbox } from "../atoms/checkbox";
 import { useState } from "react";
@@ -17,6 +17,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem } from "../atoms/form";
 import { Input } from "../atoms/input";
 import { Button } from "../atoms/button";
+import LoadingCircleSpinner from "../atoms/loading-circle-spinner";
 
 function formatDueDate(dueDate: Date) {
   const difference = differenceInCalendarDays(dueDate, new Date());
@@ -75,12 +76,14 @@ export default function TaskSection() {
     }
   >({
     mutationFn: async (newTask) => {
+      setLoading(true);
       const response = await axios.post("api/tasks/new", newTask);
       return response.data;
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["tasks"] }); // Wait for refetch to complete
       form.reset();
+      setLoading(false);
     },
   });
 
@@ -118,9 +121,13 @@ export default function TaskSection() {
               )}
             />
 
-            <Button type="submit" size="icon" disabled={isLoading}>
-              <Plus className="h-4 w-4" />
-            </Button>
+            {isLoading ? (
+              <LoadingCircleSpinner />
+            ) : (
+              <Button type="submit" size="icon" disabled={isLoading}>
+                <Plus className="h-4 w-4" />
+              </Button>
+            )}
           </div>
         </form>
       </Form>
