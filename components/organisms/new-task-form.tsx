@@ -1,5 +1,5 @@
-import React from "react";
-import { Form, FormControl, FormField, FormItem } from "../atoms/form";
+import React, { useState } from "react";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "../atoms/form";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,7 +9,8 @@ import axios from "axios";
 import { Input } from "../atoms/input";
 import LoadingCircleSpinner from "../atoms/loading-circle-spinner";
 import { Button } from "../atoms/button";
-import { Plus } from "lucide-react";
+import { Plus, Text } from "lucide-react";
+import { Textarea } from "../atoms/textarea";
 
 const formSchema = z.object({
   name: z.string().min(3),
@@ -23,6 +24,8 @@ const formSchema = z.object({
 });
 
 export default function NewTaskForm() {
+  const [describing, setDescribing] = useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -52,6 +55,7 @@ export default function NewTaskForm() {
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["tasks"] }); // Wait for refetch to complete
       form.reset();
+      setDescribing(false);
     },
   });
 
@@ -90,6 +94,38 @@ export default function NewTaskForm() {
             </Button>
           )}
         </div>
+
+        <div className="flex gap-2">
+          <Button
+            type="button"
+            variant={"outline"}
+            size={"xs"}
+            onClick={() => setDescribing(!describing)}
+            disabled={addTask.isPending}
+          >
+            <Text />
+            <span className="text-xs">{describing ? "Hide description" : "Add description"}</span>
+          </Button>
+        </div>
+
+        {describing && (
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Textarea
+                    placeholder="Provide a brief description of the task..."
+                    className="resize-none"
+                    disabled={addTask.isPending}
+                    {...field}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+        )}
       </form>
     </Form>
   );
@@ -143,7 +179,7 @@ export default function NewTaskForm() {
 // }
 
 // export default function NewTaskForm({ tasks, setTasks, categories, setCategories }: NewTaskFormProps) {
-//   const [describing, setDescribing] = useState(false);
+//
 //   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
 
 //   const form = useForm<z.infer<typeof formSchema>>({
@@ -205,17 +241,7 @@ export default function NewTaskForm() {
 //           </Button>
 //         </div>
 
-//         <div className="flex gap-2">
-//           <Button
-//             type="button"
-//             variant={"outline"}
-//             size={"xs"}
-//             onClick={() => setDescribing(!describing)}
-//             disabled={isLoading}
-//           >
-//             <Text />
-//             <span className="text-xs">{describing ? "Hide description" : "Add description"}</span>
-//           </Button>
+//
 
 //           <CategoryPopOver
 //             isLoading={isLoading}
@@ -293,25 +319,7 @@ export default function NewTaskForm() {
 //           />
 //         </div>
 
-//         {describing && (
-//           <FormField
-//             control={form.control}
-//             name="description"
-//             render={({ field }) => (
-//               <FormItem>
-//                 <FormControl>
-//                   <Textarea
-//                     placeholder="Provide a brief description of the task..."
-//                     className="resize-none"
-//                     disabled={isLoading}
-//                     {...field}
-//                   />
-//                 </FormControl>
-//                 <FormMessage />
-//               </FormItem>
-//             )}
-//           />
-//         )}
+//
 //       </form>
 //     </Form>
 //   );
