@@ -5,21 +5,7 @@ import React from "react";
 import { ScrollArea } from "../atoms/scroll-area";
 import { cn } from "@/lib/utils";
 import { AnimatePresence } from "motion/react";
-import SlideAnimation from "../atoms/slide-animation";
-import { Checkbox } from "../atoms/checkbox";
-import { differenceInCalendarDays } from "date-fns";
-import { Clock } from "lucide-react";
-
-function formatDueDate(dueDate: Date) {
-  const difference = differenceInCalendarDays(dueDate, new Date());
-  const formatter = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
-  const label = {
-    label: "Due " + formatter.format(difference, "day"),
-    color: difference === 0 ? "text-orange-400" : difference > 0 ? "text-blue-500" : difference < 0 && "text-red-500",
-  };
-
-  return label;
-}
+import TaskCard from "../molecules/task-card";
 
 export default function TaskList() {
   const { data: tasks } = useQuery<TaskWithCategory[]>({
@@ -46,51 +32,7 @@ export default function TaskList() {
             <AnimatePresence>
               <div className="space-y-1">
                 {activeTasks.map((task) => (
-                  <SlideAnimation key={task.id}>
-                    <div className={`bg-${task.category?.color} absolute h-[100px] w-2`} />
-                    <div className="flex items-center justify-between p-3">
-                      <div className="flex items-center gap-3 w-full">
-                        <Checkbox
-                          id={`task-${task.id}`}
-                          checked={task.completed}
-                          onCheckedChange={() => {}}
-                          // disabled={isLoading}
-                          className="cursor-pointer"
-                        />
-
-                        <div className="flex flex-col gap-1  ">
-                          <div
-                            className={cn(
-                              task.completed && "line-through text-foreground/50",
-                              "text-sm font-semibold text-left"
-                            )}
-                          >
-                            {task.name}
-                          </div>
-
-                          <p
-                            className={cn(
-                              task.completed && "line-through text-foreground/50",
-                              "text-xs text-left truncate w-60 md:w-72"
-                            )}
-                          >
-                            {task.description}
-                          </p>
-
-                          <div
-                            className={cn(
-                              task.dueDate && formatDueDate(task.dueDate).color,
-                              task.completed && "line-through text-foreground/50",
-                              "flex gap-1 items-center text-xs"
-                            )}
-                          >
-                            <Clock className="h-3 w-3" />
-                            <span>{task.dueDate ? formatDueDate(task.dueDate).label : "No due date"}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </SlideAnimation>
+                  <TaskCard task={task} key={task.id} />
                 ))}
               </div>
             </AnimatePresence>
