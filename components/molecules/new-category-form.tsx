@@ -1,14 +1,11 @@
-"use client";
-
+import React from "react";
 import { Input } from "../atoms/input";
-import { cn } from "@/lib/utils";
-import { useState } from "react";
-import { Button } from "../atoms/button";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-
-import { Category } from "@prisma/client";
-import { toast } from "sonner";
+import { Button } from "../atoms/button";
 import { X } from "lucide-react";
+import { Category } from "@prisma/client";
+import { cn } from "@/lib/utils";
 
 const colors = [
   { name: "red-500", bg: "bg-red-500" },
@@ -22,40 +19,26 @@ const colors = [
 ];
 
 interface NewCategoryFormProps {
-  categories: Category[];
-  setCategories: React.Dispatch<React.SetStateAction<Category[]>>;
   setIsAdding: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function NewCategoryForm({ categories, setCategories, setIsAdding }: NewCategoryFormProps) {
-  const [name, setName] = useState("");
-  const [selectedColor, setColor] = useState("red-500");
-  const [isSubmitting, setSubmitting] = useState(false);
+export default function NewCategoryForm({ setIsAdding }: NewCategoryFormProps) {
+  const [name, setName] = React.useState("");
+  const [selectedColor, setColor] = React.useState("red-500");
 
-  async function handleAddCategory() {
-    if (name.trim()) {
-      try {
-        setSubmitting(true);
+  const queryClient = useQueryClient();
 
-        const response = await axios.post("api/category/new", { name, color: selectedColor });
-        const newTask = response.data;
-
-        setCategories([newTask, ...categories]);
-
-        setName("");
-        setColor("red-500");
-
-        setSubmitting(false);
-        setIsAdding(false);
-      } catch (error) {
-        if (axios.isAxiosError(error)) {
-          toast.error(error.response?.data); // Customize further if needed
-        }
-
-        setSubmitting(false);
-      }
-    }
-  }
+  const addCategory = useMutation({
+    mutationFn: async () => {
+      await axios.post("api/categories/new", { name, color: selectedColor });
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["categories"] }); // Wait for refetch to complete
+      setName("");
+      setColor("red-500");
+      setIsAdding(false);
+    },
+  });
 
   return (
     <div className="flex flex-col gap-2">
@@ -67,7 +50,7 @@ export default function NewCategoryForm({ categories, setCategories, setIsAdding
           value={name}
           onChange={(e) => setName(e.target.value.toLowerCase())}
           className="flex-1 h-8 text-xs w-[170px]"
-          disabled={isSubmitting}
+          disabled={addCategory.isPending}
         />
 
         <Button
@@ -75,7 +58,7 @@ export default function NewCategoryForm({ categories, setCategories, setIsAdding
           size={"xs"}
           className="hover:text-red-500"
           onClick={() => setIsAdding(false)}
-          disabled={isSubmitting}
+          disabled={addCategory.isPending}
         >
           <X />
         </Button>
@@ -86,14 +69,14 @@ export default function NewCategoryForm({ categories, setCategories, setIsAdding
           <div
             key={`color_${id}`}
             className={cn(selectedColor !== color.name && "border-transparent", "border-2 rounded-full p-1")}
-            onClick={() => !isSubmitting && setColor(color.name)}
+            onClick={() => !addCategory.isPending && setColor(color.name)}
           >
             <div className={`${color.bg} rounded-full h-5 w-5 cursor-pointer`} />
           </div>
         ))}
       </div>
 
-      <Button variant={"outline"} onClick={() => handleAddCategory()} disabled={isSubmitting}>
+      <Button variant={"outline"} onClick={() => addCategory.mutate()} disabled={addCategory.isPending}>
         Add category
       </Button>
     </div>
