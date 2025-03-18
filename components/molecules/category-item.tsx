@@ -5,9 +5,7 @@ import { Category } from "@prisma/client";
 import { motion } from "motion/react";
 import { Button } from "../atoms/button";
 import { X } from "lucide-react";
-import { useState } from "react";
 import axios from "axios";
-import { useCategoryStore } from "@/store/category-store";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface CategoryItemProps {

@@ -1,13 +1,12 @@
 import React from "react";
 import { PopoverContent } from "../atoms/popover";
 import { AnimatePresence } from "motion/react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { Category } from "@prisma/client";
-import axios from "axios";
+
 import { Button } from "../atoms/button";
 import { Separator } from "../atoms/separator";
 import NewCategoryForm from "../molecules/new-category-form";
-import CategoryItem from "../molecules/category-item";
 
 export default function CategoryMenu({ children }: { children: React.ReactNode }) {
   const [isAdding, setIsAdding] = React.useState(false);

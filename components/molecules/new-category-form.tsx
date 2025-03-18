@@ -4,7 +4,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { Button } from "../atoms/button";
 import { X } from "lucide-react";
-import { Category } from "@prisma/client";
 import { cn } from "@/lib/utils";
 
 const colors = [

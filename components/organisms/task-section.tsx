@@ -2,9 +2,6 @@
 
 import TaskList from "./task-list";
 import NewTaskForm from "./new-task-form";
-import { useQuery } from "@tanstack/react-query";
-import { TaskWithCategory } from "@/types";
-import axios from "axios";
 
 export default function TaskSection() {
   return (
