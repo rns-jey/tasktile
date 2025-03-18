@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, FormControl, FormField, FormItem, FormMessage } from "../atoms/form";
+import { Form, FormControl, FormField, FormItem } from "../atoms/form";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,8 +9,11 @@ import axios from "axios";
 import { Input } from "../atoms/input";
 import LoadingCircleSpinner from "../atoms/loading-circle-spinner";
 import { Button } from "../atoms/button";
-import { Plus, Text } from "lucide-react";
+import { Plus, Tag, Text } from "lucide-react";
 import { Textarea } from "../atoms/textarea";
+import { Popover, PopoverContent, PopoverTrigger } from "../atoms/popover";
+import { AnimatePresence, motion } from "motion/react";
+import CategoryPopOver from "./category-pop-over";
 
 const formSchema = z.object({
   name: z.string().min(3),
@@ -106,6 +109,8 @@ export default function NewTaskForm() {
             <Text />
             <span className="text-xs">{describing ? "Hide description" : "Add description"}</span>
           </Button>
+
+          <CategoryPopOver />
         </div>
 
         {describing && (
