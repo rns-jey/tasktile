@@ -9,15 +9,16 @@ import axios from "axios";
 import { Input } from "../atoms/input";
 import LoadingCircleSpinner from "../atoms/loading-circle-spinner";
 import { Button } from "../atoms/button";
-import { CalendarIcon, Plus, Tag, Text } from "lucide-react";
+import { CalendarIcon, Plus, Text } from "lucide-react";
 import { Textarea } from "../atoms/textarea";
 import { Popover, PopoverContent, PopoverTrigger } from "../atoms/popover";
-import { AnimatePresence, motion } from "motion/react";
+
 import CategoryPopOver from "./category-pop-over";
-import { useCategoryStore } from "@/store/category-store";
+
 import { format } from "date-fns";
 import { Calendar } from "../atoms/calendar";
 import { Separator } from "../atoms/separator";
+import { Category } from "@prisma/client";
 
 const formSchema = z.object({
   name: z.string().min(3),
@@ -32,7 +33,7 @@ const formSchema = z.object({
 
 export default function NewTaskForm() {
   const [describing, setDescribing] = useState(false);
-  const { selectedCategory, deselectCategory } = useCategoryStore();
+  const [taskCategory, selectCategory] = useState<Category | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -45,8 +46,8 @@ export default function NewTaskForm() {
   });
 
   useEffect(() => {
-    form.setValue("categoryId", selectedCategory?.id);
-  }, [selectedCategory]);
+    form.setValue("categoryId", taskCategory?.id);
+  }, [taskCategory]);
 
   const queryClient = useQueryClient();
 
@@ -67,7 +68,7 @@ export default function NewTaskForm() {
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["tasks"] }); // Wait for refetch to complete
       form.reset();
-      deselectCategory();
+      selectCategory(null);
       setDescribing(false);
     },
   });
@@ -120,7 +121,7 @@ export default function NewTaskForm() {
             <span className="text-xs">{describing ? "Hide description" : "Add description"}</span>
           </Button>
 
-          <CategoryPopOver isLoading={addTask.isPending} />
+          <CategoryPopOver isLoading={addTask.isPending} taskCategory={taskCategory} selectCategory={selectCategory} />
 
           <FormField
             control={form.control}

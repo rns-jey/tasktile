@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import SlideAnimation from "../atoms/slide-animation";
 import { TaskWithCategory } from "@/types";
 import { Checkbox } from "../atoms/checkbox";
@@ -20,6 +22,7 @@ import {
   AlertDialogTrigger,
 } from "../atoms/alert-dialog";
 import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerTrigger } from "../atoms/drawer";
+import EditTaskForm from "../organisms/edit-task-form";
 
 interface TaskCardProps {
   task: TaskWithCategory;
@@ -38,6 +41,7 @@ function formatDueDate(dueDate: Date) {
 
 export default function TaskCard({ task }: TaskCardProps) {
   const queryClient = useQueryClient();
+  const [open, setOpen] = useState(false);
 
   const toggleTask = useMutation({
     mutationFn: async (task: TaskWithCategory) => {
@@ -73,7 +77,7 @@ export default function TaskCard({ task }: TaskCardProps) {
           />
 
           <div className="flex gap-1 w-full">
-            <Drawer>
+            <Drawer open={open} onOpenChange={setOpen}>
               <DrawerTrigger disabled={toggleTask.isPending} className="grow cursor-pointer">
                 <div className="flex flex-col gap-1  ">
                   <div
@@ -113,6 +117,7 @@ export default function TaskCard({ task }: TaskCardProps) {
                     Modify your task details here. Click 'Save' to update your changes.
                   </DrawerDescription>
                 </DrawerHeader>
+                <EditTaskForm task={task} setOpen={setOpen} />
               </DrawerContent>
             </Drawer>
             {task.completed && (

@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../atoms/form";
-import { Category, Task } from "@prisma/client";
+import { Category } from "@prisma/client";
 import { Input } from "../atoms/input";
 import { Popover, PopoverContent, PopoverTrigger } from "../atoms/popover";
 import { Button } from "../atoms/button";
@@ -17,18 +17,15 @@ import { Calendar } from "../atoms/calendar";
 import { Textarea } from "../atoms/textarea";
 import { Separator } from "../atoms/separator";
 import axios from "axios";
-import { toast } from "sonner";
+
 import { TaskWithCategory } from "@/types";
 import CategoryPopOver from "./category-pop-over";
 import { useEffect, useState } from "react";
 import { DrawerClose } from "../atoms/drawer";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface EditTaskFormProps {
   task: TaskWithCategory;
-  tasks: TaskWithCategory[];
-  setTasks: React.Dispatch<React.SetStateAction<TaskWithCategory[]>>;
-  categories: Category[];
-  setCategories: React.Dispatch<React.SetStateAction<Category[]>>;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -46,8 +43,8 @@ const formSchema = z.object({
     }),
 });
 
-export default function EditTaskForm({ task, tasks, setTasks, categories, setCategories, setOpen }: EditTaskFormProps) {
-  const [selectedCategory, setSelectedCategory] = useState<Category | null>(task.category);
+export default function EditTaskForm({ task, setOpen }: EditTaskFormProps) {
+  const [taskCategory, selectCategory] = useState<Category | null>(task.category);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -60,38 +57,37 @@ export default function EditTaskForm({ task, tasks, setTasks, categories, setCat
   });
 
   useEffect(() => {
-    form.setValue("categoryId", selectedCategory?.id);
-  }, [selectedCategory]);
+    form.setValue("categoryId", taskCategory?.id);
+  }, [taskCategory]);
 
   const isLoading = form.formState.isSubmitting;
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    try {
-      const id = task.id;
+  const queryClient = useQueryClient();
 
-      const response = await axios.patch(`/api/task/${task.id}`, values);
-      const updatedTask = response.data;
-
-      setTasks(
-        tasks.map((task) =>
-          task.id === id
-            ? {
-                ...task,
-                name: updatedTask.name,
-                description: updatedTask.description,
-                category: updatedTask.category,
-                dueDate: updatedTask.dueDate,
-              }
-            : task
-        )
-      );
-
-      setOpen(false);
-      toast("Task updated.");
-      form.reset();
-    } catch (error) {
-      console.log(error);
+  const updateTask = useMutation<
+    TaskWithCategory,
+    Error,
+    {
+      name: string;
+      description: string;
+      categoryId?: string | null;
+      dueDate?: Date | null;
     }
+  >({
+    mutationFn: async (updatedTask) => {
+      const response = await axios.patch(`/api/tasks/${task.id}`, updatedTask);
+      return response.data;
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["tasks"] }); // Wait for refetch to complete
+      form.reset();
+      selectCategory(null);
+      setOpen(false);
+    },
+  });
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    updateTask.mutate(values);
   }
 
   return (
@@ -131,13 +127,7 @@ export default function EditTaskForm({ task, tasks, setTasks, categories, setCat
           )}
         />
 
-        <CategoryPopOver
-          isLoading={isLoading}
-          categories={categories}
-          setCategories={setCategories}
-          selectedCategory={selectedCategory}
-          setSelectedCategory={setSelectedCategory}
-        />
+        <CategoryPopOver isLoading={updateTask.isPending} taskCategory={taskCategory} selectCategory={selectCategory} />
 
         <FormField
           control={form.control}

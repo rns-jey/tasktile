@@ -12,11 +12,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface CategoryItemProps {
   category: Category;
+  selectCategory: React.Dispatch<React.SetStateAction<Category | null>>;
 }
 
-export default function CategoryItem({ category }: CategoryItemProps) {
-  const { selectCategory, deselectCategory } = useCategoryStore();
-
+export default function CategoryItem({ category, selectCategory }: CategoryItemProps) {
   const queryClient = useQueryClient();
 
   const deleteCategory = useMutation({
@@ -26,7 +25,7 @@ export default function CategoryItem({ category }: CategoryItemProps) {
     onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["categories"] });
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
-      deselectCategory();
+      selectCategory(null);
     },
   });
 

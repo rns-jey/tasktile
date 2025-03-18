@@ -1,7 +1,7 @@
 import React from "react";
 import { PopoverContent } from "../atoms/popover";
 import { AnimatePresence } from "motion/react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Category } from "@prisma/client";
 import axios from "axios";
 import { Button } from "../atoms/button";
@@ -9,24 +9,16 @@ import { Separator } from "../atoms/separator";
 import NewCategoryForm from "../molecules/new-category-form";
 import CategoryItem from "../molecules/category-item";
 
-export default function CategoryMenu() {
-  const { data: categories } = useQuery<Category[]>({
-    queryKey: ["categories"],
-    queryFn: async () => {
-      const response = await axios.get("/api/categories");
-
-      return response.data;
-    },
-  });
-
+export default function CategoryMenu({ children }: { children: React.ReactNode }) {
   const [isAdding, setIsAdding] = React.useState(false);
+
+  const queryClient = useQueryClient();
+  const categories = queryClient.getQueryData<Category[]>(["categories"]);
 
   return (
     <PopoverContent className="w-auto p-2 space-y-2" align="start">
       <AnimatePresence>
-        <div className="flex flex-col">
-          {categories && categories.map((category) => <CategoryItem category={category} key={category.id} />)}
-        </div>
+        <div className="flex flex-col">{children}</div>
       </AnimatePresence>
 
       {categories && <Separator />}
