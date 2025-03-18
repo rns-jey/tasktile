@@ -8,16 +8,14 @@ import { X } from "lucide-react";
 import { useState } from "react";
 import axios from "axios";
 import { useCategoryStore } from "@/store/category-store";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface CategoryItemProps {
   category: Category;
-  categories: Category[];
-  setCategories: React.Dispatch<React.SetStateAction<Category[]>>;
-  setSelectedCategory: React.Dispatch<React.SetStateAction<Category | null>>;
 }
 
 export default function CategoryItem({ category }: CategoryItemProps) {
-  const { selectCategory } = useCategoryStore();
+  const { selectCategory, deselectCategory } = useCategoryStore();
 
   // async function deleteCategory(id: string) {
   //   try {
@@ -34,6 +32,19 @@ export default function CategoryItem({ category }: CategoryItemProps) {
   //   }
   // }
 
+  const queryClient = useQueryClient();
+
+  const deleteCategory = useMutation({
+    mutationFn: async () => {
+      await axios.delete(`/api/categories/${category.id}`);
+    },
+    onSuccess: async () => {
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+      deselectCategory();
+    },
+  });
+
   return (
     <motion.div
       key={category.id}
@@ -48,7 +59,7 @@ export default function CategoryItem({ category }: CategoryItemProps) {
         <span className="text-sm">{category.name}</span>
       </div>
 
-      <Button variant={"ghost"} size={"xs"} className="hover:text-red-500">
+      <Button variant={"ghost"} size={"xs"} className="hover:text-red-500" onClick={() => deleteCategory.mutate()}>
         <X />
       </Button>
     </motion.div>

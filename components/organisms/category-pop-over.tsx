@@ -1,19 +1,12 @@
 import React from "react";
-import { Popover, PopoverContent, PopoverTrigger } from "../atoms/popover";
+import { Popover, PopoverTrigger } from "../atoms/popover";
 import { Button } from "../atoms/button";
-import { Tag, X } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
-import { Category } from "@prisma/client";
-import axios from "axios";
-import { AnimatePresence, motion } from "motion/react";
-import { Separator } from "../atoms/separator";
-
-import NewCategoryForm from "../molecules/new-category-form";
+import { Tag } from "lucide-react";
 import { useCategoryStore } from "@/store/category-store";
 import CategoryMenu from "./category-menu";
 
 export default function CategoryPopOver() {
-  const { selectedCategory, selectCategory } = useCategoryStore();
+  const { selectedCategory } = useCategoryStore();
 
   return (
     <Popover>
