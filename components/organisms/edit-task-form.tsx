@@ -105,7 +105,7 @@ export default function EditTaskForm({ task, setOpen }: EditTaskFormProps) {
                   placeholder="Input task name"
                   autoComplete="off"
                   className="flex-1"
-                  disabled={isLoading}
+                  disabled={updateTask.isPending}
                   {...field}
                 />
               </FormControl>
@@ -120,7 +120,12 @@ export default function EditTaskForm({ task, setOpen }: EditTaskFormProps) {
             <FormItem className="grow">
               <FormLabel>Description</FormLabel>
               <FormControl>
-                <Textarea placeholder="Provide a brief description of the task..." className="resize-none" {...field} />
+                <Textarea
+                  placeholder="Provide a brief description of the task..."
+                  className="resize-none"
+                  disabled={updateTask.isPending}
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -142,6 +147,7 @@ export default function EditTaskForm({ task, setOpen }: EditTaskFormProps) {
                       <Button
                         variant={"outline"}
                         className={cn("w-[240px] pl-3 text-left font-normal", !field.value && "text-muted-foreground")}
+                        disabled={updateTask.isPending}
                       >
                         {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
                         <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
@@ -170,9 +176,13 @@ export default function EditTaskForm({ task, setOpen }: EditTaskFormProps) {
         <Separator />
 
         <div className="flex flex-col gap-2 mb-4">
-          <Button type="submit">Submit</Button>
+          <Button type="submit" disabled={updateTask.isPending}>
+            Submit
+          </Button>
           <DrawerClose asChild>
-            <Button variant="outline">Cancel</Button>
+            <Button variant="outline" disabled={updateTask.isPending}>
+              Cancel
+            </Button>
           </DrawerClose>
         </div>
       </form>
