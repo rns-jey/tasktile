@@ -4,9 +4,22 @@ import { TaskWithCategory } from "@/types";
 import { Checkbox } from "../atoms/checkbox";
 import { cn } from "@/lib/utils";
 import { differenceInCalendarDays } from "date-fns";
-import { Clock } from "lucide-react";
+import { Clock, Trash2, Undo2 } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import { Button } from "../atoms/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "../atoms/alert-dialog";
+import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerTrigger } from "../atoms/drawer";
 
 interface TaskCardProps {
   task: TaskWithCategory;
@@ -36,6 +49,16 @@ export default function TaskCard({ task }: TaskCardProps) {
     },
   });
 
+  const deleteTask = useMutation({
+    mutationFn: async (task: TaskWithCategory) => {
+      const response = await axios.delete(`/api/tasks/${task.id}`);
+      return response.data;
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["tasks"] }); // Wait for refetch to complete
+    },
+  });
+
   return (
     <SlideAnimation key={task.id}>
       <div className={`bg-${task.category?.color} absolute h-[100px] w-2`} />
@@ -49,74 +72,92 @@ export default function TaskCard({ task }: TaskCardProps) {
             className="cursor-pointer"
           />
 
-          <div className="flex flex-col gap-1  ">
-            <div className={cn(task.completed && "line-through text-foreground/50", "text-sm font-semibold text-left")}>
-              {task.name}
-            </div>
+          <div className="flex gap-1 w-full">
+            <Drawer>
+              <DrawerTrigger disabled={toggleTask.isPending} className="grow cursor-pointer">
+                <div className="flex flex-col gap-1  ">
+                  <div
+                    className={cn(
+                      task.completed && "line-through text-foreground/50",
+                      "text-sm font-semibold text-left"
+                    )}
+                  >
+                    {task.name}
+                  </div>
 
-            <p
-              className={cn(
-                task.completed && "line-through text-foreground/50",
-                "text-xs text-left truncate w-60 md:w-72"
-              )}
-            >
-              {task.description}
-            </p>
+                  <p
+                    className={cn(
+                      task.completed && "line-through text-foreground/50",
+                      "text-xs text-left truncate w-60 md:w-72"
+                    )}
+                  >
+                    {task.description}
+                  </p>
 
-            <div
-              className={cn(
-                task.dueDate && formatDueDate(task.dueDate).color,
-                task.completed && "line-through text-foreground/50",
-                "flex gap-1 items-center text-xs"
-              )}
-            >
-              <Clock className="h-3 w-3" />
-              <span>{task.dueDate ? formatDueDate(task.dueDate).label : "No due date"}</span>
-            </div>
+                  <div
+                    className={cn(
+                      task.dueDate && formatDueDate(task.dueDate).color,
+                      task.completed && "line-through text-foreground/50",
+                      "flex gap-1 items-center text-xs"
+                    )}
+                  >
+                    <Clock className="h-3 w-3" />
+                    <span>{task.dueDate ? formatDueDate(task.dueDate).label : "No due date"}</span>
+                  </div>
+                </div>
+              </DrawerTrigger>
+              <DrawerContent>
+                <DrawerHeader className="text-left">
+                  <DrawerTitle>Edit task</DrawerTitle>
+                  <DrawerDescription>
+                    Modify your task details here. Click 'Save' to update your changes.
+                  </DrawerDescription>
+                </DrawerHeader>
+              </DrawerContent>
+            </Drawer>
+            {task.completed && (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => toggleTask.mutate(task)}
+                disabled={toggleTask.isPending}
+                className="h-8 w-8 text-muted-foreground hover:text-primary"
+              >
+                <Undo2 className="h-4 w-4" />
+              </Button>
+            )}
+
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  disabled={deleteTask.isPending}
+                  className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete the task and remove it from your task
+                    list.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={() => deleteTask.mutate(task)}>Continue</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         </div>
       </div>
     </SlideAnimation>
   );
 }
-
-// "use client";
-
-// import { useState } from "react";
-
-// import { Checkbox } from "../atoms/checkbox";
-// import { Category, Task } from "@prisma/client";
-// import axios from "axios";
-// import { Button } from "../atoms/button";
-// import { Clock, Trash2, Undo2 } from "lucide-react";
-// import { cn } from "@/lib/utils";
-// import {
-//   AlertDialog,
-//   AlertDialogAction,
-//   AlertDialogCancel,
-//   AlertDialogContent,
-//   AlertDialogDescription,
-//   AlertDialogFooter,
-//   AlertDialogHeader,
-//   AlertDialogTitle,
-//   AlertDialogTrigger,
-// } from "../atoms/alert-dialog";
-// import { toast } from "sonner";
-// import { Label } from "../atoms/label";
-// import { differenceInCalendarDays } from "date-fns";
-// import {
-//   Drawer,
-//   DrawerClose,
-//   DrawerContent,
-//   DrawerDescription,
-//   DrawerFooter,
-//   DrawerHeader,
-//   DrawerTitle,
-//   DrawerTrigger,
-// } from "../atoms/drawer";
-// import NewTaskForm from "../organisms/new-task-form";
-// import EditTaskForm from "../organisms/edit-task-form";
-// import { TaskWithCategory } from "@/types";
 
 // interface TaskCardProps {
 //   task: TaskWithCategory;
@@ -185,7 +226,7 @@ export default function TaskCard({ task }: TaskCardProps) {
 
 //           <Drawer open={open} onOpenChange={setOpen}>
 //             <DrawerTrigger disabled={task.completed} className="w-full cursor-pointer">
-//               <div className="flex flex-col gap-1  ">
+//               <div className="flex flex-col gap-1">
 //                 <div
 //                   className={cn(task.completed && "line-through text-foreground/50", "text-sm font-semibold text-left")}
 //                 >
