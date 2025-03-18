@@ -17,21 +17,6 @@ interface CategoryItemProps {
 export default function CategoryItem({ category }: CategoryItemProps) {
   const { selectCategory, deselectCategory } = useCategoryStore();
 
-  // async function deleteCategory(id: string) {
-  //   try {
-  //     setLoading(true);
-  //     await axios.delete(`/api/category/${category.id}`);
-
-  //     setCategories(categories.filter((category) => category.id !== id));
-
-  //     setLoading(false);
-  //     setSelectedCategory(null);
-  //   } catch (error) {
-  //     console.error("Failed to delete task", error);
-  //     setLoading(false);
-  //   }
-  // }
-
   const queryClient = useQueryClient();
 
   const deleteCategory = useMutation({
