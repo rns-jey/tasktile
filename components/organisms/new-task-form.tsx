@@ -29,7 +29,7 @@ const formSchema = z.object({
 
 export default function NewTaskForm() {
   const [describing, setDescribing] = useState(false);
-  const { selectedCategory } = useCategoryStore();
+  const { selectedCategory, deselectCategory } = useCategoryStore();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -64,6 +64,7 @@ export default function NewTaskForm() {
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["tasks"] }); // Wait for refetch to complete
       form.reset();
+      deselectCategory();
       setDescribing(false);
     },
   });
