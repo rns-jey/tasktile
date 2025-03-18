@@ -9,8 +9,11 @@ import { AnimatePresence, motion } from "motion/react";
 import { Separator } from "../atoms/separator";
 
 import NewCategoryForm from "../molecules/new-category-form";
+import { useCategoryStore } from "@/store/category-store";
 
 export default function CategoryPopOver() {
+  const { selectedCategory, selectCategory } = useCategoryStore();
+
   const { data: categories } = useQuery<Category[]>({
     queryKey: ["categories"],
     queryFn: async () => {
@@ -27,6 +30,7 @@ export default function CategoryPopOver() {
       <PopoverTrigger asChild>
         <Button variant={"outline"} size={"xs"} className="flex items-center w-fit">
           <Tag />
+          <span className="text-xs">{selectedCategory ? selectedCategory.name : "Add category"}</span>
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-2 space-y-2" align="start">
@@ -42,7 +46,7 @@ export default function CategoryPopOver() {
                   transition={{ duration: 0.3 }}
                   className="flex justify-between p-1 rounded cursor-pointer hover:bg-accent"
                 >
-                  <div className="p-0 flex items-center gap-1 w-full">
+                  <div className="p-0 flex items-center gap-1 w-full" onClick={() => selectCategory(category)}>
                     <div className={`rounded-full bg-${category.color} h-3 w-3`} />
                     <span className="text-sm">{category.name}</span>
                   </div>
