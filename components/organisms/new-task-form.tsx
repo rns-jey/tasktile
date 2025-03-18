@@ -117,7 +117,7 @@ export default function NewTaskForm() {
             <span className="text-xs">{describing ? "Hide description" : "Add description"}</span>
           </Button>
 
-          <CategoryPopOver />
+          <CategoryPopOver isLoading={addTask.isPending} />
         </div>
 
         {describing && (

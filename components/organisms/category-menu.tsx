@@ -1,12 +1,10 @@
 import React from "react";
 import { PopoverContent } from "../atoms/popover";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence } from "motion/react";
 import { useQuery } from "@tanstack/react-query";
 import { Category } from "@prisma/client";
 import axios from "axios";
 import { Button } from "../atoms/button";
-import { X } from "lucide-react";
-import { useCategoryStore } from "@/store/category-store";
 import { Separator } from "../atoms/separator";
 import NewCategoryForm from "../molecules/new-category-form";
 import CategoryItem from "../molecules/category-item";
