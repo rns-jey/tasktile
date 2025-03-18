@@ -6,6 +6,7 @@ import { ScrollArea } from "../atoms/scroll-area";
 import { cn } from "@/lib/utils";
 import { AnimatePresence } from "motion/react";
 import TaskCard from "../molecules/task-card";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../atoms/accordion";
 
 export default function TaskList() {
   const { data: tasks } = useQuery<TaskWithCategory[]>({
@@ -20,6 +21,7 @@ export default function TaskList() {
   if (!tasks) return <div>Loading...</div>;
 
   const activeTasks = tasks.filter((task) => !task.completed);
+  const completedTasks = tasks.filter((task) => task.completed);
 
   return (
     <>
@@ -45,23 +47,33 @@ export default function TaskList() {
           No active tasks. Add a new task to get started!
         </p>
       )}
+
+      {/* Completed tasks */}
+      <Accordion type="single" collapsible>
+        <AccordionItem value="completed-tasks">
+          <AccordionTrigger>
+            <h2 className="text-lg font-semibold text-primary">Completed Tasks</h2>
+          </AccordionTrigger>
+          <AccordionContent>
+            <ScrollArea className={cn(completedTasks.length >= 5 ? "h-[300px]" : "h-fit")}>
+              <AnimatePresence>
+                <div className="space-y-1">
+                  {completedTasks.map((task) => (
+                    <TaskCard task={task} key={task.id} />
+                  ))}
+                </div>
+              </AnimatePresence>
+            </ScrollArea>
+
+            {completedTasks.length === 0 && (
+              <p className="text-sm text-muted-foreground text-center py-3">No completed tasks yet.</p>
+            )}
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
     </>
   );
 }
-
-// "use client";
-
-// import { useState } from "react";
-// import { Category, Task } from "@prisma/client";
-
-// import { AnimatePresence, motion } from "motion/react";
-// import NewTaskForm from "./new-task-form";
-// import { ScrollArea } from "../atoms/scroll-area";
-// import TaskCard from "../molecules/task-card";
-// import { cn } from "@/lib/utils";
-// import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../atoms/accordion";
-// import { TaskWithCategory } from "@/types";
-// import SlideAnimation from "../atoms/slide-animation";
 
 // interface TaskListProps {
 //   taskList: TaskWithCategory[];
@@ -112,35 +124,7 @@ export default function TaskList() {
 //       </div>
 
 //       {/* Completed tasks */}
-//       <Accordion type="single" collapsible>
-//         <AccordionItem value="completed-tasks">
-//           <AccordionTrigger>
-//             <h2 className="text-lg font-semibold text-primary">Completed Tasks</h2>
-//           </AccordionTrigger>
-//           <AccordionContent>
-//             <ScrollArea className={cn(completedTasks.length >= 5 ? "h-[300px]" : "h-fit")}>
-//               <AnimatePresence>
-//                 <div className="space-y-1">
-//                   {completedTasks.map((task) => (
-//                     <SlideAnimation key={task.id}>
-//                       <TaskCard
-//                         task={task}
-//                         tasks={tasks}
-//                         setTasks={setTasks}
-//                         categories={categories}
-//                         setCategories={setCategories}
-//                       />
-//                     </SlideAnimation>
-//                   ))}
-//                 </div>
-//               </AnimatePresence>
-//             </ScrollArea>
-//             {completedTasks.length === 0 && (
-//               <p className="text-sm text-muted-foreground text-center py-3">No completed tasks yet.</p>
-//             )}
-//           </AccordionContent>
-//         </AccordionItem>
-//       </Accordion>
+
 //     </div>
 //   );
 // }

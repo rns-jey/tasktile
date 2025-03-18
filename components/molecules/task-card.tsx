@@ -5,6 +5,8 @@ import { Checkbox } from "../atoms/checkbox";
 import { cn } from "@/lib/utils";
 import { differenceInCalendarDays } from "date-fns";
 import { Clock } from "lucide-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 
 interface TaskCardProps {
   task: TaskWithCategory;
@@ -22,6 +24,18 @@ function formatDueDate(dueDate: Date) {
 }
 
 export default function TaskCard({ task }: TaskCardProps) {
+  const queryClient = useQueryClient();
+
+  const toggleTask = useMutation({
+    mutationFn: async (task: TaskWithCategory) => {
+      const response = await axios.patch(`/api/tasks/${task.id}/toggle`, { completed: !task.completed });
+      return response.data;
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["tasks"] }); // Wait for refetch to complete
+    },
+  });
+
   return (
     <SlideAnimation key={task.id}>
       <div className={`bg-${task.category?.color} absolute h-[100px] w-2`} />
@@ -30,8 +44,8 @@ export default function TaskCard({ task }: TaskCardProps) {
           <Checkbox
             id={`task-${task.id}`}
             checked={task.completed}
-            onCheckedChange={() => {}}
-            // disabled={isLoading}
+            onCheckedChange={() => toggleTask.mutate(task)}
+            disabled={toggleTask.isPending}
             className="cursor-pointer"
           />
 
