@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, FormControl, FormField, FormItem } from "../atoms/form";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -14,6 +14,7 @@ import { Textarea } from "../atoms/textarea";
 import { Popover, PopoverContent, PopoverTrigger } from "../atoms/popover";
 import { AnimatePresence, motion } from "motion/react";
 import CategoryPopOver from "./category-pop-over";
+import { useCategoryStore } from "@/store/category-store";
 
 const formSchema = z.object({
   name: z.string().min(3),
@@ -28,6 +29,7 @@ const formSchema = z.object({
 
 export default function NewTaskForm() {
   const [describing, setDescribing] = useState(false);
+  const { selectedCategory } = useCategoryStore();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -38,6 +40,10 @@ export default function NewTaskForm() {
       dueDate: null,
     },
   });
+
+  useEffect(() => {
+    form.setValue("categoryId", selectedCategory?.id);
+  }, [selectedCategory]);
 
   const queryClient = useQueryClient();
 

@@ -10,20 +10,10 @@ import { Separator } from "../atoms/separator";
 
 import NewCategoryForm from "../molecules/new-category-form";
 import { useCategoryStore } from "@/store/category-store";
+import CategoryMenu from "./category-menu";
 
 export default function CategoryPopOver() {
   const { selectedCategory, selectCategory } = useCategoryStore();
-
-  const { data: categories } = useQuery<Category[]>({
-    queryKey: ["categories"],
-    queryFn: async () => {
-      const response = await axios.get("/api/categories");
-
-      return response.data;
-    },
-  });
-
-  const [isAdding, setIsAdding] = React.useState(false);
 
   return (
     <Popover>
@@ -33,47 +23,7 @@ export default function CategoryPopOver() {
           <span className="text-xs">{selectedCategory ? selectedCategory.name : "Add category"}</span>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-2 space-y-2" align="start">
-        <AnimatePresence>
-          <div className="flex flex-col">
-            {categories &&
-              categories.map((category) => (
-                <motion.div
-                  key={category.id}
-                  initial={{ x: -20, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  exit={{ x: 100, opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="flex justify-between p-1 rounded cursor-pointer hover:bg-accent"
-                >
-                  <div className="p-0 flex items-center gap-1 w-full" onClick={() => selectCategory(category)}>
-                    <div className={`rounded-full bg-${category.color} h-3 w-3`} />
-                    <span className="text-sm">{category.name}</span>
-                  </div>
-
-                  <Button variant={"ghost"} size={"xs"} className="hover:text-red-500">
-                    <X />
-                  </Button>
-                </motion.div>
-              ))}
-          </div>
-        </AnimatePresence>
-
-        {categories && <Separator />}
-
-        {isAdding && <NewCategoryForm setIsAdding={setIsAdding} />}
-
-        {!isAdding && (
-          <Button
-            variant={"ghost"}
-            size={"xs"}
-            className="w-full flex items-center gap-1"
-            onClick={() => setIsAdding(true)}
-          >
-            <span className="text-sm">New category</span>
-          </Button>
-        )}
-      </PopoverContent>
+      <CategoryMenu />
     </Popover>
   );
 }

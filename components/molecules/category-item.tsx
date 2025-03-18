@@ -7,6 +7,7 @@ import { Button } from "../atoms/button";
 import { X } from "lucide-react";
 import { useState } from "react";
 import axios from "axios";
+import { useCategoryStore } from "@/store/category-store";
 
 interface CategoryItemProps {
   category: Category;
@@ -15,44 +16,39 @@ interface CategoryItemProps {
   setSelectedCategory: React.Dispatch<React.SetStateAction<Category | null>>;
 }
 
-export default function CategoryItem({ category, categories, setCategories, setSelectedCategory }: CategoryItemProps) {
-  const [isLoading, setLoading] = useState(false);
+export default function CategoryItem({ category }: CategoryItemProps) {
+  const { selectCategory } = useCategoryStore();
 
-  async function deleteCategory(id: string) {
-    try {
-      setLoading(true);
-      await axios.delete(`/api/category/${category.id}`);
+  // async function deleteCategory(id: string) {
+  //   try {
+  //     setLoading(true);
+  //     await axios.delete(`/api/category/${category.id}`);
 
-      setCategories(categories.filter((category) => category.id !== id));
+  //     setCategories(categories.filter((category) => category.id !== id));
 
-      setLoading(false);
-      setSelectedCategory(null);
-    } catch (error) {
-      console.error("Failed to delete task", error);
-      setLoading(false);
-    }
-  }
+  //     setLoading(false);
+  //     setSelectedCategory(null);
+  //   } catch (error) {
+  //     console.error("Failed to delete task", error);
+  //     setLoading(false);
+  //   }
+  // }
 
   return (
     <motion.div
+      key={category.id}
       initial={{ x: -20, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
       exit={{ x: 100, opacity: 0 }}
       transition={{ duration: 0.3 }}
       className="flex justify-between p-1 rounded cursor-pointer hover:bg-accent"
     >
-      <div className="p-0 flex items-center gap-1 w-full" onClick={() => setSelectedCategory(category)}>
+      <div className="p-0 flex items-center gap-1 w-full" onClick={() => selectCategory(category)}>
         <div className={`rounded-full bg-${category.color} h-3 w-3`} />
         <span className="text-sm">{category.name}</span>
       </div>
 
-      <Button
-        variant={"ghost"}
-        size={"xs"}
-        className="hover:text-red-500"
-        onClick={() => deleteCategory(category.id)}
-        disabled={isLoading}
-      >
+      <Button variant={"ghost"} size={"xs"} className="hover:text-red-500">
         <X />
       </Button>
     </motion.div>
