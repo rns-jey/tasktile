@@ -61,6 +61,7 @@ export default function TaskCard({ task }: TaskCardProps) {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["tasks"] }); // Wait for refetch to complete
+      await queryClient.invalidateQueries({ queryKey: ["contributions"] }); // Wait for refetch to complete
     },
   });
 
