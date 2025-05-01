@@ -14,11 +14,13 @@ export function generateMonthCalendar(contributions: RawContribution[], targetDa
   const calendarDays = eachDayOfInterval({ start, end });
 
   return calendarDays.map((day) => {
-    const match = contributions.find((item) => isSameDay(parseISO(item.date), day));
+    const match = contributions.find((item) => isSameDay(parseISO(item.completedAt), day));
 
     return {
-      date: day,
-      count: match ? match.count : 0,
+      completedAt: day,
+      _count: {
+        completed: match ? match._count.completed : 0,
+      },
       isCurrentMonth: day.getMonth() === targetDate.getMonth(),
     };
   });

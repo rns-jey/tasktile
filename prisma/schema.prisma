@@ -41,6 +41,7 @@ model Task {
   categoryId String?
   category Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
 
+  completedAt DateTime?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

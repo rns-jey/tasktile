@@ -3,12 +3,16 @@ import { Category, Task } from "@prisma/client";
 export type TaskWithCategory = Task & { category: Category | null };
 
 export type RawContribution = {
-  date: string;
-  count: number;
+  completedAt: string;
+  _count: {
+    completed: number;
+  };
 };
 
 export type CalendarDay = {
-  date: Date;
+  completedAt: Date;
   isCurrentMonth: boolean;
-  count: number;
+  _count: {
+    completed: number;
+  };
 };
