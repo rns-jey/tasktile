@@ -29,7 +29,7 @@ export default function MonthTiles() {
   return (
     <div className="max-w-72 p-6 bg-background rounded-lg shadow-lg">
       <h1>May 2025</h1>
-      <p>Total: {data.totalCount}</p>
+      <p>Total: {data.totalCount} Completed</p>
       <CalendarGrid days={calendarData} />
     </div>
   );

@@ -16,8 +16,6 @@ export default function CalendarGrid({ days }: CalendarGridProps) {
     return colorScale[4];
   };
 
-  console.log(days);
-
   return (
     <div>
       <div className="grid grid-cols-7 gap-1">
