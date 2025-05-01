@@ -8,6 +8,24 @@ import { AnimatePresence } from "motion/react";
 import TaskCard from "../molecules/task-card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../atoms/accordion";
 
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from "@dnd-kit/core";
+
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+
 export default function TaskList() {
   const { data: tasks } = useQuery<TaskWithCategory[]>({
     queryKey: ["tasks"],
@@ -22,6 +40,17 @@ export default function TaskList() {
 
   const activeTasks = tasks.filter((task) => !task.completed);
   const completedTasks = tasks.filter((task) => task.completed);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
 
   return (
     <>
