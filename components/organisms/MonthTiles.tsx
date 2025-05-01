@@ -1,18 +1,25 @@
+"use client";
+
 import { generateMonthCalendar } from "@/lib/utils";
 
 import CalendarGrid from "../molecules/CalendarGrid";
-
-const rawData = [
-  { date: "2025-04-30T23:00:00.000Z", count: 4 },
-  { date: "2025-05-01T23:00:00.000Z", count: 2 },
-  { date: "2025-05-03T23:00:00.000Z", count: 0 },
-  { date: "2025-05-05T23:00:00.000Z", count: 4 },
-  { date: "2025-05-09T23:00:00.000Z", count: 1 },
-  { date: "2025-05-12T23:00:00.000Z", count: 1 },
-];
+import { useQuery } from "@tanstack/react-query";
+import { RawContribution } from "@/types";
+import axios from "axios";
 
 export default function MonthTiles() {
-  const calendarData = generateMonthCalendar(rawData, new Date("2025-05-01"));
+  const { data: contributions } = useQuery<RawContribution[]>({
+    queryKey: ["contributions"],
+    queryFn: async () => {
+      const response = await axios.get("/api/contributions");
+
+      return response.data;
+    },
+  });
+
+  if (!contributions) return <div>Loading...</div>;
+
+  const calendarData = generateMonthCalendar(contributions, new Date("2025-05-01"));
 
   return (
     <div className="max-w-72 p-6 bg-background rounded-lg shadow-lg">

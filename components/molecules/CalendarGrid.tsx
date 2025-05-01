@@ -16,17 +16,19 @@ export default function CalendarGrid({ days }: CalendarGridProps) {
     return colorScale[4];
   };
 
+  console.log(days);
+
   return (
     <div>
       <div className="grid grid-cols-7 gap-1">
         {days.map((dayObj: CalendarDay) => (
           <div
-            key={dayObj.date.toISOString()}
-            title={`${format(dayObj.date, "MMM d")}: ${dayObj.count} contributions`}
+            key={dayObj.completedAt.toISOString()}
+            title={`${format(dayObj.completedAt, "MMM d")}: ${dayObj._count.completed} contributions`}
             className={`w-8 h-8 flex items-center justify-center text-xs rounded green-600 ${
               dayObj.isCurrentMonth ? "" : "opacity-0"
             }`}
-            style={{ backgroundColor: getColor(dayObj.count) }}
+            style={{ backgroundColor: getColor(dayObj._count.completed) }}
           />
         ))}
       </div>

@@ -16,10 +16,15 @@ export async function PATCH(req: Request, props: { params: tParams }) {
 
     const { completed } = await req.json();
 
+    const now = new Date();
+    const today = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
+    const completedAt = completed ? today : null;
+
     const newTask = await db.task.update({
       where: { id: taskId, userId: profile.id },
       data: {
         completed,
+        completedAt,
       },
     });
 
