@@ -12,21 +12,35 @@ export async function GET(req: Request) {
     const start = startOfMonth(new Date());
     const end = endOfMonth(new Date());
 
-    const contributions = await db.task.groupBy({
-      by: ["completedAt"],
-      where: {
-        userId: profile.id,
-        completedAt: {
-          gte: start,
-          lte: end,
+    const [contributions, totalCount] = await Promise.all([
+      db.task.groupBy({
+        by: ["completedAt"],
+        where: {
+          userId: profile.id,
+          completedAt: {
+            gte: start,
+            lte: end,
+          },
         },
-      },
-      _count: {
-        completed: true,
-      },
-    });
+        _count: {
+          completed: true,
+        },
+      }),
+      db.task.count({
+        where: {
+          userId: profile.id,
+          completedAt: {
+            gte: start,
+            lte: end,
+          },
+        },
+      }),
+    ]);
 
-    return NextResponse.json(contributions);
+    return NextResponse.json({
+      contributions,
+      totalCount,
+    });
   } catch (error) {
     console.log(error);
     return new NextResponse("Internal Server Error", { status: 500 });

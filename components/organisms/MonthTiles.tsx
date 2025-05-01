@@ -7,8 +7,13 @@ import { useQuery } from "@tanstack/react-query";
 import { RawContribution } from "@/types";
 import axios from "axios";
 
+type ContributionResponse = {
+  contributions: RawContribution[];
+  totalCount: number;
+};
+
 export default function MonthTiles() {
-  const { data: contributions } = useQuery<RawContribution[]>({
+  const { data } = useQuery<ContributionResponse>({
     queryKey: ["contributions"],
     queryFn: async () => {
       const response = await axios.get("/api/contributions");
@@ -17,14 +22,14 @@ export default function MonthTiles() {
     },
   });
 
-  if (!contributions) return <div>Loading...</div>;
+  if (!data) return <div>Loading...</div>;
 
-  const calendarData = generateMonthCalendar(contributions, new Date("2025-05-01"));
+  const calendarData = generateMonthCalendar(data.contributions, new Date("2025-05-01"));
 
   return (
     <div className="max-w-72 p-6 bg-background rounded-lg shadow-lg">
       <h1>May 2025</h1>
-      <p>Total: 150 Completed</p>
+      <p>Total: {data.totalCount}</p>
       <CalendarGrid days={calendarData} />
     </div>
   );
