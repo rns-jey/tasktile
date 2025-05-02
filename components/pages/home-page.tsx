@@ -9,10 +9,10 @@ export default async function HomePage() {
   const currentUser = await currentProfile();
 
   return (
-    <div className="flex flex-col gap-4 items-center">
+    <div className="flex flex-col items-center gap-4">
       <Header />
 
-      <main className="p-4 flex flex-row gap-4">
+      <main className="flex flex-row gap-4 p-4">
         <TaskSection />
 
         <div className="flex gap-2">
