@@ -13,8 +13,8 @@ export default function MonthTiles({
 }: MonthTilesProps) {
   return (
     <div className="bg-background max-w-72 rounded-lg p-6 shadow-lg">
-      <h1>May 2025</h1>
-      <p>Total: {totalCount} Completed</p>
+      <h1 className="text-2xl font-bold">May 2025</h1>
+      <p className="text-xs">Total: {totalCount} Completed</p>
       <CalendarGrid days={calendarData} />
     </div>
   );
