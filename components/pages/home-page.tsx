@@ -16,7 +16,10 @@ export default async function HomePage() {
         <TaskSection />
 
         <div className="flex gap-2">
-          <MonthTiles />
+          <div>
+            <MonthTiles />
+          </div>
+
           <div>
             <CompletedToday />
           </div>

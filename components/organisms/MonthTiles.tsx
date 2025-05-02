@@ -6,6 +6,7 @@ import CalendarGrid from "../molecules/CalendarGrid";
 import { useQuery } from "@tanstack/react-query";
 import { RawContribution } from "@/types";
 import axios from "axios";
+import { Skeleton } from "../atoms/skeleton";
 
 type ContributionResponse = {
   contributions: RawContribution[];
@@ -22,7 +23,14 @@ export default function MonthTiles() {
     },
   });
 
-  if (!data) return <div>Loading...</div>;
+  if (!data)
+    return (
+      <div className="bg-background max-w-72 space-y-2 rounded-lg p-6 shadow-lg">
+        <Skeleton className="h-6 w-60" />
+        <Skeleton className="h-6 w-60" />
+        <Skeleton className="h-44 w-60" />
+      </div>
+    );
 
   const calendarData = generateMonthCalendar(
     data.contributions,
