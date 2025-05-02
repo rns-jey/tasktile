@@ -1,14 +1,20 @@
 import { Calendar } from "lucide-react";
 
-export default function CompletedToday() {
+type CompletedTodayProps = {
+  completedToday: number;
+};
+
+export default function CompletedToday({
+  completedToday,
+}: CompletedTodayProps) {
   return (
-    <div className="max-w-72 p-6 bg-background rounded-lg shadow-lg">
+    <div className="bg-background max-w-72 rounded-lg p-6 shadow-lg">
       <div className="flex gap-1">
         <Calendar />
         <h1>Today</h1>
       </div>
 
-      <h1>3</h1>
+      <h1>{completedToday}</h1>
       <p>tasks completed today</p>
     </div>
   );

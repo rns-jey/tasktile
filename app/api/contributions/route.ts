@@ -12,7 +12,12 @@ export async function GET(req: Request) {
     const start = startOfMonth(new Date());
     const end = endOfMonth(new Date());
 
-    const [contributions, totalCount] = await Promise.all([
+    const now = new Date();
+    const today = new Date(
+      Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()),
+    );
+
+    const [contributions, totalCount, completedToday] = await Promise.all([
       db.task.groupBy({
         by: ["completedAt"],
         where: {
@@ -35,11 +40,18 @@ export async function GET(req: Request) {
           },
         },
       }),
+      db.task.count({
+        where: {
+          userId: profile.id,
+          completedAt: today,
+        },
+      }),
     ]);
 
     return NextResponse.json({
       contributions,
       totalCount,
+      completedToday,
     });
   } catch (error) {
     console.log(error);

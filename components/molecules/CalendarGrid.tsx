@@ -37,7 +37,7 @@ export default function CalendarGrid({ days }: CalendarGridProps) {
                 />
               </TooltipTrigger>
               <TooltipContent>
-                <p>{`${dayObj._count.completed > 0 ? dayObj._count.completed : "No"} tasks completed on ${format(dayObj.completedAt, "MMM d")}`}</p>
+                <p>{`${dayObj._count.completed > 0 ? dayObj._count.completed : "No"} completed on ${format(dayObj.completedAt, "MMM d")}`}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
