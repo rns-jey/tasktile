@@ -1,5 +1,11 @@
 import { CalendarDay } from "@/types";
 import { format } from "date-fns";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../atoms/tooltip";
 
 interface CalendarGridProps {
   days: CalendarDay[];
@@ -20,14 +26,21 @@ export default function CalendarGrid({ days }: CalendarGridProps) {
     <div>
       <div className="grid grid-cols-7 gap-1">
         {days.map((dayObj: CalendarDay) => (
-          <div
-            key={dayObj.completedAt.toISOString()}
-            title={`${format(dayObj.completedAt, "MMM d")}: ${dayObj._count.completed} contributions`}
-            className={`w-8 h-8 flex items-center justify-center text-xs rounded green-600 ${
-              dayObj.isCurrentMonth ? "" : "opacity-0"
-            }`}
-            style={{ backgroundColor: getColor(dayObj._count.completed) }}
-          />
+          <TooltipProvider key={dayObj.completedAt.toISOString()}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div
+                  className={`green-600 flex h-8 w-8 items-center justify-center rounded text-xs ${
+                    dayObj.isCurrentMonth ? "" : "opacity-0"
+                  }`}
+                  style={{ backgroundColor: getColor(dayObj._count.completed) }}
+                />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{`${dayObj._count.completed > 0 ? dayObj._count.completed : "No"} tasks completed on ${format(dayObj.completedAt, "MMM d")}`}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         ))}
       </div>
     </div>

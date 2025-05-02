@@ -24,10 +24,13 @@ export default function MonthTiles() {
 
   if (!data) return <div>Loading...</div>;
 
-  const calendarData = generateMonthCalendar(data.contributions, new Date("2025-05-01"));
+  const calendarData = generateMonthCalendar(
+    data.contributions,
+    new Date("2025-05-01"),
+  );
 
   return (
-    <div className="max-w-72 p-6 bg-background rounded-lg shadow-lg">
+    <div className="bg-background max-w-72 rounded-lg p-6 shadow-lg">
       <h1>May 2025</h1>
       <p>Total: {data.totalCount} Completed</p>
       <CalendarGrid days={calendarData} />
