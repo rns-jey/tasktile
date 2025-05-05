@@ -26,10 +26,23 @@ export default function DashboardSection() {
 
   if (!data)
     return (
-      <div className="bg-background max-w-72 space-y-2 rounded-lg p-6 shadow-lg">
-        <Skeleton className="h-6 w-60" />
-        <Skeleton className="h-6 w-60" />
-        <Skeleton className="h-44 w-60" />
+      <div className="flex gap-2">
+        <div>
+          <div className="bg-background max-w-72 space-y-2 rounded-lg p-6 shadow-lg">
+            <Skeleton className="h-6 w-60" />
+            <Skeleton className="h-6 w-60" />
+            <Skeleton className="h-44 w-60" />
+          </div>
+          <div className="bg-background max-w-72 space-y-2 rounded-lg p-6 shadow-lg"></div>
+        </div>
+
+        <div>
+          <div className="bg-background max-w-72 space-y-2 rounded-lg p-6 shadow-lg">
+            <Skeleton className="h-6 w-36" />
+            <Skeleton className="h-6 w-36" />
+            <Skeleton className="h-6 w-36" />
+          </div>
+        </div>
       </div>
     );
 
