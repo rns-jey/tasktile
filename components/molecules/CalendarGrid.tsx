@@ -30,7 +30,7 @@ export default function CalendarGrid({ days }: CalendarGridProps) {
             <Tooltip>
               <TooltipTrigger asChild>
                 <div
-                  className={`green-600 flex h-8 w-8 items-center justify-center rounded text-xs ${
+                  className={`green-600 flex h-8 w-8 cursor-pointer items-center justify-center rounded text-xs hover:border-2 hover:border-black ${
                     dayObj.isCurrentMonth ? "" : "opacity-0"
                   }`}
                   style={{ backgroundColor: getColor(dayObj._count.completed) }}

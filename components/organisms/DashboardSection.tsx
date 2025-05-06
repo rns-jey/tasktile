@@ -7,11 +7,13 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { RawContribution } from "@/types";
 import { Skeleton } from "../atoms/skeleton";
+import StreakCount from "./StreakCount";
 
 type ContributionResponse = {
   contributions: RawContribution[];
   totalCount: number;
   completedToday: number;
+  streak: number;
 };
 
 export default function DashboardSection() {
@@ -33,7 +35,6 @@ export default function DashboardSection() {
             <Skeleton className="h-6 w-60" />
             <Skeleton className="h-44 w-60" />
           </div>
-          <div className="bg-background max-w-72 space-y-2 rounded-lg p-6 shadow-lg"></div>
         </div>
 
         <div>
@@ -41,6 +42,14 @@ export default function DashboardSection() {
             <Skeleton className="h-6 w-36" />
             <Skeleton className="h-6 w-36" />
             <Skeleton className="h-6 w-36" />
+          </div>
+        </div>
+
+        <div>
+          <div className="bg-background max-w-72 space-y-2 rounded-lg p-6 shadow-lg">
+            <Skeleton className="h-6 w-24" />
+            <Skeleton className="h-6 w-24" />
+            <Skeleton className="h-6 w-24" />
           </div>
         </div>
       </div>
@@ -73,6 +82,10 @@ export default function DashboardSection() {
 
       <div>
         <CompletedToday completedToday={data.completedToday} />
+      </div>
+
+      <div>
+        <StreakCount streak={data.streak} />
       </div>
     </div>
   );
