@@ -75,18 +75,21 @@ export default function DashboardSection() {
   });
 
   return (
-    <div className="flex gap-2">
-      <div>
+    <div className="flex flex-col gap-2">
+      <div className="flex gap-2">
         <MonthTiles totalCount={data.totalCount} calendarData={calendarData} />
+
+        <div className="flex flex-col gap-2">
+          <div className="flex gap-2">
+            <CompletedToday completedToday={data.completedToday} />
+            <StreakCount streak={data.streak} />
+          </div>
+
+          <div className="bg-background h-full w-full rounded-lg p-6 shadow-lg" />
+        </div>
       </div>
 
-      <div>
-        <CompletedToday completedToday={data.completedToday} />
-      </div>
-
-      <div>
-        <StreakCount streak={data.streak} />
-      </div>
+      <div className="bg-background h-56 w-full rounded-lg p-6 shadow-lg" />
     </div>
   );
 }
