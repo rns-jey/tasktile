@@ -5,6 +5,7 @@ import TaskSection from "../organisms/task-section";
 import MonthTiles from "../organisms/MonthTiles";
 import CompletedToday from "../organisms/CompletedToday";
 import DashboardSection from "../organisms/DashboardSection";
+import Main from "../organisms/Main";
 
 export default async function HomePage() {
   const currentUser = await currentProfile();
@@ -12,11 +13,7 @@ export default async function HomePage() {
   return (
     <div className="flex flex-col items-center gap-4">
       <Header />
-
-      <main className="flex flex-row gap-4 p-4">
-        <DashboardSection />
-        <TaskSection />
-      </main>
+      <Main />
     </div>
   );
 }
