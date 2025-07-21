@@ -1,7 +1,7 @@
 import Header from "../organisms/header";
 
 import currentProfile from "@/lib/current-profile";
-import TaskSection from "../organisms/task-section";
+import TaskSection from "../organisms/TaskSection";
 import MonthTiles from "../organisms/MonthTiles";
 import CompletedToday from "../organisms/CompletedToday";
 import DashboardSection from "../organisms/DashboardSection";
