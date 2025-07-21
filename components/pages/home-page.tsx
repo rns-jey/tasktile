@@ -14,8 +14,8 @@ export default async function HomePage() {
       <Header />
 
       <main className="flex flex-row gap-4 p-4">
-        <TaskSection />
         <DashboardSection />
+        <TaskSection />
       </main>
     </div>
   );
