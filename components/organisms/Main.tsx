@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import DashboardSection from "./DashboardSection";
 import TaskSection from "./task-section";
 import { usePathname } from "next/navigation";
+import AnalyticsSection from "./AnalyticsSection";
 
 export default function Main() {
   const pathname = usePathname();
@@ -14,7 +15,7 @@ export default function Main() {
       {pathname === "/" || pathname === "/tasks" ? (
         <TaskSection />
       ) : (
-        <div></div>
+        <AnalyticsSection />
       )}
     </main>
   );
