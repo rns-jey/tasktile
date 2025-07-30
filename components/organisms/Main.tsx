@@ -3,7 +3,8 @@
 import TaskSection from "./TaskSection";
 import AnalyticsSection from "./AnalyticsSection";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../atoms/tabs";
-import { Card, CardContent, CardHeader } from "../atoms/card";
+import { Card, CardContent, CardFooter, CardHeader } from "../atoms/card";
+import { Separator } from "../atoms/separator";
 
 export default function Main() {
   return (
@@ -27,7 +28,21 @@ export default function Main() {
                 Analytics
               </TabsTrigger>
             </TabsList>
+
+            <Separator className="my-1" />
+
+            <h3>Categories</h3>
           </CardContent>
+          <CardFooter className="flex justify-between">
+            <div>
+              <h3>Completed</h3>
+              <p>0</p>
+            </div>
+            <div>
+              <h3>Active</h3>
+              <p>1</p>
+            </div>
+          </CardFooter>
         </Card>
         <TabsContent value="tasks" className="w-full">
           <TaskSection />

@@ -6,7 +6,12 @@ import { ScrollArea } from "../atoms/scroll-area";
 import { cn } from "@/lib/utils";
 import { AnimatePresence } from "motion/react";
 import TaskCard from "../molecules/task-card";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../atoms/accordion";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "../atoms/accordion";
 
 import {
   DndContext,
@@ -56,10 +61,14 @@ export default function TaskList() {
     <>
       {/* Active tasks */}
       <div>
-        <h2 className="text-lg font-semibold mb-3 text-primary">Active Tasks</h2>
+        <h2 className="text-primary mb-3 text-lg font-semibold">
+          Active Tasks
+        </h2>
 
         {activeTasks.length > 0 && (
-          <ScrollArea className={cn(activeTasks.length >= 5 ? "h-[300px]" : "h-fit")}>
+          <ScrollArea
+            className={cn(activeTasks.length >= 5 ? "h-[300px]" : "h-fit")}
+          >
             <AnimatePresence>
               <div className="space-y-1">
                 {activeTasks.map((task) => (
@@ -72,7 +81,7 @@ export default function TaskList() {
       </div>
 
       {activeTasks.length === 0 && (
-        <p className="text-sm text-muted-foreground text-center py-3">
+        <p className="text-muted-foreground py-3 text-center text-sm">
           No active tasks. Add a new task to get started!
         </p>
       )}
@@ -81,10 +90,14 @@ export default function TaskList() {
       <Accordion type="single" collapsible>
         <AccordionItem value="completed-tasks">
           <AccordionTrigger>
-            <h2 className="text-lg font-semibold text-primary">Completed Tasks</h2>
+            <h2 className="text-primary text-lg font-semibold">
+              Completed Tasks
+            </h2>
           </AccordionTrigger>
           <AccordionContent>
-            <ScrollArea className={cn(completedTasks.length >= 5 ? "h-[300px]" : "h-fit")}>
+            <ScrollArea
+              className={cn(completedTasks.length >= 5 ? "h-[300px]" : "h-fit")}
+            >
               <AnimatePresence>
                 <div className="space-y-1">
                   {completedTasks.map((task) => (
@@ -95,7 +108,9 @@ export default function TaskList() {
             </ScrollArea>
 
             {completedTasks.length === 0 && (
-              <p className="text-sm text-muted-foreground text-center py-3">No completed tasks yet.</p>
+              <p className="text-muted-foreground py-3 text-center text-sm">
+                No completed tasks yet.
+              </p>
             )}
           </AccordionContent>
         </AccordionItem>
