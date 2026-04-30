@@ -12,9 +12,9 @@ export default function Main() {
       <Tabs
         orientation="vertical"
         defaultValue="tasks"
-        className="flex w-full flex-row"
+        className="flex w-full flex-col"
       >
-        <Card className="h-full w-full max-w-xs gap-4 py-4">
+        <Card className="mx-auto h-full w-full max-w-md gap-4 py-4">
           <CardHeader className="px-4">
             <h2>Dashboard</h2>
             <p>Manage your tasks and track progress</p>
