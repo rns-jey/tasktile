@@ -5,18 +5,19 @@ import AnalyticsSection from "./AnalyticsSection";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../atoms/tabs";
 import { Card, CardContent, CardFooter, CardHeader } from "../atoms/card";
 import { Separator } from "../atoms/separator";
+import { ChartColumn, ListTodo } from "lucide-react";
 
 export default function Main() {
   return (
     <main className="flex w-full max-w-7xl flex-row items-start gap-4 p-4">
-      <Tabs
+      {/* <Tabs
         orientation="vertical"
         defaultValue="tasks"
         className="flex w-full flex-col"
       >
         <Card className="mx-auto h-full w-full max-w-md gap-4 py-4">
           <CardHeader className="px-4">
-            <h2>Dashboard</h2>
+            <h2 className="text-2xl font-bold">Dashboard</h2>
             <p>Manage your tasks and track progress</p>
           </CardHeader>
           <CardContent className="flex h-full w-full flex-col px-4">
@@ -49,6 +50,24 @@ export default function Main() {
         </TabsContent>
         <TabsContent value="analytics">
           <AnalyticsSection />
+        </TabsContent>
+      </Tabs> */}
+
+      <Tabs defaultValue="todo" className="w-full">
+        <TabsList className="mx-auto w-1/2">
+          <TabsTrigger value="todo">
+            <ListTodo />
+            To do
+          </TabsTrigger>
+
+          <TabsTrigger value="analytics">
+            <ChartColumn />
+            Analytics
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="todo">
+          <TaskSection />
         </TabsContent>
       </Tabs>
     </main>
