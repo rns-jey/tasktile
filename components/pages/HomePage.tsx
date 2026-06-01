@@ -1,6 +1,7 @@
 import currentProfile from "@/lib/current-profile";
 
 import AppHeader from "../organisms/AppHeader";
+import Main from "../organisms/Main";
 
 export default async function HomePage() {
   const currentUser = await currentProfile();
@@ -8,7 +9,7 @@ export default async function HomePage() {
   return (
     <div className="flex flex-col items-center gap-4">
       <AppHeader />
-      {/* <Main /> */}
+      <Main />
     </div>
   );
 }

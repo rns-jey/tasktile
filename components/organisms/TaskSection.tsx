@@ -1,18 +1,17 @@
-"use client";
-
 import TaskList from "./task-list";
-import NewTaskForm from "./new-task-form";
+import NewTaskForm from "./NewTaskForm";
+import { Plus } from "lucide-react";
+import { Button } from "../atoms/Button";
+import NewTaskSection from "./NewTaskSection";
 
 export default function TaskSection() {
   return (
-    <div className="bg-background mx-auto w-full rounded-lg p-6 shadow-lg">
-      <h2 className="text-primary mb-3 text-lg font-semibold">Tasks</h2>
-
+    <div className="my-4">
       {/* Add new task */}
-      <NewTaskForm />
+      <NewTaskSection />
 
       {/* List of active and completed tasks */}
-      <TaskList />
+      {/* <TaskList /> */}
     </div>
   );
 }

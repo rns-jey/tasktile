@@ -1,15 +1,13 @@
 "use client";
 
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../molecules/Tabs";
 import TaskSection from "./TaskSection";
-import AnalyticsSection from "./AnalyticsSection";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../atoms/tabs";
-import { Card, CardContent, CardFooter, CardHeader } from "../atoms/card";
-import { Separator } from "../atoms/separator";
+
 import { ChartColumn, ListTodo } from "lucide-react";
 
 export default function Main() {
   return (
-    <main className="flex w-full max-w-7xl flex-row items-start gap-4 p-4">
+    <main className="flex w-full max-w-2xl flex-row items-start gap-4 p-4">
       {/* <Tabs
         orientation="vertical"
         defaultValue="tasks"
