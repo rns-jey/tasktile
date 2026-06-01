@@ -13,7 +13,7 @@ export default async function HomePage() {
   return (
     <div className="flex flex-col items-center gap-4">
       <Header />
-      <Main />
+      {/* <Main /> */}
     </div>
   );
 }
