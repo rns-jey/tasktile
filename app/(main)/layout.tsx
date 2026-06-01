@@ -1,12 +1,21 @@
 import React from "react";
-import ReactQueryProvider from "@/components/providers/react-query-provider";
-import { ThemeProvider } from "@/components/providers/theme-provider";
 
-export default function MainLayout({
+import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import Providers from "@/components/providers/Providers";
+import currentProfile from "@/lib/current-profile";
+import { redirect } from "next/navigation";
+
+export default async function MainLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const profile = await currentProfile();
+
+  if (!profile) {
+    if (!profile) redirect("/sign-in");
+  }
+
   return (
     <ThemeProvider
       attribute="class"
@@ -14,7 +23,7 @@ export default function MainLayout({
       enableSystem
       disableTransitionOnChange
     >
-      <ReactQueryProvider>{children}</ReactQueryProvider>
+      <Providers profile={profile}>{children}</Providers>
     </ThemeProvider>
   );
 }

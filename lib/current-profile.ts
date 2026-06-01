@@ -5,8 +5,7 @@ export default async function currentProfile() {
   const user = await currentUser();
 
   if (!user) {
-    (await auth()).redirectToSignIn();
-    return;
+    return null;
   }
 
   const profile = await db.profile.findUnique({
