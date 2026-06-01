@@ -1,13 +1,11 @@
-import { Diamond } from "lucide-react";
 import React from "react";
-import { Button } from "../atoms/button";
-import Link from "next/link";
-import Header from "../organisms/header";
+
+import AppHeader from "../organisms/AppHeader";
 
 export default function LandingPage() {
   return (
     <div>
-      <Header />
+      <AppHeader />
     </div>
   );
 }
