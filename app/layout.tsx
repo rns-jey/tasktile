@@ -16,7 +16,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "TaskTile - Your To-Do List App",
-  description: "Manage your tasks efficiently with TaskTile, a simple and intuitive to-do list app.",
+  description:
+    "Manage your tasks efficiently with TaskTile, a simple and intuitive to-do list app.",
 };
 
 export default function RootLayout({
@@ -26,8 +27,10 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en">
-        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <html lang="en" suppressHydrationWarning>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
           {children}
           <Toaster />
         </body>
