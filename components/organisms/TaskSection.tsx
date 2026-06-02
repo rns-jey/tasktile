@@ -1,17 +1,15 @@
-import TaskList from "./task-list";
-import NewTaskForm from "./NewTaskForm";
-import { Plus } from "lucide-react";
-import { Button } from "../atoms/Button";
 import NewTaskSection from "./NewTaskSection";
+
+import TaskListSection from "@/components/organisms/TaskListSection";
 
 export default function TaskSection() {
   return (
-    <div className="my-4">
+    <div className="my-4 flex flex-col gap-4">
       {/* Add new task */}
       <NewTaskSection />
 
       {/* List of active and completed tasks */}
-      {/* <TaskList /> */}
+      <TaskListSection />
     </div>
   );
 }
