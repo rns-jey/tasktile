@@ -18,15 +18,7 @@ import {
   FieldLabel,
 } from "@/components/ui/Field";
 import { Input } from "@/components//ui/Input";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components//ui/Select";
+
 import {
   Popover,
   PopoverContent,
@@ -39,6 +31,7 @@ import { CardContent, CardFooter } from "@/components/ui/Card";
 import InputTaskName from "@/components/molecules/InputTaskName";
 import TextAreaDescription from "../molecules/TextAreaDescription";
 import SelectCategory from "../molecules/SelectCategory";
+import InputCategory from "../molecules/InputCategory";
 
 interface NewTaskFormProps {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -65,20 +58,7 @@ const formSchema = z
     }
   });
 
-const colors = [
-  { name: "red-500", bg: "bg-red-500" },
-  { name: "orange-500", bg: "bg-orange-500" },
-  { name: "yellow-500", bg: "bg-yellow-500" },
-  { name: "green-500", bg: "bg-green-500" },
-  { name: "blue-500", bg: "bg-blue-500" },
-  { name: "indigo-500", bg: "bg-indigo-500" },
-  { name: "purple-500", bg: "bg-purple-500" },
-  { name: "pink-500", bg: "bg-pink-500" },
-];
-
 export default function NewTaskForm({ setIsOpen }: NewTaskFormProps) {
-  const [selectedColor, setColor] = React.useState("red-500");
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -145,7 +125,7 @@ export default function NewTaskForm({ setIsOpen }: NewTaskFormProps) {
             />
 
             <TextAreaDescription
-              id="form-add-description"
+              id="form-add-task-description"
               name="description"
               control={form.control}
               label="Description"
@@ -164,49 +144,13 @@ export default function NewTaskForm({ setIsOpen }: NewTaskFormProps) {
                 />
 
                 {form.watch("categoryId") === "other" && (
-                  <Controller
+                  <InputCategory
+                    id="form-add-task-category-name"
                     name="categoryName"
                     control={form.control}
-                    render={({ field, fieldState }) => (
-                      <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor="form-add-task-categoryName">
-                          Category Name
-                        </FieldLabel>
-                        <div className="flex flex-col gap-1">
-                          <Input
-                            {...field}
-                            id="form-add-task-categoryName"
-                            aria-invalid={fieldState.invalid}
-                            placeholder="Add a new category ..."
-                          />
-
-                          {fieldState.invalid && (
-                            <FieldError errors={[fieldState.error]} />
-                          )}
-
-                          <div className="grid grid-cols-6 gap-1">
-                            {colors.map((color, id) => (
-                              <div
-                                key={`color_${id}`}
-                                className={cn(
-                                  selectedColor !== color.name &&
-                                    "border-transparent",
-                                  "rounded-full border-2 p-1",
-                                )}
-                                onClick={() => {
-                                  form.setValue("categoryColor", color.name);
-                                  setColor(color.name);
-                                }}
-                              >
-                                <div
-                                  className={`${color.bg} h-5 w-5 cursor-pointer rounded-full`}
-                                />
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </Field>
-                    )}
+                    label="Category name"
+                    placeholder="Add a new category ..."
+                    setValue={form.setValue}
                   />
                 )}
               </div>

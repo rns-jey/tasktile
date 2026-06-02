@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Control, Controller, FieldPath } from "react-hook-form";
-import { Field, FieldError, FieldLabel } from "@/components/ui/Field";
+import { Field, FieldLabel } from "@/components/ui/Field";
 import { TaskFormValues } from "@/types";
 import {
   Select,
