@@ -3,14 +3,14 @@
 import React from "react";
 
 import { Plus } from "lucide-react";
-import { Button } from "../atoms/Button";
-import { Card, CardContent, CardFooter, CardHeader } from "../molecules/Card";
+import { Button } from "@/components/ui/Button";
+import { Card, CardContent, CardFooter, CardHeader } from "../ui/Card";
 import { z } from "zod";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Field, FieldGroup, FieldLabel, FieldError } from "../molecules/Field";
-import { Input } from "../atoms/Input";
-import { Textarea } from "../atoms/TextArea";
+import { Field, FieldGroup, FieldLabel, FieldError } from "../ui/Field";
+import { Input } from "@/components/ui/Input";
+import { Textarea } from "@/components/ui/TextArea";
 import {
   Select,
   SelectTrigger,
@@ -19,41 +19,104 @@ import {
   SelectGroup,
   SelectLabel,
   SelectItem,
-} from "../molecules/Select";
-import { Popover, PopoverTrigger, PopoverContent } from "../molecules/Popover";
-import { Calendar } from "./Calendar";
+} from "../ui/Select";
+import { Popover, PopoverTrigger, PopoverContent } from "../ui/Popover";
+import { Calendar } from "@/components/ui/Calendar";
 import { CalendarIcon } from "lucide-react";
-import { Separator } from "../atoms/Separator";
+import { Separator } from "@/components/ui/Separator";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { TaskWithCategory } from "@/types";
+import axios from "axios";
+import { cn } from "@/lib/utils";
+import { Category } from "@prisma/client";
 
-const formSchema = z.object({
-  name: z.string().min(3),
-  description: z.string(),
-  categoryId: z.string().nullish(),
-  dueDate: z.union([
-    z.date(),
-    z.null(),
-    z.undefined(), // Allow null values
-  ]),
-});
+const formSchema = z
+  .object({
+    name: z.string().min(3, "Task name is required"),
+    description: z.string(),
+
+    categoryId: z.string().nullish(),
+    categoryName: z.string(),
+    categoryColor: z.string(),
+
+    dueDate: z.date().optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.categoryId === "other" && !data.categoryName) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["categoryName"],
+        message: "Category name is required",
+      });
+    }
+  });
+
+const colors = [
+  { name: "red-500", bg: "bg-red-500" },
+  { name: "orange-500", bg: "bg-orange-500" },
+  { name: "yellow-500", bg: "bg-yellow-500" },
+  { name: "green-500", bg: "bg-green-500" },
+  { name: "blue-500", bg: "bg-blue-500" },
+  { name: "indigo-500", bg: "bg-indigo-500" },
+  { name: "purple-500", bg: "bg-purple-500" },
+  { name: "pink-500", bg: "bg-pink-500" },
+];
 
 export default function NewTaskSection() {
   const [isOpen, setIsOpen] = React.useState(false);
+  const [selectedColor, setColor] = React.useState("red-500");
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
       description: "",
-      categoryId: "2",
-      dueDate: null,
+
+      categoryId: "",
+      categoryName: "",
+      categoryColor: "red-500",
+
+      dueDate: undefined,
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    try {
-      console.log(values);
-    } catch (error) {}
+    addTask.mutate(values);
   }
+
+  const { data: categories } = useQuery<Category[]>({
+    queryKey: ["categories"],
+    queryFn: async () => {
+      const response = await axios.get("/api/categories");
+
+      return response.data;
+    },
+  });
+
+  const queryClient = useQueryClient();
+
+  const addTask = useMutation<
+    TaskWithCategory,
+    Error,
+    {
+      name: string;
+      description?: string;
+      categoryId?: string | null;
+      categoryName?: string;
+      categoryColor?: string;
+      dueDate?: Date | null;
+    }
+  >({
+    mutationFn: async (newTask) => {
+      const response = await axios.post("api/tasks/new", newTask);
+      return response.data;
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["tasks"] }); // Wait for refetch to complete
+      form.reset();
+      setIsOpen(false);
+    },
+  });
 
   if (!isOpen) {
     return (
@@ -115,40 +178,94 @@ export default function NewTaskSection() {
             />
 
             <div className="flex gap-2">
-              <Controller
-                name="categoryId"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field>
-                    <FieldLabel htmlFor="form-add-task-categoryId">
-                      Category
-                    </FieldLabel>
-                    <Select
-                      {...field}
-                      value={field.value}
-                      onValueChange={field.onChange}
-                      onOpenChange={() => field.onBlur()}
-                    >
-                      <SelectTrigger
-                        id="form-add-task-categoryId"
-                        className="w-full max-w-48"
+              <div className="flex w-full flex-col gap-2">
+                <Controller
+                  name="categoryId"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <Field>
+                      <FieldLabel htmlFor="form-add-task-categoryId">
+                        Category
+                      </FieldLabel>
+                      <Select
+                        {...field}
+                        value={field.value || undefined}
+                        onValueChange={field.onChange}
+                        onOpenChange={() => field.onBlur()}
                       >
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectLabel>Categories</SelectLabel>
-                          <SelectItem value="0">Work</SelectItem>
-                          <SelectItem value="1">Personal</SelectItem>
-                          <SelectItem value="2">Shopping</SelectItem>
-                          <SelectItem value="3">Health</SelectItem>
-                          <SelectItem value="4">Other</SelectItem>
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                  </Field>
+                        <SelectTrigger id="form-add-task-categoryId">
+                          <SelectValue placeholder="Select a category" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            <SelectLabel>Categories</SelectLabel>
+                            {categories &&
+                              categories.map((category) => (
+                                <SelectItem
+                                  key={category.id}
+                                  value={category.id}
+                                >
+                                  <div>yes</div>
+                                  {category.name}
+                                </SelectItem>
+                              ))}
+                            <SelectItem key="other" value="other">
+                              other
+                            </SelectItem>
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                    </Field>
+                  )}
+                />
+
+                {form.watch("categoryId") === "other" && (
+                  <Controller
+                    name="categoryName"
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor="form-add-task-categoryName">
+                          Category Name
+                        </FieldLabel>
+                        <div className="flex flex-col gap-1">
+                          <Input
+                            {...field}
+                            id="form-add-task-categoryName"
+                            aria-invalid={fieldState.invalid}
+                            placeholder="Add a new category ..."
+                          />
+
+                          {fieldState.invalid && (
+                            <FieldError errors={[fieldState.error]} />
+                          )}
+
+                          <div className="grid grid-cols-6 gap-1">
+                            {colors.map((color, id) => (
+                              <div
+                                key={`color_${id}`}
+                                className={cn(
+                                  selectedColor !== color.name &&
+                                    "border-transparent",
+                                  "rounded-full border-2 p-1",
+                                )}
+                                onClick={() => {
+                                  form.setValue("categoryColor", color.name);
+                                  setColor(color.name);
+                                }}
+                              >
+                                <div
+                                  className={`${color.bg} h-5 w-5 cursor-pointer rounded-full`}
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </Field>
+                    )}
+                  />
                 )}
-              />
+              </div>
 
               <Controller
                 name="dueDate"
@@ -166,7 +283,11 @@ export default function NewTaskSection() {
                         >
                           <CalendarIcon className="h-4 w-4" />
                           {field.value
-                            ? field.value.toLocaleDateString()
+                            ? field.value.toLocaleDateString("en-US", {
+                                day: "numeric",
+                                month: "long",
+                                year: "numeric",
+                              })
                             : "Pick a date"}
                         </Button>
                       </PopoverTrigger>
@@ -219,10 +340,14 @@ export default function NewTaskSection() {
         </form>
       </CardContent>
       <CardFooter className="flex justify-end gap-2">
-        <Button type="submit" form="form-add-task">
+        <Button type="submit" form="form-add-task" disabled={addTask.isPending}>
           Create
         </Button>
-        <Button variant="outline" onClick={() => setIsOpen(false)}>
+        <Button
+          variant="outline"
+          onClick={() => setIsOpen(false)}
+          disabled={addTask.isPending}
+        >
           Cancel
         </Button>
       </CardFooter>
