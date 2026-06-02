@@ -12,6 +12,7 @@ import {
 import { Checkbox } from "@/components/ui/Checkbox";
 import { ScrollArea } from "@/components/ui/ScrollArea";
 import { cn } from "@/lib/utils";
+import { Skeleton } from "@/components/ui/Skeleton";
 
 export default function TaskListSection() {
   const { data: tasks } = useQuery<TaskWithCategory[]>({
@@ -23,7 +24,21 @@ export default function TaskListSection() {
     },
   });
 
-  if (!tasks) return <div>Loading...</div>;
+  if (!tasks)
+    return (
+      <div className="my-4 flex flex-col gap-4">
+        {/* Active Tasks */}
+        <div className="flex flex-col gap-3">
+          <Skeleton className="h-5 w-16" />
+
+          <div className="flex flex-col gap-2">
+            <Skeleton className="h-14 w-full" />
+            <Skeleton className="h-14 w-full" />
+            <Skeleton className="h-14 w-full" />
+          </div>
+        </div>
+      </div>
+    );
 
   const activeTasks = tasks.filter((task) => !task.completed);
   const completedTasks = tasks.filter((task) => task.completed);
