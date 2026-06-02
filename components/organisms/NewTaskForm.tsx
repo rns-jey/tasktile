@@ -32,6 +32,7 @@ import InputTaskName from "@/components/molecules/InputTaskName";
 import TextAreaDescription from "../molecules/TextAreaDescription";
 import SelectCategory from "../molecules/SelectCategory";
 import InputCategory from "../molecules/InputCategory";
+import CalendarDueDate from "../molecules/CalendarDueDate";
 
 interface NewTaskFormProps {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -155,73 +156,11 @@ export default function NewTaskForm({ setIsOpen }: NewTaskFormProps) {
                 )}
               </div>
 
-              <Controller
+              <CalendarDueDate
+                id="form-add-task-dueDate"
                 name="dueDate"
                 control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field>
-                    <FieldLabel htmlFor="form-add-task-dueDate">
-                      Due Date
-                    </FieldLabel>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="outline"
-                          className="flex w-full items-center justify-start gap-2"
-                        >
-                          <CalendarIcon className="h-4 w-4" />
-                          {field.value
-                            ? field.value.toLocaleDateString("en-US", {
-                                day: "numeric",
-                                month: "long",
-                                year: "numeric",
-                              })
-                            : "Pick a date"}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent>
-                        <Calendar
-                          {...field}
-                          id="form-add-task-dueDate"
-                          mode="single"
-                          selected={field.value}
-                          onSelect={field.onChange}
-                          className="w-full"
-                        />
-                        <Separator />
-                        <div className="flex justify-between gap-1">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => field.onChange(null)}
-                          >
-                            No due date
-                          </Button>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => field.onChange(new Date())}
-                          >
-                            Today
-                          </Button>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() =>
-                              field.onChange(
-                                new Date(
-                                  new Date().setDate(new Date().getDate() + 1),
-                                ),
-                              )
-                            }
-                          >
-                            Tomorrow
-                          </Button>
-                        </div>
-                      </PopoverContent>
-                    </Popover>
-                  </Field>
-                )}
+                label="Due Date"
               />
             </div>
           </FieldGroup>
