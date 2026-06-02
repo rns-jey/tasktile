@@ -21,7 +21,14 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "../atoms/alert-dialog";
-import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerTrigger } from "../atoms/drawer";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "../atoms/drawer";
 import EditTaskForm from "../organisms/edit-task-form";
 
 interface TaskCardProps {
@@ -33,19 +40,26 @@ function formatDueDate(dueDate: Date) {
   const formatter = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
   const label = {
     label: "Due " + formatter.format(difference, "day"),
-    color: difference === 0 ? "text-orange-400" : difference > 0 ? "text-blue-500" : difference < 0 && "text-red-500",
+    color:
+      difference === 0
+        ? "text-orange-400"
+        : difference > 0
+          ? "text-blue-500"
+          : difference < 0 && "text-red-500",
   };
 
   return label;
 }
 
-export default function TaskCard({ task }: TaskCardProps) {
+export default function OldTaskCard({ task }: TaskCardProps) {
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
 
   const toggleTask = useMutation({
     mutationFn: async (task: TaskWithCategory) => {
-      const response = await axios.patch(`/api/tasks/${task.id}/toggle`, { completed: !task.completed });
+      const response = await axios.patch(`/api/tasks/${task.id}/toggle`, {
+        completed: !task.completed,
+      });
       return response.data;
     },
     onSuccess: async () => {
@@ -69,7 +83,7 @@ export default function TaskCard({ task }: TaskCardProps) {
     <SlideAnimation key={task.id}>
       <div className={`bg-${task.category?.color} absolute h-[100px] w-2`} />
       <div className="flex items-center justify-between p-3">
-        <div className="flex items-center gap-3 w-full">
+        <div className="flex w-full items-center gap-3">
           <Checkbox
             id={`task-${task.id}`}
             checked={task.completed}
@@ -78,14 +92,17 @@ export default function TaskCard({ task }: TaskCardProps) {
             className="cursor-pointer"
           />
 
-          <div className="flex gap-1 w-full">
+          <div className="flex w-full gap-1">
             <Drawer open={open} onOpenChange={setOpen}>
-              <DrawerTrigger disabled={toggleTask.isPending} className="grow cursor-pointer">
-                <div className="flex flex-col gap-1  ">
+              <DrawerTrigger
+                disabled={toggleTask.isPending}
+                className="grow cursor-pointer"
+              >
+                <div className="flex flex-col gap-1">
                   <div
                     className={cn(
-                      task.completed && "line-through text-foreground/50",
-                      "text-sm font-semibold text-left"
+                      task.completed && "text-foreground/50 line-through",
+                      "text-left text-sm font-semibold",
                     )}
                   >
                     {task.name}
@@ -93,8 +110,8 @@ export default function TaskCard({ task }: TaskCardProps) {
 
                   <p
                     className={cn(
-                      task.completed && "line-through text-foreground/50",
-                      "text-xs text-left truncate w-60 md:w-72"
+                      task.completed && "text-foreground/50 line-through",
+                      "w-60 truncate text-left text-xs md:w-72",
                     )}
                   >
                     {task.description}
@@ -103,12 +120,16 @@ export default function TaskCard({ task }: TaskCardProps) {
                   <div
                     className={cn(
                       task.dueDate && formatDueDate(task.dueDate).color,
-                      task.completed && "line-through text-foreground/50",
-                      "flex gap-1 items-center text-xs"
+                      task.completed && "text-foreground/50 line-through",
+                      "flex items-center gap-1 text-xs",
                     )}
                   >
                     <Clock className="h-3 w-3" />
-                    <span>{task.dueDate ? formatDueDate(task.dueDate).label : "No due date"}</span>
+                    <span>
+                      {task.dueDate
+                        ? formatDueDate(task.dueDate).label
+                        : "No due date"}
+                    </span>
                   </div>
                 </div>
               </DrawerTrigger>
@@ -116,7 +137,8 @@ export default function TaskCard({ task }: TaskCardProps) {
                 <DrawerHeader className="text-left">
                   <DrawerTitle>Edit task</DrawerTitle>
                   <DrawerDescription>
-                    Modify your task details here. Click 'Save' to update your changes.
+                    Modify your task details here. Click 'Save' to update your
+                    changes.
                   </DrawerDescription>
                 </DrawerHeader>
                 <EditTaskForm task={task} setOpen={setOpen} />
@@ -128,7 +150,7 @@ export default function TaskCard({ task }: TaskCardProps) {
                 size="icon"
                 onClick={() => toggleTask.mutate(task)}
                 disabled={toggleTask.isPending}
-                className="h-8 w-8 text-muted-foreground hover:text-primary"
+                className="text-muted-foreground hover:text-primary h-8 w-8"
               >
                 <Undo2 className="h-4 w-4" />
               </Button>
@@ -140,7 +162,7 @@ export default function TaskCard({ task }: TaskCardProps) {
                   variant="ghost"
                   size="icon"
                   disabled={deleteTask.isPending}
-                  className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                  className="text-muted-foreground hover:text-destructive h-8 w-8"
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>
@@ -149,13 +171,15 @@ export default function TaskCard({ task }: TaskCardProps) {
                 <AlertDialogHeader>
                   <AlertDialogTitle>Are you sure?</AlertDialogTitle>
                   <AlertDialogDescription>
-                    This action cannot be undone. This will permanently delete the task and remove it from your task
-                    list.
+                    This action cannot be undone. This will permanently delete
+                    the task and remove it from your task list.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={() => deleteTask.mutate(task)}>Continue</AlertDialogAction>
+                  <AlertDialogAction onClick={() => deleteTask.mutate(task)}>
+                    Continue
+                  </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
