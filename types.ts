@@ -16,3 +16,12 @@ export type CalendarDay = {
     completed: number;
   };
 };
+
+export type TaskFormValues = {
+  name: string;
+  description: string;
+  categoryId?: string | null | undefined;
+  categoryName: string;
+  categoryColor: string;
+  dueDate?: Date | undefined;
+};

@@ -37,6 +37,7 @@ import { Button } from "@/components//ui/Button";
 import { Calendar } from "@/components//ui/Calendar";
 import { Separator } from "@/components//ui/Separator";
 import { CardContent, CardFooter } from "@/components/ui/Card";
+import InputTaskName from "@/components/molecules/InputTaskName";
 
 interface NewTaskFormProps {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -134,23 +135,12 @@ export default function NewTaskForm({ setIsOpen }: NewTaskFormProps) {
       <CardContent>
         <form id="form-add-task" onSubmit={form.handleSubmit(onSubmit)}>
           <FieldGroup>
-            <Controller
+            <InputTaskName
+              id="form-add-task-name"
               name="name"
               control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="form-add-task-name">Name</FieldLabel>
-                  <Input
-                    {...field}
-                    id="form-add-task-name"
-                    aria-invalid={fieldState.invalid}
-                    placeholder="Add a new task ..."
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
+              label="name"
+              placeholder="Add a task name .."
             />
 
             <Controller
