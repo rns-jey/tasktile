@@ -18,7 +18,6 @@ import {
   FieldLabel,
 } from "@/components/ui/Field";
 import { Input } from "@/components//ui/Input";
-import { Textarea } from "@/components//ui/TextArea";
 import {
   Select,
   SelectContent,
@@ -39,6 +38,7 @@ import { Separator } from "@/components//ui/Separator";
 import { CardContent, CardFooter } from "@/components/ui/Card";
 import InputTaskName from "@/components/molecules/InputTaskName";
 import TextAreaDescription from "../molecules/TextAreaDescription";
+import SelectCategory from "../molecules/SelectCategory";
 
 interface NewTaskFormProps {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -154,44 +154,13 @@ export default function NewTaskForm({ setIsOpen }: NewTaskFormProps) {
 
             <div className="flex gap-2">
               <div className="flex w-full flex-col gap-2">
-                <Controller
+                <SelectCategory
+                  id="form-add-task-categoryId"
                   name="categoryId"
                   control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field>
-                      <FieldLabel htmlFor="form-add-task-categoryId">
-                        Category
-                      </FieldLabel>
-                      <Select
-                        {...field}
-                        value={field.value || undefined}
-                        onValueChange={field.onChange}
-                        onOpenChange={() => field.onBlur()}
-                      >
-                        <SelectTrigger id="form-add-task-categoryId">
-                          <SelectValue placeholder="Select a category" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectLabel>Categories</SelectLabel>
-                            {categories &&
-                              categories.map((category) => (
-                                <SelectItem
-                                  key={category.id}
-                                  value={category.id}
-                                >
-                                  <div>yes</div>
-                                  {category.name}
-                                </SelectItem>
-                              ))}
-                            <SelectItem key="other" value="other">
-                              other
-                            </SelectItem>
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </Field>
-                  )}
+                  label="Category"
+                  placeholder="Select a category"
+                  categories={categories}
                 />
 
                 {form.watch("categoryId") === "other" && (
