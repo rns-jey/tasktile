@@ -7,8 +7,8 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../molecules/DropdownMenu";
-import { Button } from "../atoms/Button";
+} from "@/components/ui/DropdownMenu";
+import { Button } from "@/components/ui/Button";
 import { SignedOut, SignOutButton } from "@clerk/nextjs";
 import { useTheme } from "next-themes";
 
