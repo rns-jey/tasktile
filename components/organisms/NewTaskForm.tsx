@@ -38,6 +38,7 @@ import { Calendar } from "@/components//ui/Calendar";
 import { Separator } from "@/components//ui/Separator";
 import { CardContent, CardFooter } from "@/components/ui/Card";
 import InputTaskName from "@/components/molecules/InputTaskName";
+import TextAreaDescription from "../molecules/TextAreaDescription";
 
 interface NewTaskFormProps {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -139,29 +140,16 @@ export default function NewTaskForm({ setIsOpen }: NewTaskFormProps) {
               id="form-add-task-name"
               name="name"
               control={form.control}
-              label="name"
+              label="Name"
               placeholder="Add a task name .."
             />
 
-            <Controller
+            <TextAreaDescription
+              id="form-add-description"
               name="description"
               control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="form-add-task-description">
-                    Description
-                  </FieldLabel>
-                  <Textarea
-                    {...field}
-                    id="form-add-task-description"
-                    aria-invalid={fieldState.invalid}
-                    placeholder="Add a description ..."
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
+              label="Description"
+              placeholder="Add a description ..."
             />
 
             <div className="flex gap-2">
