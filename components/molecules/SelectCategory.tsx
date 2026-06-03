@@ -1,8 +1,3 @@
-import React from "react";
-
-import { Control, Controller, FieldPath } from "react-hook-form";
-import { Field, FieldLabel } from "@/components/ui/Field";
-import { TaskFormValues } from "@/types";
 import {
   Select,
   SelectContent,
@@ -12,7 +7,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components//ui/Select";
-import { Category } from "@prisma/client";
+import { Field, FieldLabel } from "@/components/ui/Field";
+import { useCategories } from "@/hooks/useCategories";
+import { TaskFormValues } from "@/types";
+import { Control, Controller, FieldPath } from "react-hook-form";
 
 interface SelectCategoryProps {
   id: string;
@@ -20,7 +18,6 @@ interface SelectCategoryProps {
   control: Control<TaskFormValues>;
   label: string;
   placeholder: string;
-  categories: Category[] | undefined;
 }
 
 export default function SelectCategory({
@@ -29,8 +26,9 @@ export default function SelectCategory({
   control,
   label,
   placeholder,
-  categories,
 }: SelectCategoryProps) {
+  const { data: categories } = useCategories();
+
   return (
     <Controller
       name={name}

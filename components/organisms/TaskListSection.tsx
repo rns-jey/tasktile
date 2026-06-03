@@ -1,12 +1,11 @@
 import axios from "axios";
-import React from "react";
 
 import { TaskWithCategory } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 
 import { ScrollArea } from "@/components/ui/ScrollArea";
-import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/Skeleton";
+import { cn } from "@/lib/utils";
 
 import TaskCard from "@/components/molecules/TaskCard";
 

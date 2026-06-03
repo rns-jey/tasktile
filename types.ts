@@ -23,5 +23,5 @@ export type TaskFormValues = {
   categoryId?: string | null | undefined;
   categoryName: string;
   categoryColor: string;
-  dueDate?: Date | undefined;
+  dueDate: Date | null;
 };

@@ -1,22 +1,21 @@
-import React from "react";
 import axios from "axios";
+import React from "react";
 
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { TaskWithCategory } from "@/types";
-import { Category } from "@prisma/client";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-import { FieldGroup } from "@/components/ui/Field";
-import { CardContent, CardFooter } from "@/components/ui/Card";
 import { Button } from "@/components//ui/Button";
+import { CardContent, CardFooter } from "@/components/ui/Card";
+import { FieldGroup } from "@/components/ui/Field";
 
-import InputTaskName from "@/components/molecules/InputTaskName";
-import TextAreaDescription from "@/components/molecules/TextAreaDescription";
-import SelectCategory from "@/components/molecules/SelectCategory";
-import InputCategory from "@/components/molecules/InputCategory";
 import CalendarDueDate from "@/components/molecules/CalendarDueDate";
+import InputCategory from "@/components/molecules/InputCategory";
+import InputTaskName from "@/components/molecules/InputTaskName";
+import SelectCategory from "@/components/molecules/SelectCategory";
+import TextAreaDescription from "@/components/molecules/TextAreaDescription";
 
 interface NewTaskFormProps {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -31,7 +30,7 @@ const formSchema = z
     categoryName: z.string(),
     categoryColor: z.string(),
 
-    dueDate: z.date().optional(),
+    dueDate: z.date().nullable(),
   })
   .superRefine((data, ctx) => {
     if (data.categoryId === "other" && !data.categoryName) {
@@ -54,16 +53,7 @@ export default function NewTaskForm({ setIsOpen }: NewTaskFormProps) {
       categoryName: "",
       categoryColor: "red-500",
 
-      dueDate: undefined,
-    },
-  });
-
-  const { data: categories } = useQuery<Category[]>({
-    queryKey: ["categories"],
-    queryFn: async () => {
-      const response = await axios.get("/api/categories");
-
-      return response.data;
+      dueDate: null,
     },
   });
 
@@ -87,6 +77,7 @@ export default function NewTaskForm({ setIsOpen }: NewTaskFormProps) {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["tasks"] }); // Wait for refetch to complete
+      await queryClient.invalidateQueries({ queryKey: ["categories"] }); // Wait for refetch to complete
       form.reset();
       setIsOpen(false);
     },
@@ -125,7 +116,6 @@ export default function NewTaskForm({ setIsOpen }: NewTaskFormProps) {
                   control={form.control}
                   label="Category"
                   placeholder="Select a category"
-                  categories={categories}
                 />
 
                 {form.watch("categoryId") === "other" && (

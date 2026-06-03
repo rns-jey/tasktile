@@ -1,11 +1,14 @@
 "use client";
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import TaskSection from "@/components/organisms/TaskSection";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 
+import { useCategories } from "@/hooks/useCategories";
 import { ChartColumn, ListTodo } from "lucide-react";
 
 export default function Main() {
+  useCategories();
+
   return (
     <main className="flex w-full max-w-2xl flex-row items-start gap-4 p-4">
       {/* <Tabs
