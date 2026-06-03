@@ -8,12 +8,12 @@ import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
 import CalendarDueDate from "@/components/molecules/CalendarDueDate";
-import SelectCategory from "@/components/molecules/SelectCategory";
+import InputTaskName from "@/components/molecules/FormInputTaskName";
+import FormSelectCategory from "@/components/molecules/FormSelectCategory";
+import FormTextareaDescription from "@/components/molecules/FormTextareaDescription";
 
 import { Button } from "@/components/ui/Button";
-import { Field, FieldError, FieldGroup } from "@/components/ui/Field";
-import { Input } from "@/components/ui/Input";
-import { InputGroup, InputGroupTextarea } from "@/components/ui/InputGroup";
+import { Field, FieldGroup } from "@/components/ui/Field";
 
 import { useCategories } from "@/hooks/useCategories";
 
@@ -73,23 +73,12 @@ export default function NewTaskSection() {
         <div className="w-full">
           <form id="form-add-task" onSubmit={form.handleSubmit(onSubmit)}>
             <FieldGroup className="gap-2">
-              <Controller
+              <InputTaskName
+                id="form-add-task-name"
                 name="name"
                 control={form.control}
                 disabled={addTask.isPending}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <Input
-                      {...field}
-                      id="form-add-task-name"
-                      aria-invalid={fieldState.invalid}
-                      placeholder="Add a task name .."
-                    />
-                    {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
-                    )}
-                  </Field>
-                )}
+                placeholder="Add a task name .."
               />
 
               <div className="flex flex-col gap-2">
@@ -106,20 +95,11 @@ export default function NewTaskSection() {
                     {isDescribing ? "Hide description" : "Add description"}
                   </Button>
 
-                  <Controller
+                  <FormSelectCategory
                     name="categoryId"
                     control={form.control}
-                    render={({ field, fieldState }) => (
-                      <Field data-invalid={fieldState.invalid}>
-                        <SelectCategory
-                          {...field}
-                          id="form-add-task-category"
-                          selected={field.value}
-                          onSelect={field.onChange}
-                          disabled={addTask.isPending}
-                        />
-                      </Field>
-                    )}
+                    id="form-add-task-category"
+                    disabled={addTask.isPending}
                   />
 
                   <Controller
@@ -140,27 +120,12 @@ export default function NewTaskSection() {
                 </div>
 
                 {isDescribing && (
-                  <Controller
+                  <FormTextareaDescription
                     name="description"
                     control={form.control}
                     disabled={addTask.isPending}
-                    render={({ field, fieldState }) => (
-                      <Field data-invalid={fieldState.invalid}>
-                        <InputGroup>
-                          <InputGroupTextarea
-                            {...field}
-                            id="form-add-task-description"
-                            placeholder="Provide a brief description of the task .."
-                            rows={6}
-                            className="min-h-24 resize-none"
-                            aria-invalid={fieldState.invalid}
-                          />
-                          {fieldState.invalid && (
-                            <FieldError errors={[fieldState.error]} />
-                          )}
-                        </InputGroup>
-                      </Field>
-                    )}
+                    id="form-add-task-description"
+                    placeholder="Provide a brief description of the task .."
                   />
                 )}
               </div>

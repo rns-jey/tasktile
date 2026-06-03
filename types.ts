@@ -20,8 +20,6 @@ export type CalendarDay = {
 export type TaskFormValues = {
   name: string;
   description: string;
-  categoryId?: string | null | undefined;
-  categoryName: string;
-  categoryColor: string;
+  categoryId: string | null;
   dueDate: Date | null;
 };
