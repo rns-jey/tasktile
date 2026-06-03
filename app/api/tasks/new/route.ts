@@ -8,40 +8,16 @@ export async function POST(req: Request) {
 
     if (!profile) return new NextResponse("Unauthorized", { status: 401 });
 
-    const {
-      name,
-      description,
-      categoryId,
-      categoryName,
-      categoryColor,
-      dueDate,
-    } = await req.json();
+    const { name, description, categoryId, dueDate } = await req.json();
 
     const task = await db.task.create({
       data: {
         name,
         description,
+        categoryId,
         dueDate,
 
-        category: categoryId
-          ? categoryId === "other"
-            ? {
-                create: {
-                  name: categoryName,
-                  color: categoryColor,
-                  user: {
-                    connect: { id: profile.id },
-                  },
-                },
-              }
-            : {
-                connect: { id: categoryId },
-              }
-          : undefined,
-
-        user: {
-          connect: { id: profile.id },
-        },
+        userId: profile.id,
       },
       include: { category: true },
     });

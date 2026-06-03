@@ -1,33 +1,177 @@
-"use client";
+import { useState } from "react";
 
-import React from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
+import { Plus, Text } from "lucide-react";
+import { Controller, useForm } from "react-hook-form";
+import { z } from "zod";
 
-import { Plus } from "lucide-react";
+import CalendarDueDate from "@/components/molecules/CalendarDueDate";
+import SelectCategory from "@/components/molecules/SelectCategory";
+
 import { Button } from "@/components/ui/Button";
-import { Card, CardHeader } from "@/components/ui/Card";
+import { Field, FieldError, FieldGroup } from "@/components/ui/Field";
+import { Input } from "@/components/ui/Input";
+import { InputGroup, InputGroupTextarea } from "@/components/ui/InputGroup";
 
-import NewTaskForm from "@/components/organisms/NewTaskForm";
+import { useCategories } from "@/hooks/useCategories";
+
+import type { TaskWithCategory } from "@/types";
+
+const formSchema = z.object({
+  name: z.string().min(3, "Task name is required"),
+  description: z.string(),
+  categoryId: z.string().nullable(),
+  dueDate: z.date().nullable(),
+});
 
 export default function NewTaskSection() {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isDescribing, setDescribing] = useState(false);
 
-  if (!isOpen) {
-    return (
-      <Button
-        variant="outline"
-        className="text-muted-foreground flex w-full items-center justify-start gap-2 border-dashed"
-        onClick={() => setIsOpen(true)}
-      >
-        <Plus />
-        Add new task
-      </Button>
-    );
+  const { data: categories } = useCategories();
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      description: "",
+      categoryId: null,
+      dueDate: null,
+    },
+  });
+
+  const queryClient = useQueryClient();
+
+  const addTask = useMutation<
+    TaskWithCategory,
+    Error,
+    {
+      name: string;
+    }
+  >({
+    mutationFn: async (newTask) => {
+      const response = await axios.post("api/tasks/new", newTask);
+      return response.data;
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["tasks"] }); // Wait for refetch to complete
+      form.reset();
+      setDescribing(false);
+    },
+  });
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    addTask.mutate(values);
   }
 
   return (
-    <Card className="ring-primary">
-      <CardHeader className="text-base font-bold">New Task</CardHeader>
-      <NewTaskForm setIsOpen={setIsOpen} />
-    </Card>
+    <div>
+      <h2>Tasks</h2>
+
+      <div className="flex gap-2">
+        <div className="w-full">
+          <form id="form-add-task" onSubmit={form.handleSubmit(onSubmit)}>
+            <FieldGroup className="gap-2">
+              <Controller
+                name="name"
+                control={form.control}
+                disabled={addTask.isPending}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <Input
+                      {...field}
+                      id="form-add-task-name"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="Add a task name .."
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+
+              <div className="flex flex-col gap-2">
+                <div className="flex gap-2">
+                  <Button
+                    variant={"outline"}
+                    size={"xs"}
+                    type="button"
+                    className="w-fit"
+                    disabled={addTask.isPending}
+                    onClick={() => setDescribing(!isDescribing)}
+                  >
+                    <Text />
+                    {isDescribing ? "Hide description" : "Add description"}
+                  </Button>
+
+                  <Controller
+                    name="categoryId"
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <SelectCategory
+                          {...field}
+                          id="form-add-task-category"
+                          selected={field.value}
+                          onSelect={field.onChange}
+                          disabled={addTask.isPending}
+                        />
+                      </Field>
+                    )}
+                  />
+
+                  <Controller
+                    name="dueDate"
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <CalendarDueDate
+                          {...field}
+                          id="form-add-task-due-date"
+                          selected={field.value}
+                          onSelect={field.onChange}
+                          disabled={addTask.isPending}
+                        />
+                      </Field>
+                    )}
+                  />
+                </div>
+
+                {isDescribing && (
+                  <Controller
+                    name="description"
+                    control={form.control}
+                    disabled={addTask.isPending}
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <InputGroup>
+                          <InputGroupTextarea
+                            {...field}
+                            id="form-add-task-description"
+                            placeholder="Provide a brief description of the task .."
+                            rows={6}
+                            className="min-h-24 resize-none"
+                            aria-invalid={fieldState.invalid}
+                          />
+                          {fieldState.invalid && (
+                            <FieldError errors={[fieldState.error]} />
+                          )}
+                        </InputGroup>
+                      </Field>
+                    )}
+                  />
+                )}
+              </div>
+            </FieldGroup>
+          </form>
+        </div>
+
+        <Button type="submit" form="form-add-task" disabled={addTask.isPending}>
+          <Plus />
+        </Button>
+      </div>
+    </div>
   );
 }
