@@ -1,6 +1,6 @@
 "use client";
 
-import { Diamond, Home, Link, LogOut, Moon, Sun } from "lucide-react";
+import { Diamond, Link, LogOut, Moon, Sun } from "lucide-react";
 import React from "react";
 import {
   DropdownMenu,

@@ -3,36 +3,20 @@ import axios from "axios";
 
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { TaskWithCategory } from "@/types";
 import { Category } from "@prisma/client";
-import { cn } from "@/lib/utils";
 
-import { CalendarIcon } from "lucide-react";
-
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/Field";
-import { Input } from "@/components//ui/Input";
-
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components//ui/Popover";
-import { Button } from "@/components//ui/Button";
-import { Calendar } from "@/components//ui/Calendar";
-import { Separator } from "@/components//ui/Separator";
+import { FieldGroup } from "@/components/ui/Field";
 import { CardContent, CardFooter } from "@/components/ui/Card";
+import { Button } from "@/components//ui/Button";
+
 import InputTaskName from "@/components/molecules/InputTaskName";
-import TextAreaDescription from "../molecules/TextAreaDescription";
-import SelectCategory from "../molecules/SelectCategory";
-import InputCategory from "../molecules/InputCategory";
-import CalendarDueDate from "../molecules/CalendarDueDate";
+import TextAreaDescription from "@/components/molecules/TextAreaDescription";
+import SelectCategory from "@/components/molecules/SelectCategory";
+import InputCategory from "@/components/molecules/InputCategory";
+import CalendarDueDate from "@/components/molecules/CalendarDueDate";
 
 interface NewTaskFormProps {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;

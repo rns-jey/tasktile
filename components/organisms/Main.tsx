@@ -1,7 +1,7 @@
 "use client";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
-import TaskSection from "./TaskSection";
+import TaskSection from "@/components/organisms/TaskSection";
 
 import { ChartColumn, ListTodo } from "lucide-react";
 

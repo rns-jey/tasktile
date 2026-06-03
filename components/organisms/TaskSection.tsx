@@ -1,5 +1,4 @@
-import NewTaskSection from "./NewTaskSection";
-
+import NewTaskSection from "@/components/organisms/NewTaskSection";
 import TaskListSection from "@/components/organisms/TaskListSection";
 
 export default function TaskSection() {

@@ -1,5 +1,7 @@
 import React from "react";
 import { Control, Controller, FieldPath } from "react-hook-form";
+import { CalendarIcon } from "lucide-react";
+
 import { Field, FieldLabel } from "@/components/ui/Field";
 import {
   Popover,
@@ -7,7 +9,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui/Popover";
 import { Button } from "@/components/ui/Button";
-import { CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/Calendar";
 import { Separator } from "@/components/ui/Separator";
 import { TaskFormValues } from "@/types";

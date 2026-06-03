@@ -1,3 +1,7 @@
+import { Field, FieldError, FieldLabel } from "@/components/ui/Field";
+import { Input } from "@/components/ui/Input";
+import { cn } from "@/lib/utils";
+import type { TaskFormValues } from "@/types";
 import React from "react";
 import {
   Control,
@@ -5,10 +9,6 @@ import {
   FieldPath,
   UseFormSetValue,
 } from "react-hook-form";
-import { Field, FieldError, FieldLabel } from "../ui/Field";
-import { Input } from "../ui/Input";
-import { cn } from "@/lib/utils";
-import { TaskFormValues } from "@/types";
 
 const colors = [
   { name: "red-500", bg: "bg-red-500" },

@@ -8,7 +8,7 @@ import { ScrollArea } from "@/components/ui/ScrollArea";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/Skeleton";
 
-import TaskCard from "../molecules/TaskCard";
+import TaskCard from "@/components/molecules/TaskCard";
 
 export default function TaskListSection() {
   const { data: tasks } = useQuery<TaskWithCategory[]>({
