@@ -1,68 +1,68 @@
+import { useEffect, useState } from "react";
+
+import { Button } from "@/components/ui/Button";
 import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components//ui/Select";
-import { Field, FieldLabel } from "@/components/ui/Field";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/DropdownMenu";
 import { useCategories } from "@/hooks/useCategories";
-import { TaskFormValues } from "@/types";
-import { Control, Controller, FieldPath } from "react-hook-form";
+import { Category } from "@prisma/client";
+import { Tag } from "lucide-react";
 
 interface SelectCategoryProps {
-  id: string;
-  name: FieldPath<{ categoryId?: string | null | undefined }>;
-  control: Control<TaskFormValues>;
-  label: string;
-  placeholder: string;
+  id?: string;
+  selected: string | null;
+  onSelect: (value: string) => void;
+  disabled?: boolean;
 }
 
 export default function SelectCategory({
   id,
-  name,
-  control,
-  label,
-  placeholder,
+  selected,
+  onSelect,
+  disabled,
 }: SelectCategoryProps) {
+  const [selectedCategory, setCategory] = useState<Category | null>(null);
+
   const { data: categories } = useCategories();
 
+  useEffect(() => {
+    if (!selected) setCategory(null); // fires when parent resets
+  }, [selected]);
+
   return (
-    <Controller
-      name={name}
-      control={control}
-      render={({ field }) => (
-        <Field>
-          <FieldLabel htmlFor={id}>{label}</FieldLabel>
-          <Select
-            {...field}
-            value={field.value || undefined}
-            onValueChange={field.onChange}
-            onOpenChange={() => field.onBlur()}
-          >
-            <SelectTrigger id={id}>
-              <SelectValue placeholder={placeholder} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Categories</SelectLabel>
-                {categories &&
-                  categories.map((category) => (
-                    <SelectItem key={category.id} value={category.id}>
-                      <div>yes</div>
-                      {category.name}
-                    </SelectItem>
-                  ))}
-                <SelectItem key="other" value="other">
-                  other
-                </SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </Field>
-      )}
-    />
+    <DropdownMenu>
+      <DropdownMenuTrigger id={id} asChild>
+        <Button
+          variant={"outline"}
+          size={"xs"}
+          type="button"
+          className="flex w-fit justify-start"
+          disabled={disabled}
+        >
+          <Tag />
+          {selectedCategory ? selectedCategory.name : "Add category"}
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="start">
+        {categories &&
+          categories.map((category) => (
+            <DropdownMenuItem
+              key={category.id}
+              onClick={() => {
+                setCategory(category);
+                onSelect(category.id);
+              }}
+            >
+              <div
+                className={`rounded-full bg-${category.color} h-3 w-3 shrink-0`}
+              />
+              {category.name}
+            </DropdownMenuItem>
+          ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
