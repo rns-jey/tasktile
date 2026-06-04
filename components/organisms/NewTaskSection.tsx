@@ -7,18 +7,18 @@ import { Plus, Text } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
-import CalendarDueDate from "@/components/molecules/CalendarDueDate";
-import FormTextareaDescription from "@/components/molecules/FormTextareaDescription";
-
 import { Button } from "@/components/ui/Button";
 import { Field, FieldError, FieldGroup } from "@/components/ui/Field";
 
 import { useCategories } from "@/hooks/useCategories";
 
+import CalendarDueDate from "@/components/molecules/CalendarDueDate";
 import type { TaskWithCategory } from "@/types";
 import { Category } from "@prisma/client";
+import DropdownDueDate from "../molecules/DropdownDueDate";
 import SelectCategory from "../molecules/SelectCategory";
 import { Input } from "../ui/Input";
+import { InputGroup, InputGroupTextarea } from "../ui/InputGroup";
 
 const formSchema = z.object({
   name: z.string().min(3, "Task name is required"),
@@ -125,20 +125,40 @@ export default function NewTaskSection() {
                     disabled={addTask.isPending}
                   />
 
-                  <CalendarDueDate
+                  <DropdownDueDate
                     selected={selectedDate}
                     setDate={setDate}
                     disabled={addTask.isPending}
-                  />
+                  >
+                    <CalendarDueDate
+                      selected={selectedDate}
+                      setDate={setDate}
+                    />
+                  </DropdownDueDate>
                 </div>
 
                 {isDescribing && (
-                  <FormTextareaDescription
+                  <Controller
                     name="description"
                     control={form.control}
                     disabled={addTask.isPending}
-                    id="form-add-task-description"
-                    placeholder="Provide a brief description of the task .."
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <InputGroup>
+                          <InputGroupTextarea
+                            {...field}
+                            id="form-add-task-description"
+                            placeholder="Provide a brief description of the task .."
+                            rows={6}
+                            className="min-h-24 resize-none"
+                            aria-invalid={fieldState.invalid}
+                          />
+                          {fieldState.invalid && (
+                            <FieldError errors={[fieldState.error]} />
+                          )}
+                        </InputGroup>
+                      </Field>
+                    )}
                   />
                 )}
               </div>
