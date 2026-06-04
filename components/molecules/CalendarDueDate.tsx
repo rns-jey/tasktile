@@ -9,22 +9,19 @@ import {
 } from "../ui/DropdownMenu";
 
 interface CalendarDueDateProps {
-  id?: string;
   selected: Date | null;
-  onSelect: (value: Date) => void;
+  setDate: React.Dispatch<React.SetStateAction<Date | null>>;
   disabled?: boolean;
 }
 
 const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 export default function CalendarDueDate({
-  id,
   selected,
-  onSelect,
+  setDate,
   disabled,
 }: CalendarDueDateProps) {
   const [currentMonth, setCurrentMonth] = useState(new Date());
-  const [selectedDate, setDate] = useState<Date | null>(selected);
 
   const calendarData = useMemo(() => {
     const year = currentMonth.getFullYear();
@@ -96,7 +93,7 @@ export default function CalendarDueDate({
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger id={id} asChild>
+      <DropdownMenuTrigger asChild>
         <Button
           variant={"outline"}
           size={"xs"}
@@ -105,7 +102,7 @@ export default function CalendarDueDate({
           disabled={disabled}
         >
           <Calendar />
-          {selectedDate ? selectedDate.toDateString() : "Pick a date"}
+          {selected ? selected.toDateString() : "Pick a date"}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="w-full">
@@ -147,20 +144,17 @@ export default function CalendarDueDate({
                   variant={"ghost"}
                   size={"icon-xs"}
                   disabled={isPast(day.date)}
-                  onClick={() => {
-                    setDate(day.date);
-                    onSelect(day.date);
-                  }}
+                  onClick={() => setDate(new Date(day.date))}
                   className={cn(
                     "dark:hover:bg-accent flex h-full w-full items-center justify-center text-sm font-semibold",
                     isToday(day.date) && "bg-accent",
-                    day.date === selectedDate &&
+                    day.date === selected &&
                       "bg-gray-300 text-gray-700 dark:hover:bg-gray-300 dark:hover:text-gray-700",
                     !day.isCurrentMonth &&
-                      day.date !== selectedDate &&
+                      day.date !== selected &&
                       "text-muted-foreground",
                     !day.isCurrentMonth &&
-                      day.date === selectedDate &&
+                      day.date === selected &&
                       "text-gray-700",
                   )}
                 >

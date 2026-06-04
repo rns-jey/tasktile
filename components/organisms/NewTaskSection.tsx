@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -8,16 +8,17 @@ import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
 import CalendarDueDate from "@/components/molecules/CalendarDueDate";
-import InputTaskName from "@/components/molecules/FormInputTaskName";
-import FormSelectCategory from "@/components/molecules/FormSelectCategory";
 import FormTextareaDescription from "@/components/molecules/FormTextareaDescription";
 
 import { Button } from "@/components/ui/Button";
-import { Field, FieldGroup } from "@/components/ui/Field";
+import { Field, FieldError, FieldGroup } from "@/components/ui/Field";
 
 import { useCategories } from "@/hooks/useCategories";
 
 import type { TaskWithCategory } from "@/types";
+import { Category } from "@prisma/client";
+import SelectCategory from "../molecules/SelectCategory";
+import { Input } from "../ui/Input";
 
 const formSchema = z.object({
   name: z.string().min(3, "Task name is required"),
@@ -28,6 +29,8 @@ const formSchema = z.object({
 
 export default function NewTaskSection() {
   const [isDescribing, setDescribing] = useState(false);
+  const [selectedCategory, setCategory] = useState<Category | null>(null);
+  const [selectedDate, setDate] = useState<Date | null>(null);
 
   const { data: categories } = useCategories();
 
@@ -40,6 +43,14 @@ export default function NewTaskSection() {
       dueDate: null,
     },
   });
+
+  useEffect(() => {
+    form.setValue("categoryId", selectedCategory ? selectedCategory.id : null);
+  }, [selectedCategory]);
+
+  useEffect(() => {
+    form.setValue("dueDate", selectedDate);
+  }, [selectedDate]);
 
   const queryClient = useQueryClient();
 
@@ -57,6 +68,8 @@ export default function NewTaskSection() {
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["tasks"] }); // Wait for refetch to complete
       form.reset();
+      setCategory(null);
+      setDate(null);
       setDescribing(false);
     },
   });
@@ -73,12 +86,23 @@ export default function NewTaskSection() {
         <div className="w-full">
           <form id="form-add-task" onSubmit={form.handleSubmit(onSubmit)}>
             <FieldGroup className="gap-2">
-              <InputTaskName
-                id="form-add-task-name"
+              <Controller
                 name="name"
                 control={form.control}
                 disabled={addTask.isPending}
-                placeholder="Add a task name .."
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <Input
+                      {...field}
+                      id="form-add-task-name"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="Add a task name .."
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
               />
 
               <div className="flex flex-col gap-2">
@@ -95,27 +119,16 @@ export default function NewTaskSection() {
                     {isDescribing ? "Hide description" : "Add description"}
                   </Button>
 
-                  <FormSelectCategory
-                    name="categoryId"
-                    control={form.control}
-                    id="form-add-task-category"
+                  <SelectCategory
+                    selected={selectedCategory}
+                    setCategory={setCategory}
                     disabled={addTask.isPending}
                   />
 
-                  <Controller
-                    name="dueDate"
-                    control={form.control}
-                    render={({ field, fieldState }) => (
-                      <Field data-invalid={fieldState.invalid}>
-                        <CalendarDueDate
-                          {...field}
-                          id="form-add-task-due-date"
-                          selected={field.value}
-                          onSelect={field.onChange}
-                          disabled={addTask.isPending}
-                        />
-                      </Field>
-                    )}
+                  <CalendarDueDate
+                    selected={selectedDate}
+                    setDate={setDate}
+                    disabled={addTask.isPending}
                   />
                 </div>
 

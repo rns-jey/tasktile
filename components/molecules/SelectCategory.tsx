@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-
 import { Button } from "@/components/ui/Button";
 import {
   DropdownMenu,
@@ -12,29 +10,21 @@ import { Category } from "@prisma/client";
 import { Tag } from "lucide-react";
 
 interface SelectCategoryProps {
-  id?: string;
-  selected: string | null;
-  onSelect: (value: string) => void;
+  selected: Category | null;
+  setCategory: React.Dispatch<React.SetStateAction<Category | null>>;
   disabled?: boolean;
 }
 
 export default function SelectCategory({
-  id,
   selected,
-  onSelect,
+  setCategory,
   disabled,
 }: SelectCategoryProps) {
-  const [selectedCategory, setCategory] = useState<Category | null>(null);
-
   const { data: categories } = useCategories();
-
-  useEffect(() => {
-    if (!selected) setCategory(null); // fires when parent resets
-  }, [selected]);
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger id={id} asChild>
+      <DropdownMenuTrigger asChild>
         <Button
           variant={"outline"}
           size={"xs"}
@@ -43,7 +33,7 @@ export default function SelectCategory({
           disabled={disabled}
         >
           <Tag />
-          {selectedCategory ? selectedCategory.name : "Add category"}
+          {selected ? selected.name : "Add category"}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start">
@@ -51,10 +41,7 @@ export default function SelectCategory({
           categories.map((category) => (
             <DropdownMenuItem
               key={category.id}
-              onClick={() => {
-                setCategory(category);
-                onSelect(category.id);
-              }}
+              onClick={() => setCategory(category)}
             >
               <div
                 className={`rounded-full bg-${category.color} h-3 w-3 shrink-0`}
