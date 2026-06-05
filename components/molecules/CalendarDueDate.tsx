@@ -1,7 +1,9 @@
-import { cn } from "@/lib/utils";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useMemo, useState } from "react";
-import { Button } from "../ui/Button";
+
+import { cn } from "@/lib/utils";
+
+import { Button } from "@/components/ui/Button";
 
 interface CalendarDueDateProps {
   selected: Date | null;
@@ -85,7 +87,7 @@ export default function CalendarDueDate({
   };
 
   return (
-    <div className="space-y-2 p-2">
+    <div className="w-full space-y-2 p-2">
       {/* Month Navigation */}
       <div className="flex w-full items-center gap-2">
         <Button variant={"outline"} size={"icon-sm"}>
@@ -123,16 +125,24 @@ export default function CalendarDueDate({
               variant={"ghost"}
               size={"icon-xs"}
               disabled={isPast(day.date)}
-              onClick={() => setDate(new Date(day.date))}
+              onClick={() => {
+                setDate(new Date(day.date));
+              }}
+              type="button"
               className={cn(
                 "dark:hover:bg-accent flex h-full w-full items-center justify-center text-sm font-semibold",
                 isToday(day.date) && "bg-accent",
-                day.date === selected &&
+                selected &&
+                  day.date.valueOf() === selected.valueOf() &&
                   "bg-gray-300 text-gray-700 dark:hover:bg-gray-300 dark:hover:text-gray-700",
                 !day.isCurrentMonth &&
-                  day.date !== selected &&
+                  selected &&
+                  day.date.valueOf() !== selected.valueOf() &&
                   "text-muted-foreground",
-                !day.isCurrentMonth && day.date === selected && "text-gray-700",
+                !day.isCurrentMonth &&
+                  selected &&
+                  day.date.valueOf() === selected.valueOf() &&
+                  "text-gray-700",
               )}
             >
               {day.date.getDate()}

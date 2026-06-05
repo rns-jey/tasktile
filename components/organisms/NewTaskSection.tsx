@@ -129,6 +129,7 @@ export default function NewTaskSection() {
                     selected={selectedDate}
                     setDate={setDate}
                     disabled={addTask.isPending}
+                    size="xs"
                   >
                     <CalendarDueDate
                       selected={selectedDate}

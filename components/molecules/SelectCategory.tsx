@@ -36,7 +36,10 @@ export default function SelectCategory({
           {selected ? selected.name : "Add category"}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start">
+      <DropdownMenuContent
+        align="start"
+        onCloseAutoFocus={(e) => e.preventDefault()}
+      >
         {categories &&
           categories.map((category) => (
             <DropdownMenuItem
