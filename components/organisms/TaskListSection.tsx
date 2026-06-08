@@ -8,6 +8,7 @@ import { Skeleton } from "@/components/ui/Skeleton";
 import { cn } from "@/lib/utils";
 
 import TaskCard from "@/components/molecules/TaskCard";
+import { AnimatePresence } from "motion/react";
 
 export default function TaskListSection() {
   const { data: tasks } = useQuery<TaskWithCategory[]>({
@@ -48,11 +49,13 @@ export default function TaskListSection() {
           <ScrollArea
             className={cn(activeTasks.length >= 5 ? "h-[300px]" : "h-fit")}
           >
-            <div className="flex flex-col gap-2">
-              {activeTasks.map((task) => (
-                <TaskCard key={task.id} task={task} />
-              ))}
-            </div>
+            <AnimatePresence initial={false}>
+              <div className="flex flex-col gap-2">
+                {activeTasks.map((task) => (
+                  <TaskCard key={task.id} task={task} />
+                ))}
+              </div>
+            </AnimatePresence>
           </ScrollArea>
         ) : (
           <p className="text-muted-foreground py-3 text-center text-sm">
