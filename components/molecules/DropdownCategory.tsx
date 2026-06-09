@@ -1,10 +1,9 @@
 import { Category } from "@prisma/client";
 import { Tag } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "../ui/Button";
 import {
   Command,
-  CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
@@ -15,6 +14,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "../ui/DropdownMenu";
+import NewCategoryForm from "./new-category-form";
 
 interface DropdownCategoryProps {
   categories: Category[];
@@ -41,6 +41,8 @@ export default function DropdownCategory({
   size,
 }: DropdownCategoryProps) {
   const [open, setOpen] = React.useState(false);
+  const [search, setSearch] = useState("");
+  const [isAdding, setIsAdding] = React.useState(false);
 
   const selected = categories.find((c) => c.id === value);
 
@@ -60,30 +62,52 @@ export default function DropdownCategory({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="w-full">
-        <Command>
-          <CommandInput className="text-sm" placeholder="Search categories…" />
-          <CommandList>
-            <CommandEmpty>No category found.</CommandEmpty>
-            <CommandGroup>
-              {categories.map((category) => (
-                <CommandItem
-                  key={category.id}
-                  value={category.id}
-                  className="text-sm"
-                  onSelect={(val: string) => {
-                    onChange(val === value ? "" : val);
-                    setOpen(false);
-                  }}
-                >
-                  <div
-                    className={`rounded-full bg-${category.color} h-3 w-3 shrink-0`}
-                  />
-                  {category.name}
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </CommandList>
-        </Command>
+        {isAdding ? (
+          <NewCategoryForm
+            name={search}
+            setSearch={setSearch}
+            setIsAdding={setIsAdding}
+          />
+        ) : (
+          <Command>
+            <CommandInput
+              className="text-sm"
+              placeholder="Search categories…"
+              value={search}
+              onValueChange={setSearch}
+            />
+            <CommandList>
+              <CommandGroup>
+                {categories.map((category) => (
+                  <CommandItem
+                    key={category.id}
+                    value={category.name}
+                    className="text-sm"
+                    onSelect={(val: string) => {
+                      onChange(val === category.id ? "" : category.id);
+                      setOpen(false);
+                    }}
+                  >
+                    <div
+                      className={`rounded-full bg-${category.color} h-3 w-3 shrink-0`}
+                    />
+                    {category.name}
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+              {search && (
+                <CommandGroup>
+                  <CommandItem
+                    value={`__create__${search}`}
+                    onSelect={() => setIsAdding(true)}
+                  >
+                    Create "{search}"
+                  </CommandItem>
+                </CommandGroup>
+              )}
+            </CommandList>
+          </Command>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );

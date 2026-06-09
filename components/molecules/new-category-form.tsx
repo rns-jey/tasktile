@@ -1,10 +1,11 @@
 import React from "react";
-import { Input } from "../atoms/input";
+
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { Button } from "../atoms/button";
-import { X } from "lucide-react";
+
 import { cn } from "@/lib/utils";
+import { Button } from "../ui/Button";
+import { Label } from "../ui/Label";
 
 const colors = [
   { name: "red-500", bg: "bg-red-500" },
@@ -19,10 +20,15 @@ const colors = [
 
 interface NewCategoryFormProps {
   setIsAdding: React.Dispatch<React.SetStateAction<boolean>>;
+  setSearch: React.Dispatch<React.SetStateAction<string>>;
+  name: string;
 }
 
-export default function NewCategoryForm({ setIsAdding }: NewCategoryFormProps) {
-  const [name, setName] = React.useState("");
+export default function NewCategoryForm({
+  setIsAdding,
+  setSearch,
+  name,
+}: NewCategoryFormProps) {
   const [selectedColor, setColor] = React.useState("red-500");
 
   const queryClient = useQueryClient();
@@ -33,50 +39,54 @@ export default function NewCategoryForm({ setIsAdding }: NewCategoryFormProps) {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["categories"] }); // Wait for refetch to complete
-      setName("");
+      setSearch("");
       setColor("red-500");
       setIsAdding(false);
     },
   });
 
   return (
-    <div className="flex flex-col gap-2">
-      <div className="flex items-center gap-1 pr-1">
-        <Input
-          type="text"
-          placeholder="Input category name..."
-          autoComplete="off"
-          value={name}
-          onChange={(e) => setName(e.target.value.toLowerCase())}
-          className="flex-1 h-8 text-xs w-[170px]"
-          disabled={addCategory.isPending}
-        />
+    <div className="flex flex-col gap-2 p-2">
+      <Label>Choose a category color</Label>
 
-        <Button
-          variant={"ghost"}
-          size={"xs"}
-          className="hover:text-red-500"
-          onClick={() => setIsAdding(false)}
-          disabled={addCategory.isPending}
-        >
-          <X />
-        </Button>
-      </div>
-
-      <div className="grid grid-cols-6 gap-1">
+      <div
+        className={cn(
+          "grid grid-cols-6 gap-1",
+          addCategory.isPending && "pointer-events-none",
+        )}
+      >
         {colors.map((color, id) => (
           <div
             key={`color_${id}`}
-            className={cn(selectedColor !== color.name && "border-transparent", "border-2 rounded-full p-1")}
+            className={cn(
+              selectedColor !== color.name && "border-transparent",
+              "rounded-full border-2 p-1",
+            )}
             onClick={() => !addCategory.isPending && setColor(color.name)}
           >
-            <div className={`${color.bg} rounded-full h-5 w-5 cursor-pointer`} />
+            <div
+              className={`${color.bg} h-5 w-5 cursor-pointer rounded-full`}
+            />
           </div>
         ))}
       </div>
 
-      <Button variant={"outline"} onClick={() => addCategory.mutate()} disabled={addCategory.isPending}>
-        Add category
+      <Button
+        type="submit"
+        form="form-add-category"
+        onClick={() => addCategory.mutate()}
+        disabled={addCategory.isPending}
+      >
+        Create new category
+      </Button>
+
+      <Button
+        variant={"outline"}
+        className="hover:text-red-500"
+        onClick={() => setIsAdding(false)}
+        disabled={addCategory.isPending}
+      >
+        Cancel
       </Button>
     </div>
   );
