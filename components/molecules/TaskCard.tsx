@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { TaskWithCategory } from "@/types";
 import { differenceInCalendarDays } from "date-fns";
-import { Clock, Trash } from "lucide-react";
+import { Clock, Trash2 } from "lucide-react";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
@@ -144,7 +144,14 @@ export default function TaskCard({ task }: TaskCardProps) {
             <Drawer open={open} onOpenChange={setOpen}>
               <DrawerTrigger asChild>
                 <div className="w-full cursor-pointer p-2">
-                  <h3 className="font-semibold">{task.name}</h3>
+                  <h3
+                    className={cn(
+                      "font-semibold",
+                      task.completed && "text-foreground/50 line-through",
+                    )}
+                  >
+                    {task.name}
+                  </h3>
 
                   {task.description && (
                     <p className={cn("text-muted-foreground")}>
@@ -180,11 +187,12 @@ export default function TaskCard({ task }: TaskCardProps) {
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button
+                  type="button"
                   variant={"ghost"}
                   size={"icon"}
-                  className="pointer-events-none translate-x-1.5 items-center text-red-500 opacity-0 transition-all duration-150 group-hover:pointer-events-auto group-hover:translate-x-0 group-hover:opacity-100 hover:text-red-500"
+                  className="text-muted-foreground hover:text-destructive pointer-events-none invisible translate-x-1.5 items-center transition-all duration-150 group-hover:pointer-events-auto group-hover:visible group-hover:translate-x-0"
                 >
-                  <Trash />
+                  <Trash2 />
                 </Button>
               </AlertDialogTrigger>
               <AlertDialogContent>

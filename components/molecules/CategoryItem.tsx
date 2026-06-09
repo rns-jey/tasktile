@@ -58,7 +58,8 @@ export default function CategoryItem({
         <Button
           type="button"
           variant={"ghost"}
-          className="text-muted-foreground hover:text-destructive invisible group-hover:visible"
+          size={"icon"}
+          className="text-muted-foreground hover:text-destructive pointer-events-none invisible translate-x-1.5 items-center transition-all duration-150 group-hover:pointer-events-auto group-hover:visible group-hover:translate-x-0"
           onClick={(e) => {
             e.stopPropagation(); // prevent triggering onSelect
             deleteCategory.mutate();
