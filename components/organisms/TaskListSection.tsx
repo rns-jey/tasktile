@@ -49,13 +49,13 @@ export default function TaskListSection() {
           <ScrollArea
             className={cn(activeTasks.length >= 5 ? "h-[300px]" : "h-fit")}
           >
-            <AnimatePresence initial={false}>
-              <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2">
+              <AnimatePresence>
                 {activeTasks.map((task) => (
                   <TaskCard key={task.id} task={task} />
                 ))}
-              </div>
-            </AnimatePresence>
+              </AnimatePresence>
+            </div>
           </ScrollArea>
         ) : (
           <p className="text-muted-foreground py-3 text-center text-sm">
