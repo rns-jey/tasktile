@@ -14,6 +14,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "../ui/DropdownMenu";
+import CategoryItem from "./CategoryItem";
 import NewCategoryForm from "./new-category-form";
 
 interface DropdownCategoryProps {
@@ -79,20 +80,13 @@ export default function DropdownCategory({
             <CommandList>
               <CommandGroup>
                 {categories.map((category) => (
-                  <CommandItem
+                  <CategoryItem
                     key={category.id}
-                    value={category.name}
-                    className="text-sm"
-                    onSelect={(val: string) => {
-                      onChange(val === category.id ? "" : category.id);
-                      setOpen(false);
-                    }}
-                  >
-                    <div
-                      className={`rounded-full bg-${category.color} h-3 w-3 shrink-0`}
-                    />
-                    {category.name}
-                  </CommandItem>
+                    category={category}
+                    onChange={onChange}
+                    value={value}
+                    setOpen={setOpen}
+                  />
                 ))}
               </CommandGroup>
               {search && (
