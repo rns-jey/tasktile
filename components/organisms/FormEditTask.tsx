@@ -8,7 +8,6 @@ import { z } from "zod";
 import { useCategories } from "@/hooks/useCategories";
 import { TaskWithCategory } from "@/types";
 
-import CalendarDueDate from "@/components/molecules/CalendarDueDate";
 import DropdownDueDate from "@/components/molecules/DropdownDueDate";
 
 import { Button } from "@/components/ui/Button";
@@ -196,9 +195,7 @@ export default function FormEditTask({ task, setOpen }: FormEditTaskProps) {
                 setDate={setDate}
                 disabled={updateTask.isPending}
                 size="default"
-              >
-                <CalendarDueDate selected={selectedDate} setDate={setDate} />
-              </DropdownDueDate>
+              />
             </Field>
           </FieldGroup>
         </form>

@@ -12,7 +12,6 @@ import { Field, FieldError, FieldGroup } from "@/components/ui/Field";
 
 import { useCategories } from "@/hooks/useCategories";
 
-import CalendarDueDate from "@/components/molecules/CalendarDueDate";
 import type { TaskWithCategory } from "@/types";
 import { Category } from "@prisma/client";
 import DropdownDueDate from "../molecules/DropdownDueDate";
@@ -29,6 +28,7 @@ const formSchema = z.object({
 
 export default function NewTaskSection() {
   const [isDescribing, setDescribing] = useState(false);
+
   const [selectedCategory, setCategory] = useState<Category | null>(null);
   const [selectedDate, setDate] = useState<Date | null>(null);
 
@@ -130,12 +130,7 @@ export default function NewTaskSection() {
                     setDate={setDate}
                     disabled={addTask.isPending}
                     size="xs"
-                  >
-                    <CalendarDueDate
-                      selected={selectedDate}
-                      setDate={setDate}
-                    />
-                  </DropdownDueDate>
+                  />
                 </div>
 
                 {isDescribing && (
