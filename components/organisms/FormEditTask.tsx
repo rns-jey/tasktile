@@ -48,7 +48,7 @@ export default function FormEditTask({ task, setOpen }: FormEditTaskProps) {
     defaultValues: {
       name: name,
       description: description,
-      categoryId: categoryId ? categoryId : undefined,
+      categoryId: categoryId,
       dueDate: selectedDate ? new Date(selectedDate) : null,
     },
   });
@@ -89,7 +89,12 @@ export default function FormEditTask({ task, setOpen }: FormEditTaskProps) {
     return (
       <>
         <div className="p-4">
-          <form id="form-edit-task" onSubmit={form.handleSubmit(onSubmit)}>
+          <form
+            id="form-edit-task"
+            onSubmit={form.handleSubmit(onSubmit, (errors) =>
+              console.log("Validation errors:", errors),
+            )}
+          >
             <FieldGroup className="gap-2">
               <Controller
                 name="name"

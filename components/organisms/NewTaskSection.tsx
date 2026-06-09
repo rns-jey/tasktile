@@ -46,10 +46,6 @@ export default function NewTaskSection() {
   });
 
   useEffect(() => {
-    form.setValue("categoryId", selectedCategory ? selectedCategory.id : null);
-  }, [selectedCategory]);
-
-  useEffect(() => {
     form.setValue("dueDate", selectedDate);
   }, [selectedDate]);
 
@@ -60,6 +56,9 @@ export default function NewTaskSection() {
     Error,
     {
       name: string;
+      description: string;
+      categoryId: string | null;
+      dueDate: Date | null;
     }
   >({
     mutationFn: async (newTask) => {
@@ -86,7 +85,12 @@ export default function NewTaskSection() {
 
         <div className="flex gap-2">
           <div className="w-full">
-            <form id="form-add-task" onSubmit={form.handleSubmit(onSubmit)}>
+            <form
+              id="form-add-task"
+              onSubmit={form.handleSubmit(onSubmit, (errors) =>
+                console.log("Validation errors:", errors),
+              )}
+            >
               <FieldGroup className="gap-2">
                 <Controller
                   name="name"
