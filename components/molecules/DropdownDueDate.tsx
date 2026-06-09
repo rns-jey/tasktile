@@ -13,7 +13,7 @@ interface DropdownDueDateProps {
   selected: Date | null;
   setDate: React.Dispatch<React.SetStateAction<Date | null>>;
   disabled?: boolean;
-  size:
+  size?:
     | "default"
     | "icon"
     | "icon-lg"
@@ -111,7 +111,7 @@ export default function DropdownDueDate({
           variant={"outline"}
           size={size}
           type="button"
-          className="flex w-fit max-w-40 justify-start"
+          className="flex justify-start"
           disabled={disabled}
         >
           <Calendar />

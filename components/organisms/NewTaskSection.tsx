@@ -14,8 +14,9 @@ import { useCategories } from "@/hooks/useCategories";
 
 import type { TaskWithCategory } from "@/types";
 import { Category } from "@prisma/client";
+
+import DropdownCategory from "../molecules/DropdownCategory";
 import DropdownDueDate from "../molecules/DropdownDueDate";
-import SelectCategory from "../molecules/SelectCategory";
 import { Input } from "../ui/Input";
 import { InputGroup, InputGroupTextarea } from "../ui/InputGroup";
 
@@ -78,94 +79,109 @@ export default function NewTaskSection() {
     addTask.mutate(values);
   }
 
-  return (
-    <div>
-      <h2>Tasks</h2>
+  if (categories) {
+    return (
+      <div>
+        <h2>Tasks</h2>
 
-      <div className="flex gap-2">
-        <div className="w-full">
-          <form id="form-add-task" onSubmit={form.handleSubmit(onSubmit)}>
-            <FieldGroup className="gap-2">
-              <Controller
-                name="name"
-                control={form.control}
-                disabled={addTask.isPending}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <Input
-                      {...field}
-                      id="form-add-task-name"
-                      aria-invalid={fieldState.invalid}
-                      placeholder="Add a task name .."
-                    />
-                    {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
-                    )}
-                  </Field>
-                )}
-              />
+        <div className="flex gap-2">
+          <div className="w-full">
+            <form id="form-add-task" onSubmit={form.handleSubmit(onSubmit)}>
+              <FieldGroup className="gap-2">
+                <Controller
+                  name="name"
+                  control={form.control}
+                  disabled={addTask.isPending}
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <Input
+                        {...field}
+                        id="form-add-task-name"
+                        aria-invalid={fieldState.invalid}
+                        placeholder="Add a task name .."
+                      />
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
 
-              <div className="flex flex-col gap-2">
-                <div className="flex gap-2">
-                  <Button
-                    variant={"outline"}
-                    size={"xs"}
-                    type="button"
-                    className="w-fit"
-                    disabled={addTask.isPending}
-                    onClick={() => setDescribing(!isDescribing)}
-                  >
-                    <Text />
-                    {isDescribing ? "Hide description" : "Add description"}
-                  </Button>
+                <div className="flex flex-col gap-2">
+                  <div className="grid w-full grid-cols-3 gap-2">
+                    <Button
+                      variant={"outline"}
+                      size={"xs"}
+                      type="button"
+                      disabled={addTask.isPending}
+                      onClick={() => setDescribing(!isDescribing)}
+                    >
+                      <Text />
+                      {isDescribing ? "Hide description" : "Add description"}
+                    </Button>
 
-                  <SelectCategory
-                    selected={selectedCategory}
-                    setCategory={setCategory}
-                    disabled={addTask.isPending}
-                  />
-
-                  <DropdownDueDate
-                    selected={selectedDate}
-                    setDate={setDate}
-                    disabled={addTask.isPending}
-                    size="xs"
-                  />
-                </div>
-
-                {isDescribing && (
-                  <Controller
-                    name="description"
-                    control={form.control}
-                    disabled={addTask.isPending}
-                    render={({ field, fieldState }) => (
-                      <Field data-invalid={fieldState.invalid}>
-                        <InputGroup>
-                          <InputGroupTextarea
-                            {...field}
-                            id="form-add-task-description"
-                            placeholder="Provide a brief description of the task .."
-                            rows={6}
-                            className="min-h-24 resize-none"
-                            aria-invalid={fieldState.invalid}
+                    <Controller
+                      name="categoryId"
+                      control={form.control}
+                      render={({ field, fieldState }) => (
+                        <Field data-invalid={fieldState.invalid}>
+                          <DropdownCategory
+                            categories={categories}
+                            value={field.value}
+                            onChange={field.onChange}
+                            disabled={addTask.isPending}
+                            size="xs"
                           />
-                          {fieldState.invalid && (
-                            <FieldError errors={[fieldState.error]} />
-                          )}
-                        </InputGroup>
-                      </Field>
-                    )}
-                  />
-                )}
-              </div>
-            </FieldGroup>
-          </form>
-        </div>
+                        </Field>
+                      )}
+                    />
 
-        <Button type="submit" form="form-add-task" disabled={addTask.isPending}>
-          <Plus />
-        </Button>
+                    <DropdownDueDate
+                      selected={selectedDate}
+                      setDate={setDate}
+                      disabled={addTask.isPending}
+                      size="xs"
+                    />
+                  </div>
+
+                  {isDescribing && (
+                    <Controller
+                      name="description"
+                      control={form.control}
+                      disabled={addTask.isPending}
+                      render={({ field, fieldState }) => (
+                        <Field data-invalid={fieldState.invalid}>
+                          <InputGroup>
+                            <InputGroupTextarea
+                              {...field}
+                              id="form-add-task-description"
+                              placeholder="Provide a brief description of the task .."
+                              rows={6}
+                              className="min-h-24 resize-none"
+                              aria-invalid={fieldState.invalid}
+                            />
+                            {fieldState.invalid && (
+                              <FieldError errors={[fieldState.error]} />
+                            )}
+                          </InputGroup>
+                        </Field>
+                      )}
+                    />
+                  )}
+                </div>
+              </FieldGroup>
+            </form>
+          </div>
+
+          <Button
+            type="submit"
+            form="form-add-task"
+            disabled={addTask.isPending}
+          >
+            <Plus />
+          </Button>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
