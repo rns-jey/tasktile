@@ -1,20 +1,21 @@
 "use client";
 
-import * as React from "react";
 import {
   ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
 } from "lucide-react";
+import * as React from "react";
 import {
   DayPicker,
   getDefaultClassNames,
+  RootProps,
   type DayButton,
   type Locale,
 } from "react-day-picker";
 
-import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "@/components/ui/Button";
+import { cn } from "@/lib/utils";
 
 function Calendar({
   className,
@@ -138,7 +139,7 @@ function Calendar({
         ...classNames,
       }}
       components={{
-        Root: ({ className, rootRef, ...props }) => {
+        Root: ({ className, rootRef, ...props }: RootProps) => {
           return (
             <div
               data-slot="calendar"

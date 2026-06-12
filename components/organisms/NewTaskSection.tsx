@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -13,10 +13,9 @@ import { Field, FieldError, FieldGroup } from "@/components/ui/Field";
 import { useCategories } from "@/hooks/useCategories";
 
 import type { TaskWithCategory } from "@/types";
-import { Category } from "@prisma/client";
 
+import DatePicker from "../molecules/DatePicker";
 import DropdownCategory from "../molecules/DropdownCategory";
-import DropdownDueDate from "../molecules/DropdownDueDate";
 import { Input } from "../ui/Input";
 import { InputGroup, InputGroupTextarea } from "../ui/InputGroup";
 
@@ -24,14 +23,11 @@ const formSchema = z.object({
   name: z.string().min(3, "Task name is required"),
   description: z.string(),
   categoryId: z.string().nullable(),
-  dueDate: z.date().nullable(),
+  dueDate: z.date().optional(),
 });
 
 export default function NewTaskSection() {
   const [isDescribing, setDescribing] = useState(false);
-
-  const [selectedCategory, setCategory] = useState<Category | null>(null);
-  const [selectedDate, setDate] = useState<Date | null>(null);
 
   const { data: categories } = useCategories();
 
@@ -41,13 +37,9 @@ export default function NewTaskSection() {
       name: "",
       description: "",
       categoryId: null,
-      dueDate: null,
+      dueDate: undefined,
     },
   });
-
-  useEffect(() => {
-    form.setValue("dueDate", selectedDate);
-  }, [selectedDate]);
 
   const queryClient = useQueryClient();
 
@@ -58,7 +50,7 @@ export default function NewTaskSection() {
       name: string;
       description: string;
       categoryId: string | null;
-      dueDate: Date | null;
+      dueDate?: Date | undefined;
     }
   >({
     mutationFn: async (newTask) => {
@@ -68,8 +60,6 @@ export default function NewTaskSection() {
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["tasks"] }); // Wait for refetch to complete
       form.reset();
-      setCategory(null);
-      setDate(null);
       setDescribing(false);
     },
   });
@@ -140,11 +130,27 @@ export default function NewTaskSection() {
                       )}
                     />
 
-                    <DropdownDueDate
+                    {/* <DropdownDueDate
                       selected={selectedDate}
                       setDate={setDate}
                       disabled={addTask.isPending}
                       size="xs"
+                    /> */}
+
+                    <Controller
+                      name="dueDate"
+                      control={form.control}
+                      disabled={addTask.isPending}
+                      render={({ field, fieldState }) => (
+                        <Field data-invalid={fieldState.invalid}>
+                          <DatePicker
+                            size="xs"
+                            value={field.value}
+                            onChange={field.onChange}
+                            disabled={addTask.isPending}
+                          />
+                        </Field>
+                      )}
                     />
                   </div>
 

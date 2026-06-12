@@ -1,14 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { useCategories } from "@/hooks/useCategories";
 import { TaskWithCategory } from "@/types";
-
-import DropdownDueDate from "@/components/molecules/DropdownDueDate";
 
 import { Button } from "@/components/ui/Button";
 import { DrawerClose, DrawerFooter } from "@/components/ui/Drawer";
@@ -20,6 +17,7 @@ import {
 } from "@/components/ui/Field";
 import { Input } from "@/components/ui/Input";
 import { InputGroup, InputGroupTextarea } from "@/components/ui/InputGroup";
+import DatePicker from "../molecules/DatePicker";
 import DropdownCategory from "../molecules/DropdownCategory";
 
 interface FormEditTaskProps {
@@ -31,7 +29,7 @@ const formSchema = z.object({
   name: z.string().min(3, "Task name is required"),
   description: z.string(),
   categoryId: z.string().nullable(),
-  dueDate: z.date().nullable(),
+  dueDate: z.date().optional(),
 });
 
 export default function FormEditTask({ task, setOpen }: FormEditTaskProps) {
@@ -39,23 +37,15 @@ export default function FormEditTask({ task, setOpen }: FormEditTaskProps) {
 
   const { data: categories } = useCategories();
 
-  const [selectedDate, setDate] = useState<Date | null>(
-    dueDate ? new Date(dueDate) : null,
-  );
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: name,
       description: description,
       categoryId: categoryId,
-      dueDate: selectedDate ? new Date(selectedDate) : null,
+      dueDate: dueDate ? dueDate : undefined,
     },
   });
-
-  useEffect(() => {
-    form.setValue("dueDate", selectedDate);
-  }, [selectedDate]);
 
   const queryClient = useQueryClient();
 
@@ -76,7 +66,6 @@ export default function FormEditTask({ task, setOpen }: FormEditTaskProps) {
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["tasks"] }); // Wait for refetch to complete
       form.reset();
-      setDate(null);
       setOpen(false);
     },
   });
@@ -150,14 +139,6 @@ export default function FormEditTask({ task, setOpen }: FormEditTaskProps) {
                     <Field data-invalid={fieldState.invalid}>
                       <FieldLabel>Category</FieldLabel>
 
-                      {/* <CategoryPopover
-                        task={task}
-                        categories={categories}
-                        value={field.value}
-                        onChange={field.onChange}
-                        disabled={updateTask.isPending}
-                      /> */}
-
                       <DropdownCategory
                         categories={categories}
                         value={field.value}
@@ -168,15 +149,21 @@ export default function FormEditTask({ task, setOpen }: FormEditTaskProps) {
                   )}
                 />
 
-                <Field>
-                  <FieldLabel>Due date</FieldLabel>
+                <Controller
+                  name="dueDate"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel>Due date</FieldLabel>
 
-                  <DropdownDueDate
-                    selected={selectedDate}
-                    setDate={setDate}
-                    disabled={updateTask.isPending}
-                  />
-                </Field>
+                      <DatePicker
+                        value={field.value}
+                        onChange={field.onChange}
+                        disabled={updateTask.isPending}
+                      />
+                    </Field>
+                  )}
+                />
               </div>
             </FieldGroup>
           </form>
