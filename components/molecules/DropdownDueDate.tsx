@@ -43,44 +43,30 @@ export default function DropdownDueDate({
 
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
+    const prevMonthLastDay = new Date(year, month, 0);
 
     const startPadding = firstDay.getDay();
     const days = [];
 
-    // Add days from previous month
-    const prevMonthLastDay = new Date(year, month, 0);
-
     for (let i = startPadding - 1; i >= 0; i--) {
-      const date = new Date(year, month - 1, prevMonthLastDay.getDate() - i);
-      const dateStr = date.toDateString();
-
       days.push({
-        date,
+        date: new Date(year, month - 1, prevMonthLastDay.getDate() - i),
         isCurrentMonth: false,
       });
     }
 
-    // Add actual days of current month
     for (let day = 1; day <= lastDay.getDate(); day++) {
-      const date = new Date(year, month, day);
-      const dateStr = date.toDateString();
-
       days.push({
-        date,
-
+        date: new Date(year, month, day),
         isCurrentMonth: true,
       });
     }
 
-    // Add days from next month to fill the grid (always 6 rows = 42 cells)
     const remainingCells = 42 - days.length;
+
     for (let i = 1; i <= remainingCells; i++) {
-      const date = new Date(year, month + 1, i);
-      const dateStr = date.toDateString();
-
       days.push({
-        date,
-
+        date: new Date(year, month + 1, i),
         isCurrentMonth: false,
       });
     }

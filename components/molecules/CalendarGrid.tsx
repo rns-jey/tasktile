@@ -1,11 +1,11 @@
-import { CalendarDay } from "@/types";
-import { format } from "date-fns";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "../atoms/tooltip";
+} from "@/components/ui/Tooltip";
+import { CalendarDay } from "@/types";
+import { format } from "date-fns";
 
 interface CalendarGridProps {
   days: CalendarDay[];
