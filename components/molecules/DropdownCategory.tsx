@@ -1,4 +1,5 @@
-import { Category } from "@prisma/client";
+import { Category } from "@/lib/generated/prisma/client";
+
 import { Tag } from "lucide-react";
 import React, { useState } from "react";
 import { Button } from "../ui/Button";

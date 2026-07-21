@@ -1,6 +1,6 @@
 "use client";
 
-import { Category } from "@prisma/client";
+import { Category } from "@/lib/generated/prisma/client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
