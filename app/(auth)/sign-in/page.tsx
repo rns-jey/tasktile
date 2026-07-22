@@ -8,39 +8,26 @@ import {
   InputGroupInput,
 } from "@/components/ui/InputGroup";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { EyeOffIcon, LockIcon, MailIcon, User } from "lucide-react";
+import { EyeOffIcon, LockIcon, MailIcon } from "lucide-react";
 import Link from "next/link";
 import { startTransition, useActionState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
-import { signUpWithEmail } from "./action";
+import { signInWithEmail } from "./action";
 
-const formSchema = z
-  .object({
-    name: z.string().trim().min(1, "Name is required"),
-    email: z.string().min(1, "Email is required").email("Enter a valid email"),
-    password: z
-      .string()
-      .min(8, "Password must be at least 8 characters")
-      .regex(/[A-Z]/, "Include at least one uppercase letter")
-      .regex(/[0-9]/, "Include at least one number"),
-    confirmPassword: z.string().min(1, "Please confirm your password"),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"],
-  });
+const formSchema = z.object({
+  email: z.string().min(1, "Email is required").email("Enter a valid email"),
+  password: z.string().min(1, "Password is required"),
+});
 
-export default function SignUpPage() {
-  const [state, dispatch, isPending] = useActionState(signUpWithEmail, null);
+export default function SignInPage() {
+  const [state, dispatch, isPending] = useActionState(signInWithEmail, null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
       email: "",
       password: "",
-      confirmPassword: "",
     },
   });
 
@@ -48,7 +35,6 @@ export default function SignUpPage() {
     // Do something with the form values.
     const formData = new FormData();
 
-    formData.append("name", data.name);
     formData.append("email", data.email);
     formData.append("password", data.password);
 
@@ -57,14 +43,14 @@ export default function SignUpPage() {
 
   return (
     <form
-      id="form-signup"
+      id="form-signin"
       onSubmit={form.handleSubmit(onValid)}
       className="w-full p-6"
     >
       <div className="my-8 text-center">
-        <h1 className="text-2xl font-bold">Create an Account</h1>
+        <h1 className="text-2xl font-bold">Welcome Back</h1>
         <p className="text-muted-foreground">
-          Sign up in seconds and start being productive.
+          Sign in to continue where you left off.
         </p>
       </div>
 
@@ -75,31 +61,6 @@ export default function SignUpPage() {
       <div className="space-y-4">
         <FieldGroup>
           <Controller
-            name="name"
-            control={form.control}
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <InputGroup className="bg-accent/50 h-11 px-2">
-                  <InputGroupInput
-                    {...field}
-                    type="text"
-                    placeholder="Enter your name"
-                    id="form-signup-name"
-                    aria-invalid={fieldState.invalid}
-                    autoComplete="off"
-                  />
-                  <InputGroupAddon>
-                    <User />
-                  </InputGroupAddon>
-                </InputGroup>
-                {fieldState.invalid && (
-                  <FieldError errors={[fieldState.error]} />
-                )}
-              </Field>
-            )}
-          />
-
-          <Controller
             name="email"
             control={form.control}
             render={({ field, fieldState }) => (
@@ -109,9 +70,10 @@ export default function SignUpPage() {
                     {...field}
                     type="email"
                     placeholder="Enter your email"
-                    id="form-signup-email"
+                    id="form-signin-email"
                     aria-invalid={fieldState.invalid}
-                    autoComplete="off"
+                    autoComplete="email"
+                    className="truncate"
                   />
                   <InputGroupAddon>
                     <MailIcon />
@@ -134,40 +96,9 @@ export default function SignUpPage() {
                     {...field}
                     type="password"
                     placeholder="Password"
-                    id="form-signup-password"
+                    id="form-signin-password"
                     aria-invalid={fieldState.invalid}
-                    autoComplete="off"
-                  />
-                  <InputGroupAddon>
-                    <LockIcon />
-                  </InputGroupAddon>
-                  <InputGroupAddon
-                    align="inline-end"
-                    className="cursor-pointer"
-                  >
-                    <EyeOffIcon />
-                  </InputGroupAddon>
-                </InputGroup>
-                {fieldState.invalid && (
-                  <FieldError errors={[fieldState.error]} />
-                )}
-              </Field>
-            )}
-          />
-
-          <Controller
-            name="confirmPassword"
-            control={form.control}
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <InputGroup className="bg-accent/50 h-11 px-2">
-                  <InputGroupInput
-                    {...field}
-                    type="password"
-                    placeholder="Confirm Password"
-                    id="form-signup-confirm-password"
-                    aria-invalid={fieldState.invalid}
-                    autoComplete="off"
+                    autoComplete="current-password"
                   />
                   <InputGroupAddon>
                     <LockIcon />
@@ -190,12 +121,13 @@ export default function SignUpPage() {
         <div className="flex flex-col items-center space-y-2">
           <Button
             type="submit"
-            form="form-signup"
+            form="form-signin"
             disabled={isPending}
             className="h-11 w-full text-base"
           >
-            Sign Up
+            {isPending ? "Signing in..." : "Sign In"}
           </Button>
+
           <div className="flex w-full items-center gap-2">
             <div className="h-[1px] w-full bg-gradient-to-r from-transparent to-neutral-300 dark:via-neutral-700" />
             or
@@ -214,9 +146,9 @@ export default function SignUpPage() {
         </div>
 
         <div className="mt-12 flex justify-center gap-1">
-          <p>Already have an account?</p>
-          <Link href={"/sign-in"} className="text-primary font-semibold">
-            Sign In
+          <p>Don't have an account yet?</p>
+          <Link href={"/sign-up"} className="text-primary font-semibold">
+            Sign Up
           </Link>
         </div>
       </div>
