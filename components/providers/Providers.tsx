@@ -1,7 +1,8 @@
-import { Profile } from "@prisma/client";
 import React from "react";
-import UserProvider from "./UserProvider";
+
+import { Profile } from "@/lib/generated/prisma/client";
 import ReactQueryProvider from "./ReactQueryProvider";
+import UserProvider from "./UserProvider";
 
 interface ProvidersProps {
   profile: Profile;

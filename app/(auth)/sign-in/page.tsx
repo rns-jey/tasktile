@@ -1,5 +1,13 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
+import { startTransition, useActionState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { z } from "zod";
+
+import { EyeOffIcon, LockIcon, MailIcon } from "lucide-react";
+
 import { Button } from "@/components/ui/Button";
 import { Field, FieldError, FieldGroup } from "@/components/ui/Field";
 import {
@@ -7,12 +15,7 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/InputGroup";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { EyeOffIcon, LockIcon, MailIcon } from "lucide-react";
-import Link from "next/link";
-import { startTransition, useActionState } from "react";
-import { Controller, useForm } from "react-hook-form";
-import { z } from "zod";
+
 import { signInWithEmail } from "./action";
 
 const formSchema = z.object({

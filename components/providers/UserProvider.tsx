@@ -1,7 +1,7 @@
 "use client";
 
-import { Profile } from "@prisma/client";
-import React, { createContext, ReactNode, useContext } from "react";
+import { Profile } from "@/lib/generated/prisma/client";
+import { createContext, ReactNode, useContext } from "react";
 
 interface UserProfileProviderProps {
   profile: Profile;

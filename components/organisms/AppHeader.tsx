@@ -7,11 +7,18 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/DropdownMenu";
+import { authClient } from "@/lib/auth/client";
 import { Diamond, LogOut, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
+import { redirect } from "next/navigation";
 
 export default function AppHeader() {
   const { setTheme } = useTheme();
+
+  const handleSignOut = async () => {
+    await authClient.signOut();
+    redirect("/sign-in");
+  };
 
   return (
     <header className="bg-background/95 sticky top-0 z-50 w-full border-b">
@@ -41,22 +48,25 @@ export default function AppHeader() {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <Button variant="outline" size="icon" className="p-1.5" asChild>
-              <LogOut className="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
+            <Button
+              variant="outline"
+              size="icon"
+              className="p-1.5"
+              onClick={handleSignOut}
+            >
+              <LogOut className="h-[1.2rem] w-[1.2rem]" />
             </Button>
           </div>
         </div>
 
-        <div className="flex gap-2">
-          {/* <SignedOut>
-            <Button variant="outline" size="sm" className="ml-4">
-              <Link href={"/sign-in"}>Log in</Link>
-            </Button>
-            <Button size="sm">
-              <Link href={"/sign-up"}>Sign up</Link>
-            </Button>
-          </SignedOut> */}
-        </div>
+        {/* <div className="flex gap-2">
+          <Button variant="outline" size="sm" className="ml-4">
+            <Link href={"/sign-in"}>Log in</Link>
+          </Button>
+          <Button size="sm">
+            <Link href={"/sign-up"}>Sign up</Link>
+          </Button>
+        </div> */}
       </div>
     </header>
   );
