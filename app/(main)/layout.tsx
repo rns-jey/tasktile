@@ -1,7 +1,7 @@
 import React from "react";
 
-import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import Providers from "@/components/providers/Providers";
+import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import currentProfile from "@/lib/current-profile";
 import { redirect } from "next/navigation";
 

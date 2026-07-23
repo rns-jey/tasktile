@@ -1,15 +1,13 @@
 "use client";
 
-import { Diamond, Link, LogOut, Moon, Sun } from "lucide-react";
-import React from "react";
+import { Button } from "@/components/ui/Button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/DropdownMenu";
-import { Button } from "@/components/ui/Button";
-import { SignedOut, SignOutButton } from "@clerk/nextjs";
+import { Diamond, LogOut, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 
 export default function AppHeader() {
@@ -44,22 +42,20 @@ export default function AppHeader() {
             </DropdownMenu>
 
             <Button variant="outline" size="icon" className="p-1.5" asChild>
-              <SignOutButton>
-                <LogOut className="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
-              </SignOutButton>
+              <LogOut className="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
             </Button>
           </div>
         </div>
 
         <div className="flex gap-2">
-          <SignedOut>
+          {/* <SignedOut>
             <Button variant="outline" size="sm" className="ml-4">
               <Link href={"/sign-in"}>Log in</Link>
             </Button>
             <Button size="sm">
               <Link href={"/sign-up"}>Sign up</Link>
             </Button>
-          </SignedOut>
+          </SignedOut> */}
         </div>
       </div>
     </header>

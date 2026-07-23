@@ -1,16 +1,16 @@
-import { auth, currentUser } from "@clerk/nextjs/server";
+import { auth } from "./auth/server";
 import { db } from "./db";
 
 export default async function currentProfile() {
-  const user = await currentUser();
+  const { data: session } = await auth.getSession();
 
-  if (!user) {
+  if (!session?.user) {
     return null;
   }
 
   const profile = await db.profile.findUnique({
     where: {
-      userID: user.id,
+      userID: session?.user.id,
     },
   });
 
@@ -20,11 +20,10 @@ export default async function currentProfile() {
 
   const newProfile = await db.profile.create({
     data: {
-      userID: user.id,
-      email: user.emailAddresses[0].emailAddress,
-      imageUrl: user.imageUrl,
-      firstName: user.firstName || "",
-      lastName: user.lastName || "",
+      userID: session?.user.id,
+      email: session?.user.email,
+      name: session?.user.name,
+      imageUrl: session?.user.image || "",
     },
   });
 
