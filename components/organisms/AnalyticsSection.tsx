@@ -4,8 +4,13 @@ import { RawContribution } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useMemo, useState } from "react";
 import CompletedToday from "../molecules/CompletedToday";
+import { Button } from "../ui/Button";
+import { Card, CardContent, CardHeader } from "../ui/Card";
 import { Skeleton } from "../ui/Skeleton";
 import StreakCount from "./StreakCount";
 
@@ -15,6 +20,11 @@ type ContributionResponse = {
   completedToday: number;
   streak: number;
 };
+
+interface DayData {
+  date: Date;
+  isCurrentMonth: boolean;
+}
 
 export default function AnalyticsSection() {
   const { data } = useQuery<ContributionResponse>({
@@ -27,6 +37,8 @@ export default function AnalyticsSection() {
   });
 
   const [currentMonth, setCurrentMonth] = useState(new Date());
+
+  const weekDays = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
 
   const calendarData = useMemo(() => {
     const year = currentMonth.getFullYear();
@@ -41,15 +53,18 @@ export default function AnalyticsSection() {
 
     console.log(data);
 
-
     for (let i = startPadding - 1; i >= 0; i--) {
-      const previousDate = new Date(year, month - 1, prevMonthLastDay.getDate() - i)
-      const dateStr = previousDate.toDateString()
+      const previousDate = new Date(
+        year,
+        month - 1,
+        prevMonthLastDay.getDate() - i,
+      );
+      const dateStr = previousDate.toDateString();
 
       days.push({
         date: previousDate,
-        contribution: 
-        isCurrentMonth: false,
+        contribution: "",
+        currentMonth: false,
       });
     }
 
@@ -71,6 +86,16 @@ export default function AnalyticsSection() {
 
     return days;
   }, [currentMonth]);
+
+  const formatMonthYear = (date: Date) => {
+    return (
+      date.toLocaleDateString("en-Us"),
+      {
+        month: "long",
+        year: "numeric",
+      }
+    );
+  };
 
   if (!data)
     return (
@@ -130,12 +155,75 @@ export default function AnalyticsSection() {
             <CompletedToday completedToday={data.completedToday} />
             <StreakCount streak={data.streak} />
           </div>
-
-          <div className="bg-background h-full w-full rounded-lg p-6 shadow-lg" />
         </div>
       </div>
 
-      <div className="bg-background h-56 w-full rounded-lg p-6 shadow-lg" />
+      <Card>
+        {/* Month Navigation */}
+        <CardHeader>
+          <div className="flex w-full items-center justify-between">
+            <Button variant={"ghost"} size={"icon"} type="button">
+              <ChevronLeft />
+            </Button>
+            <span>{format(currentMonth, "MMMM yyyy")}</span>
+            <Button variant={"ghost"} size={"icon"} type="button">
+              <ChevronRight />
+            </Button>
+          </div>
+        </CardHeader>
+
+        <CardContent>
+          {/* Weekdays */}
+          <div className="mb-4 grid grid-cols-7 gap-2">
+            {weekDays.map((day, i) => (
+              <div
+                key={i}
+                className="text-muted-foreground text-center text-xs font-medium"
+              >
+                {day}
+              </div>
+            ))}
+          </div>
+
+          {/* Calendar Grid */}
+          <div className="grid grid-cols-7 gap-2">
+            {calendarData.map((day, i) => {
+              const isToday =
+                format(new Date(), "MMM dd yy") ===
+                format(day.date, "MMM dd yy");
+
+              console.log(day);
+              console.log(
+                isToday,
+                format(new Date(), "MMM dd yy"),
+                format(day.date, "MMM dd yy"),
+              );
+
+              return (
+                <div key={i}>
+                  {day ? (
+                    <Button
+                      variant={"outline"}
+                      className={cn("w-full font-bold")}
+                    >
+                      <span
+                        className={cn(
+                          isToday &&
+                            "bg-red-500 text-white dark:bg-white dark:text-red-500",
+                          !day.isCurrentMonth && "text-muted-foreground",
+                          "rounded-md p-0.5",
+                        )}
+                      >
+                        {day.date.getDate()}
+                      </span>
+                    </Button>
+                  ) : null}
+                </div>
+              );
+            })}
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

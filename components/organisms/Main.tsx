@@ -5,6 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 
 import { useCategories } from "@/hooks/useCategories";
 import { ChartColumn, ListTodo } from "lucide-react";
+import AnalyticsSection from "./AnalyticsSection";
 
 export default function Main() {
   useCategories();
@@ -72,7 +73,7 @@ export default function Main() {
         </TabsContent>
 
         <TabsContent value="analytics">
-          {/* <AnalyticsSection /> */}
+          <AnalyticsSection />
         </TabsContent>
       </Tabs>
     </main>
