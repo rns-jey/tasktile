@@ -1,4 +1,4 @@
-import { Category } from "@prisma/client";
+import { Category } from "@/lib/generated/prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 

@@ -1,4 +1,4 @@
-import { Category, Task } from "@prisma/client";
+import { Category, Task } from "./lib/generated/prisma/client";
 
 export type TaskWithCategory = Task & { category: Category | null };
 
