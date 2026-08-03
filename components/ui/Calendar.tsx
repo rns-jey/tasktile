@@ -9,13 +9,12 @@ import * as React from "react";
 import {
   DayPicker,
   getDefaultClassNames,
-  RootProps,
   type DayButton,
   type Locale,
 } from "react-day-picker";
 
-import { Button, buttonVariants } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
+import { Button, buttonVariants } from "./Button";
 
 function Calendar({
   className,
@@ -92,7 +91,7 @@ function Calendar({
             : "cn-calendar-caption-label flex items-center gap-1 rounded-(--cell-radius) text-sm [&>svg]:size-3.5 [&>svg]:text-muted-foreground",
           defaultClassNames.caption_label,
         ),
-        table: "w-full border-collapse",
+        month_grid: cn("w-full border-collapse", defaultClassNames.month_grid),
         weekdays: cn("flex", defaultClassNames.weekdays),
         weekday: cn(
           "flex-1 rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground select-none",
@@ -139,7 +138,7 @@ function Calendar({
         ...classNames,
       }}
       components={{
-        Root: ({ className, rootRef, ...props }: RootProps) => {
+        Root: ({ className, rootRef, ...props }) => {
           return (
             <div
               data-slot="calendar"
@@ -207,7 +206,6 @@ function CalendarDayButton({
 
   return (
     <Button
-      ref={ref}
       variant="ghost"
       size="icon"
       data-day={day.date.toLocaleDateString(locale?.code)}

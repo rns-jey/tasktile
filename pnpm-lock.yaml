@@ -10,7 +10,7 @@ importers:
     dependencies:
       '@base-ui/react':
         specifier: ^1.6.0
-        version: 1.6.0(@date-fns/tz@1.2.0)(@types/react@19.0.10)(date-fns@4.1.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+        version: 1.6.0(@date-fns/tz@1.5.0)(@types/react@19.0.10)(date-fns@4.1.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@dnd-kit/core':
         specifier: ^6.3.1
         version: 6.3.1(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -105,8 +105,8 @@ importers:
         specifier: 19.2.4
         version: 19.2.4
       react-day-picker:
-        specifier: ^9.5.1
-        version: 9.5.1(react@19.2.4)
+        specifier: ^10.0.1
+        version: 10.0.1(@types/react@19.0.10)(react@19.2.4)
       react-dom:
         specifier: 19.2.4
         version: 19.2.4(react@19.2.4)
@@ -378,8 +378,8 @@ packages:
   '@captchafox/types@1.6.0':
     resolution: {integrity: sha512-isJBepZntzO++rE2i9rP4FGh5XPwoXXle4H2POkNR6bYwjBaWI1D7XwbW5oylLnXMMELGksNnOX0QGHYHuQ2PQ==}
 
-  '@date-fns/tz@1.2.0':
-    resolution: {integrity: sha512-LBrd7MiJZ9McsOgxqWX7AaxrDjcFVjWH/tIKJd7pnR7McaslGYOP1QmmiBXdJH/H/yLCT+rcQ7FaPBUxRGUtrg==}
+  '@date-fns/tz@1.5.0':
+    resolution: {integrity: sha512-lwYN/vDPeNRULcepoE/LO2Pgx+7/RV+S9ARfbc9lr2DtGkOD7pAiruHvbR1RX3Qyf6ja47EWJDMsNK5vK08DJg==}
 
   '@daveyplate/better-auth-tanstack@1.3.6':
     resolution: {integrity: sha512-GvIGdbjRMZCEfAffU7LeWpGpie4vSli8V9jmNFCQOziZZMEFbO4cd53HBFmAushC9oEYIyhSNZBgV2ADzW94Ww==}
@@ -3083,9 +3083,6 @@ packages:
   csstype@3.1.3:
     resolution: {integrity: sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw==}
 
-  date-fns-jalali@4.1.0-0:
-    resolution: {integrity: sha512-hTIP/z+t+qKwBDcmmsnmjWTduxCg+5KfdqWQvb2X/8C9+knYY6epN/pfxdDuyVlSVeFz0sM5eEfwIUQ70U4ckg==}
-
   date-fns@4.1.0:
     resolution: {integrity: sha512-Ukq0owbQXxa/U3EGtsdVBkR1w7KOQ5gIBqdH2hkvknzZPYvBxb/aa6E8L7tmjFtkwZBu3UXBbjIgPo/Ez4xaNg==}
 
@@ -4202,11 +4199,15 @@ packages:
     peerDependencies:
       react: '>=16.4.1'
 
-  react-day-picker@9.5.1:
-    resolution: {integrity: sha512-PxuK8inYLlYgM2zZUVBPsaBM5jI40suPeG+naKyx7kpyF032RRlEAUEjkpW9/poTASh/vyWAOVqjGuGw+47isw==}
+  react-day-picker@10.0.1:
+    resolution: {integrity: sha512-eNh6BlwcYInWaJtRv18mXQ06Ys/H6rdTZAnTaSdOYJuTpwP1JMCHNd1FDRadA+gbeinq+psdULN5Xnowy9mV8w==}
     engines: {node: '>=18'}
     peerDependencies:
+      '@types/react': '>=16.8.0'
       react: '>=16.8.0'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
 
   react-dom@19.2.4:
     resolution: {integrity: sha512-AXJdLo8kgMbimY95O2aKQqsz2iWi9jMgKJhRBAxECE4IFxfcazB2LmzloIoibJI3C12IlY20+KFaLv+71bUJeQ==}
@@ -4891,7 +4892,7 @@ snapshots:
       '@babel/helper-string-parser': 7.29.7
       '@babel/helper-validator-identifier': 7.29.7
 
-  '@base-ui/react@1.6.0(@date-fns/tz@1.2.0)(@types/react@19.0.10)(date-fns@4.1.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
+  '@base-ui/react@1.6.0(@date-fns/tz@1.5.0)(@types/react@19.0.10)(date-fns@4.1.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
     dependencies:
       '@babel/runtime': 7.29.7
       '@base-ui/utils': 0.3.1(@types/react@19.0.10)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -4901,7 +4902,7 @@ snapshots:
       react-dom: 19.2.4(react@19.2.4)
       use-sync-external-store: 1.6.0(react@19.2.4)
     optionalDependencies:
-      '@date-fns/tz': 1.2.0
+      '@date-fns/tz': 1.5.0
       '@types/react': 19.0.10
       date-fns: 4.1.0
 
@@ -4959,7 +4960,7 @@ snapshots:
 
   '@captchafox/types@1.6.0': {}
 
-  '@date-fns/tz@1.2.0': {}
+  '@date-fns/tz@1.5.0': {}
 
   '@daveyplate/better-auth-tanstack@1.3.6(@tanstack/query-core@5.67.1)(@tanstack/react-query@5.67.1(react@19.2.4))(better-auth@1.4.18(@prisma/client@7.8.0(prisma@7.8.0(@types/react-dom@19.0.4(@types/react@19.0.10))(@types/react@19.0.10)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.8.2))(typescript@5.8.2))(mysql2@3.15.3)(next@16.2.4(@babel/core@7.29.7)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(prisma@7.8.0(@types/react-dom@19.0.4(@types/react@19.0.10))(@types/react@19.0.10)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.8.2))(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
     dependencies:
@@ -7624,8 +7625,6 @@ snapshots:
 
   csstype@3.1.3: {}
 
-  date-fns-jalali@4.1.0-0: {}
-
   date-fns@4.1.0: {}
 
   debug@4.4.3:
@@ -8632,12 +8631,13 @@ snapshots:
       prop-types: 15.8.1
       react: 19.2.4
 
-  react-day-picker@9.5.1(react@19.2.4):
+  react-day-picker@10.0.1(@types/react@19.0.10)(react@19.2.4):
     dependencies:
-      '@date-fns/tz': 1.2.0
+      '@date-fns/tz': 1.5.0
       date-fns: 4.1.0
-      date-fns-jalali: 4.1.0-0
       react: 19.2.4
+    optionalDependencies:
+      '@types/react': 19.0.10
 
   react-dom@19.2.4(react@19.2.4):
     dependencies:
