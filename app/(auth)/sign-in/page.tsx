@@ -9,12 +9,20 @@ import { z } from "zod";
 import { EyeOffIcon, LockIcon, MailIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/Button";
-import { Field, FieldError, FieldGroup } from "@/components/ui/Field";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/Field";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/InputGroup";
+
+import { Checkbox } from "@/components/ui/Checkbox";
+import { Label } from "@/components/ui/Label";
 
 import { signInWithEmail } from "./action";
 
@@ -120,6 +128,19 @@ export default function SignInPage() {
             )}
           />
         </FieldGroup>
+
+        <div className="flex items-center justify-between">
+          <FieldGroup className="mx-auto w-56">
+            <Field orientation="horizontal">
+              <Checkbox id="remember-checkbox" name="remember-checkbox" />
+              <FieldLabel htmlFor="remember-checkbox">Remember me</FieldLabel>
+            </Field>
+          </FieldGroup>
+
+          <Link href={"/forgot-password"} className="text-primary text-md">
+            <Label className="whitespace-nowrap">Forgot password?</Label>
+          </Link>
+        </div>
 
         <div className="flex flex-col items-center space-y-2">
           <Button
