@@ -10,16 +10,19 @@ import {
 import { authClient } from "@/lib/auth/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft, MailIcon } from "lucide-react";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 import { Controller, useForm } from "react-hook-form";
-import { z } from "zod";
+import { toast } from "sonner";
+import * as z from "zod";
 
 const formSchema = z.object({
   email: z.email("Enter a valid email").min(1, "Email is required"),
 });
 
 export default function ForgotPassword() {
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -27,32 +30,45 @@ export default function ForgotPassword() {
     },
   });
 
-  const handlePasswordReset = async (email: string) => {
+  const handlePasswordReset = async (data: z.infer<typeof formSchema>) => {
     try {
-      const response = await authClient.requestPasswordReset({
-        email,
+      const { error } = await authClient.requestPasswordReset({
+        email: data.email,
         redirectTo: `${window.location.origin}/reset-password`,
       });
+
+      if (error) {
+        throw error;
+      }
+
+      router.push(
+        `/forgot-password/check-email?email=${encodeURIComponent(data.email)}`,
+      );
     } catch (error) {
       console.error("Error sending password reset email:", error);
+      toast.error("Failed to send password reset email");
     }
   };
 
+  const isPending = form.formState.isSubmitting;
+
+  console.log("Error:", form.formState.errors);
+
   return (
     <form
-      id="form-password-reset"
-      onSubmit={form.handleSubmit((data) => handlePasswordReset(data.email))}
+      id="form-forgot-password"
+      onSubmit={form.handleSubmit(handlePasswordReset)}
       className="w-full p-6"
     >
       <Button
+        type="button"
         variant="outline"
         className="absolute top-4 left-4 h-9 w-9 rounded-full p-0"
-        onClick={() => {
-          redirect("/sign-in");
-        }}
+        onClick={() => router.push("/sign-in")}
       >
         <ArrowLeft />
       </Button>
+
       <div className="my-8 text-center">
         <h1 className="text-2xl font-bold">Forgot Password?</h1>
         <p className="text-muted-foreground">
@@ -77,6 +93,7 @@ export default function ForgotPassword() {
                     aria-invalid={fieldState.invalid}
                     autoComplete="email"
                     className="truncate"
+                    disabled={isPending}
                   />
                   <InputGroupAddon>
                     <MailIcon />
@@ -92,12 +109,11 @@ export default function ForgotPassword() {
           <Field>
             <Button
               type="submit"
-              form="form-password-reset"
-              // disabled={isPending}
+              form="form-forgot-password"
+              disabled={isPending}
               className="h-11 w-full text-base"
             >
-              {/* {isPending ? "Signing in..." : "Sign In"} */}
-              Send
+              {isPending ? "Sending..." : "Send"}
             </Button>
           </Field>
         </FieldGroup>
