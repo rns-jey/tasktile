@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  zod: 4.4.3
+
 importers:
 
   .:
@@ -18,11 +21,11 @@ importers:
         specifier: ^10.0.0
         version: 10.0.0(@dnd-kit/core@6.3.1(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4)
       '@hookform/resolvers':
-        specifier: ^4.1.2
-        version: 4.1.2(react-hook-form@7.77.0(react@19.2.4))
+        specifier: ^5.7.1
+        version: 5.7.1(@standard-schema/spec@1.1.0)(ajv@8.20.0)(effect@3.20.0)(react-hook-form@7.77.0(react@19.2.4))(valibot@1.2.0(typescript@5.8.2))(zod@4.4.3)
       '@neondatabase/auth':
         specifier: 0.4.2-beta
-        version: 0.4.2-beta(a338dc167fd788d7fa0ea0c7e068e4b0)
+        version: 0.4.2-beta(3a83ef0be4b86b4ab32c0e6a98423d2d)
       '@prisma/adapter-neon':
         specifier: ^7.8.0
         version: 7.8.0
@@ -132,7 +135,7 @@ importers:
         specifier: ^1.1.2
         version: 1.1.2(@types/react-dom@19.0.4(@types/react@19.0.10))(@types/react@19.0.10)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       zod:
-        specifier: ^4.4.3
+        specifier: 4.4.3
         version: 4.4.3
       zustand:
         specifier: ^5.0.3
@@ -426,7 +429,7 @@ packages:
       sonner: '>=1.7.0'
       tailwind-merge: '>=2.6.0'
       tailwindcss: '>=3.0.0'
-      zod: '>=3.0.0'
+      zod: 4.4.3
 
   '@dnd-kit/accessibility@3.1.1':
     resolution: {integrity: sha512-2P+YgaXF+gRsIihwwY1gCsQSYnu9Zyj2py8kY5fFvUM1qm2WA2u639R6YNVfU4GWr+ZM5mqEsfHZZLoRONbemw==}
@@ -687,15 +690,83 @@ packages:
     peerDependencies:
       hono: ^4
 
-  '@hookform/resolvers@4.1.2':
-    resolution: {integrity: sha512-wl6H9c9wLOZMJAqGLEVKzbCkxJuV+BYuLFZFCQtCwMe0b3qQk4kUBd/ZAj13SwcSqcx86rCgSCyngQfmA6DOWg==}
+  '@hookform/resolvers@5.7.1':
+    resolution: {integrity: sha512-8wS/P4UDr5sQDe4nFaV51TVyfDPrWgNIXweqG0Bs9Z5LSuzKLb+RQNPvkN2oHM5SRrJyWrVH/F+LOUcFjUyvwQ==}
     peerDependencies:
-      react-hook-form: ^7.0.0
-
-  '@hookform/resolvers@5.4.0':
-    resolution: {integrity: sha512-EIsqr/t/qbinPIhGjMdtvutIN1Kk4uwbROE9/UQ93CAVGR7GkA7Y92+fX80OzXi/OB67jVFYwKGO1WzkxmkFZw==}
-    peerDependencies:
+      '@sinclair/typebox': '>=0.25.24'
+      '@standard-schema/spec': ^1.0.0
+      '@typeschema/main': '>=0.13.7'
+      '@vinejs/vine': ^2.0.0 || ^3.0.0 || ^4.0.0
+      ajv: ^8.12.0
+      ajv-errors: ^3.0.0
+      ajv-formats: ^2.1.1
+      arktype: ^2.0.0
+      ata-validator: ^1.2.0
+      class-transformer: '>=0.4.0'
+      class-validator: '>=0.12.0'
+      computed-types: ^1.0.0
+      effect: ^3.10.3
+      fluentvalidation-ts: ^3.0.0
+      fp-ts: ^2.7.0
+      io-ts: ^2.0.0
+      joi: ^17.0.0
+      nope-validator: '>=0.12.0'
       react-hook-form: ^7.55.0
+      superstruct: '>=0.12.0'
+      typanion: ^3.3.2
+      valibot: '>=0.31.0 || ^1.0.0-beta.4 || ^1.0.0-rc'
+      vest: '>=3.0.0'
+      yup: ^1.0.0
+      zod: 4.4.3
+    peerDependenciesMeta:
+      '@sinclair/typebox':
+        optional: true
+      '@standard-schema/spec':
+        optional: true
+      '@typeschema/main':
+        optional: true
+      '@vinejs/vine':
+        optional: true
+      ajv:
+        optional: true
+      ajv-errors:
+        optional: true
+      ajv-formats:
+        optional: true
+      arktype:
+        optional: true
+      ata-validator:
+        optional: true
+      class-transformer:
+        optional: true
+      class-validator:
+        optional: true
+      computed-types:
+        optional: true
+      effect:
+        optional: true
+      fluentvalidation-ts:
+        optional: true
+      fp-ts:
+        optional: true
+      io-ts:
+        optional: true
+      joi:
+        optional: true
+      nope-validator:
+        optional: true
+      superstruct:
+        optional: true
+      typanion:
+        optional: true
+      valibot:
+        optional: true
+      vest:
+        optional: true
+      yup:
+        optional: true
+      zod:
+        optional: true
 
   '@img/colour@1.1.0':
     resolution: {integrity: sha512-Td76q7j57o/tLVdgS746cYARfSyxk8iEfRxewL9h4OMzYhbW4TAcppl0mT4eyqXddh6L/jwoM75mo7ixa/pCeQ==}
@@ -899,7 +970,7 @@ packages:
     engines: {node: '>=18'}
     peerDependencies:
       '@cfworker/json-schema': ^4.1.1
-      zod: ^3.25 || ^4.0
+      zod: 4.4.3
     peerDependenciesMeta:
       '@cfworker/json-schema':
         optional: true
@@ -2915,7 +2986,7 @@ packages:
   better-call@1.1.8:
     resolution: {integrity: sha512-XMQ2rs6FNXasGNfMjzbyroSwKwYbZ/T3IxruSS6U2MJRsSYh3wYtG3o6H00ZlKZ/C/UPOAD97tqgQJNsxyeTXw==}
     peerDependencies:
-      zod: ^4.0.0
+      zod: 4.4.3
     peerDependenciesMeta:
       zod:
         optional: true
@@ -4671,13 +4742,7 @@ packages:
   zod-to-json-schema@3.25.2:
     resolution: {integrity: sha512-O/PgfnpT1xKSDeQYSCfRI5Gy3hPf91mKVDuYLUHZJMiDFptvP41MSnWofm8dnCm0256ZNfZIM7DSzuSMAFnjHA==}
     peerDependencies:
-      zod: ^3.25.28 || ^4
-
-  zod@3.24.2:
-    resolution: {integrity: sha512-lY7CDW43ECgW9u1TcT3IoXHflywfVqDYze4waEz812jR/bZ8FHDsl7pFQoSZTz5N+2NqRXs8GBwnAwo3ZNxqhQ==}
-
-  zod@4.3.6:
-    resolution: {integrity: sha512-rftlrkhHZOcjDwkGlnUtZZkvaPHCsDATp4pGpuOOMDaTdDDXF91wuVDJoWoPsKX/3YPQ5fHuF3STjcYyKr+Qhg==}
+      zod: 4.4.3
 
   zod@4.4.3:
     resolution: {integrity: sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ==}
@@ -4970,14 +5035,14 @@ snapshots:
       react: 19.2.4
       react-dom: 19.2.4(react@19.2.4)
 
-  '@daveyplate/better-auth-ui@3.3.9(479091dc231545c7f64152074bcf57de)':
+  '@daveyplate/better-auth-ui@3.3.9(213a0b659d2c471a47bc209b524ca5af)':
     dependencies:
       '@better-auth/passkey': 1.4.18(@better-auth/core@1.4.18(@better-auth/utils@0.3.0)(@better-fetch/fetch@1.1.21)(better-call@1.1.8(zod@4.4.3))(jose@6.2.3)(kysely@0.28.17)(nanostores@1.4.0))(@better-auth/utils@0.3.0)(@better-fetch/fetch@1.1.21)(better-auth@1.4.18(@prisma/client@7.8.0(prisma@7.8.0(@types/react-dom@19.0.4(@types/react@19.0.10))(@types/react@19.0.10)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.8.2))(typescript@5.8.2))(mysql2@3.15.3)(next@16.2.4(@babel/core@7.29.7)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(prisma@7.8.0(@types/react-dom@19.0.4(@types/react@19.0.10))(@types/react@19.0.10)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.8.2))(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(better-call@1.1.8(zod@4.4.3))(nanostores@1.4.0)
       '@better-fetch/fetch': 1.1.21
       '@captchafox/react': 1.13.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@daveyplate/better-auth-tanstack': 1.3.6(@tanstack/query-core@5.67.1)(@tanstack/react-query@5.67.1(react@19.2.4))(better-auth@1.4.18(@prisma/client@7.8.0(prisma@7.8.0(@types/react-dom@19.0.4(@types/react@19.0.10))(@types/react@19.0.10)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.8.2))(typescript@5.8.2))(mysql2@3.15.3)(next@16.2.4(@babel/core@7.29.7)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(prisma@7.8.0(@types/react-dom@19.0.4(@types/react@19.0.10))(@types/react@19.0.10)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.8.2))(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@hcaptcha/react-hcaptcha': 1.17.4(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
-      '@hookform/resolvers': 5.4.0(react-hook-form@7.77.0(react@19.2.4))
+      '@hookform/resolvers': 5.7.1(@standard-schema/spec@1.1.0)(ajv@8.20.0)(effect@3.20.0)(react-hook-form@7.77.0(react@19.2.4))(valibot@1.2.0(typescript@5.8.2))(zod@4.4.3)
       '@instantdb/react': 1.0.49(react@19.2.4)
       '@marsidev/react-turnstile': 1.5.3(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@noble/hashes': 2.2.0
@@ -5208,15 +5273,16 @@ snapshots:
     dependencies:
       hono: 4.12.23
 
-  '@hookform/resolvers@4.1.2(react-hook-form@7.77.0(react@19.2.4))':
+  '@hookform/resolvers@5.7.1(@standard-schema/spec@1.1.0)(ajv@8.20.0)(effect@3.20.0)(react-hook-form@7.77.0(react@19.2.4))(valibot@1.2.0(typescript@5.8.2))(zod@4.4.3)':
     dependencies:
       '@standard-schema/utils': 0.3.0
       react-hook-form: 7.77.0(react@19.2.4)
-
-  '@hookform/resolvers@5.4.0(react-hook-form@7.77.0(react@19.2.4))':
-    dependencies:
-      '@standard-schema/utils': 0.3.0
-      react-hook-form: 7.77.0(react@19.2.4)
+    optionalDependencies:
+      '@standard-schema/spec': 1.1.0
+      ajv: 8.20.0
+      effect: 3.20.0
+      valibot: 1.2.0(typescript@5.8.2)
+      zod: 4.4.3
 
   '@img/colour@1.1.0':
     optional: true
@@ -5365,7 +5431,7 @@ snapshots:
       react: 19.2.4
       react-dom: 19.2.4(react@19.2.4)
 
-  '@modelcontextprotocol/sdk@1.29.0(zod@3.24.2)':
+  '@modelcontextprotocol/sdk@1.29.0(zod@4.4.3)':
     dependencies:
       '@hono/node-server': 1.19.14(hono@4.12.23)
       ajv: 8.20.0
@@ -5382,20 +5448,20 @@ snapshots:
       json-schema-typed: 8.0.2
       pkce-challenge: 5.0.1
       raw-body: 3.0.2
-      zod: 3.24.2
-      zod-to-json-schema: 3.25.2(zod@3.24.2)
+      zod: 4.4.3
+      zod-to-json-schema: 3.25.2(zod@4.4.3)
     transitivePeerDependencies:
       - supports-color
 
-  '@neondatabase/auth-ui@0.2.1-beta(935724cfe448ab894f379fbadb75fec8)':
+  '@neondatabase/auth-ui@0.2.1-beta(d46bf9fc09cbd399c07ce15871f9abdc)':
     dependencies:
       '@better-auth/passkey': 1.4.18(@better-auth/core@1.4.18(@better-auth/utils@0.3.0)(@better-fetch/fetch@1.1.21)(better-call@1.1.8(zod@4.4.3))(jose@6.2.3)(kysely@0.28.17)(nanostores@1.4.0))(@better-auth/utils@0.3.0)(@better-fetch/fetch@1.1.21)(better-auth@1.4.18(@prisma/client@7.8.0(prisma@7.8.0(@types/react-dom@19.0.4(@types/react@19.0.10))(@types/react@19.0.10)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.8.2))(typescript@5.8.2))(mysql2@3.15.3)(next@16.2.4(@babel/core@7.29.7)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(prisma@7.8.0(@types/react-dom@19.0.4(@types/react@19.0.10))(@types/react@19.0.10)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.8.2))(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(better-call@1.1.8(zod@4.4.3))(nanostores@1.4.0)
       '@captchafox/react': 1.13.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
-      '@daveyplate/better-auth-ui': 3.3.9(479091dc231545c7f64152074bcf57de)
+      '@daveyplate/better-auth-ui': 3.3.9(213a0b659d2c471a47bc209b524ca5af)
       '@hcaptcha/react-hcaptcha': 1.17.4(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
-      '@hookform/resolvers': 5.4.0(react-hook-form@7.77.0(react@19.2.4))
+      '@hookform/resolvers': 5.7.1(@standard-schema/spec@1.1.0)(ajv@8.20.0)(effect@3.20.0)(react-hook-form@7.77.0(react@19.2.4))(valibot@1.2.0(typescript@5.8.2))(zod@4.4.3)
       '@marsidev/react-turnstile': 1.5.3(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
-      '@neondatabase/auth': 0.4.2-beta(a338dc167fd788d7fa0ea0c7e068e4b0)
+      '@neondatabase/auth': 0.4.2-beta(3a83ef0be4b86b4ab32c0e6a98423d2d)
       '@radix-ui/react-avatar': 1.2.3(@types/react-dom@19.0.4(@types/react@19.0.10))(@types/react@19.0.10)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@radix-ui/react-checkbox': 1.3.3(@types/react-dom@19.0.4(@types/react@19.0.10))(@types/react@19.0.10)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@radix-ui/react-context': 1.2.0(@types/react@19.0.10)(react@19.2.4)
@@ -5436,6 +5502,8 @@ snapshots:
       - '@instantdb/react'
       - '@lynx-js/react'
       - '@prisma/client'
+      - '@sinclair/typebox'
+      - '@standard-schema/spec'
       - '@sveltejs/kit'
       - '@tanstack/react-query'
       - '@tanstack/react-start'
@@ -5444,29 +5512,50 @@ snapshots:
       - '@triplit/react'
       - '@types/react'
       - '@types/react-dom'
+      - '@typeschema/main'
+      - '@vinejs/vine'
+      - ajv
+      - ajv-errors
+      - ajv-formats
+      - arktype
+      - ata-validator
       - better-call
       - better-sqlite3
+      - class-transformer
+      - class-validator
+      - computed-types
       - drizzle-kit
       - drizzle-orm
+      - effect
+      - fluentvalidation-ts
+      - fp-ts
+      - io-ts
+      - joi
       - mongodb
       - mysql2
       - nanostores
       - next
+      - nope-validator
       - pg
       - prisma
       - solid-js
+      - superstruct
       - svelte
+      - typanion
+      - valibot
+      - vest
       - vitest
       - vue
+      - yup
 
-  '@neondatabase/auth@0.4.2-beta(a338dc167fd788d7fa0ea0c7e068e4b0)':
+  '@neondatabase/auth@0.4.2-beta(3a83ef0be4b86b4ab32c0e6a98423d2d)':
     dependencies:
       '@better-fetch/fetch': 1.1.21
-      '@neondatabase/auth-ui': 0.2.1-beta(935724cfe448ab894f379fbadb75fec8)
+      '@neondatabase/auth-ui': 0.2.1-beta(d46bf9fc09cbd399c07ce15871f9abdc)
       '@supabase/auth-js': 2.79.0
       better-auth: 1.4.18(@prisma/client@7.8.0(prisma@7.8.0(@types/react-dom@19.0.4(@types/react@19.0.10))(@types/react@19.0.10)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.8.2))(typescript@5.8.2))(mysql2@3.15.3)(next@16.2.4(@babel/core@7.29.7)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(prisma@7.8.0(@types/react-dom@19.0.4(@types/react@19.0.10))(@types/react@19.0.10)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.8.2))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       jose: 6.1.2
-      zod: 4.3.6
+      zod: 4.4.3
     optionalDependencies:
       next: 16.2.4(@babel/core@7.29.7)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       react: 19.2.4
@@ -5478,6 +5567,8 @@ snapshots:
       - '@instantdb/react'
       - '@lynx-js/react'
       - '@prisma/client'
+      - '@sinclair/typebox'
+      - '@standard-schema/spec'
       - '@sveltejs/kit'
       - '@tanstack/react-query'
       - '@tanstack/react-start'
@@ -5486,19 +5577,40 @@ snapshots:
       - '@triplit/react'
       - '@types/react'
       - '@types/react-dom'
+      - '@typeschema/main'
+      - '@vinejs/vine'
+      - ajv
+      - ajv-errors
+      - ajv-formats
+      - arktype
+      - ata-validator
       - better-call
       - better-sqlite3
+      - class-transformer
+      - class-validator
+      - computed-types
       - drizzle-kit
       - drizzle-orm
+      - effect
+      - fluentvalidation-ts
+      - fp-ts
+      - io-ts
+      - joi
       - mongodb
       - mysql2
       - nanostores
+      - nope-validator
       - pg
       - prisma
       - solid-js
+      - superstruct
       - svelte
+      - typanion
+      - valibot
+      - vest
       - vitest
       - vue
+      - yup
 
   '@neondatabase/serverless@1.1.0': {}
 
@@ -8780,7 +8892,7 @@ snapshots:
       '@babel/plugin-transform-typescript': 7.29.7(@babel/core@7.29.7)
       '@babel/preset-typescript': 7.29.7(@babel/core@7.29.7)
       '@dotenvx/dotenvx': 1.69.2
-      '@modelcontextprotocol/sdk': 1.29.0(zod@3.24.2)
+      '@modelcontextprotocol/sdk': 1.29.0(zod@4.4.3)
       '@types/validate-npm-package-name': 4.0.2
       browserslist: 4.28.2
       commander: 14.0.3
@@ -8805,8 +8917,8 @@ snapshots:
       tsconfig-paths: 4.2.0
       undici: 7.28.0
       validate-npm-package-name: 7.0.2
-      zod: 3.24.2
-      zod-to-json-schema: 3.25.2(zod@3.24.2)
+      zod: 4.4.3
+      zod-to-json-schema: 3.25.2(zod@4.4.3)
     transitivePeerDependencies:
       - '@cfworker/json-schema'
       - babel-plugin-macros
@@ -9101,13 +9213,9 @@ snapshots:
       grammex: 3.1.12
       graphmatch: 1.1.1
 
-  zod-to-json-schema@3.25.2(zod@3.24.2):
+  zod-to-json-schema@3.25.2(zod@4.4.3):
     dependencies:
-      zod: 3.24.2
-
-  zod@3.24.2: {}
-
-  zod@4.3.6: {}
+      zod: 4.4.3
 
   zod@4.4.3: {}
 
