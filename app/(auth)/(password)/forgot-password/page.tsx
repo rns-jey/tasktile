@@ -52,8 +52,6 @@ export default function ForgotPassword() {
 
   const isPending = form.formState.isSubmitting;
 
-  console.log("Error:", form.formState.errors);
-
   return (
     <form
       id="form-forgot-password"
