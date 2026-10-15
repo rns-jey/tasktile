@@ -11,7 +11,7 @@ export default function MonthTiles({
   calendarData,
 }: MonthTilesProps) {
   return (
-    <div className="bg-background max-w-72 rounded-lg p-6 shadow-lg">
+    <div className="bg-paper max-w-72 rounded-lg p-6 shadow-lg">
       <h1 className="text-2xl font-bold">May 2025</h1>
       <p className="text-xs">Total: {totalCount} Completed</p>
 

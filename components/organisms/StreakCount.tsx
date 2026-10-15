@@ -6,7 +6,7 @@ type StreakCountProps = {
 
 export default function StreakCount({ streak }: StreakCountProps) {
   return (
-    <div className="bg-background max-w-72 rounded-lg p-6 shadow-lg">
+    <div className="bg-paper max-w-72 rounded-lg p-6 shadow-lg">
       <div className="flex items-center gap-1">
         <Flame className="w-4" />
         <h1 className="text-sm font-bold">Streak</h1>

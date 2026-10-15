@@ -101,7 +101,7 @@ export default function AnalyticsSection() {
     return (
       <div className="flex gap-2">
         <div>
-          <div className="bg-background max-w-72 space-y-2 rounded-lg p-6 shadow-lg">
+          <div className="bg-paper max-w-72 space-y-2 rounded-lg p-6 shadow-lg">
             <Skeleton className="h-6 w-60" />
             <Skeleton className="h-6 w-60" />
             <Skeleton className="h-44 w-60" />
@@ -109,7 +109,7 @@ export default function AnalyticsSection() {
         </div>
 
         <div>
-          <div className="bg-background max-w-72 space-y-2 rounded-lg p-6 shadow-lg">
+          <div className="bg-paper max-w-72 space-y-2 rounded-lg p-6 shadow-lg">
             <Skeleton className="h-6 w-36" />
             <Skeleton className="h-6 w-36" />
             <Skeleton className="h-6 w-36" />
@@ -117,7 +117,7 @@ export default function AnalyticsSection() {
         </div>
 
         <div>
-          <div className="bg-background max-w-72 space-y-2 rounded-lg p-6 shadow-lg">
+          <div className="bg-paper max-w-72 space-y-2 rounded-lg p-6 shadow-lg">
             <Skeleton className="h-6 w-24" />
             <Skeleton className="h-6 w-24" />
             <Skeleton className="h-6 w-24" />
