@@ -82,24 +82,34 @@ export default function NewTaskSection() {
               )}
             >
               <FieldGroup className="gap-2">
-                <Controller
-                  name="name"
-                  control={form.control}
-                  disabled={addTask.isPending}
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <Input
-                        {...field}
-                        id="form-add-task-name"
-                        aria-invalid={fieldState.invalid}
-                        placeholder="Add a task name .."
-                      />
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                    </Field>
-                  )}
-                />
+                <div className="flex gap-2">
+                  <Controller
+                    name="name"
+                    control={form.control}
+                    disabled={addTask.isPending}
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <Input
+                          {...field}
+                          id="form-add-task-name"
+                          aria-invalid={fieldState.invalid}
+                          placeholder="Add a task name .."
+                        />
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                      </Field>
+                    )}
+                  />
+
+                  <Button
+                    type="submit"
+                    form="form-add-task"
+                    disabled={addTask.isPending}
+                  >
+                    <Plus />
+                  </Button>
+                </div>
 
                 <div className="flex flex-col gap-2">
                   <div className="grid w-full grid-cols-3 gap-2">
@@ -182,14 +192,6 @@ export default function NewTaskSection() {
               </FieldGroup>
             </form>
           </div>
-
-          <Button
-            type="submit"
-            form="form-add-task"
-            disabled={addTask.isPending}
-          >
-            <Plus />
-          </Button>
         </div>
       </div>
     );
