@@ -1,12 +1,14 @@
 "use client";
 
 import { Button } from "@/components/ui/Button";
-import { useRouter, useSearchParams } from "next/navigation";
+import { notFound, useRouter, useSearchParams } from "next/navigation";
 
 export default function CheckEmail() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const email = searchParams.get("email");
+
+  if (!email) notFound();
 
   return (
     <div className="w-full p-6 text-center">
