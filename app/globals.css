@@ -22,6 +22,15 @@
   --text-body: 15px;
   --text-body--line-height: 1.45;
 
+  --text-task: 17px;
+  --text-task--line-height: 1.25;
+
+  --text-meta: 13px;
+  --text-meta--line-height: 1.3;
+
+  --text-label: 12px;
+  --text-label--line-height: 1.2;
+
   /* Ink */
 }
 
@@ -76,11 +85,14 @@ body,
   --radius-4xl: calc(var(--radius) * 2.6);
 
   --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
   --color-paper-3: var(--paper-3);
 }
 
 :root {
   --muted: oklch(0.45 0.015 60);
+  --destructive: oklch(0.5 0.19 25);
+  --accent: oklch(0.4596 0.1404 34.81);
 
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -92,9 +104,9 @@ body,
   --secondary-foreground: oklch(0.205 0 0);
 
   --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
+
   --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
+
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
@@ -116,6 +128,7 @@ body,
   --foreground: oklch(0.145 0 0);
 
   --paper: oklch(0.9748 0.0079 73.74);
+  --paper-2: oklch(0.955 0.012 75);
   --paper-3: oklch(0.9447 0.0155 67.64);
 }
 

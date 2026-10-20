@@ -5,14 +5,16 @@ import axios from "axios";
 import { TaskWithCategory } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 
-import { ScrollArea } from "@/components/ui/ScrollArea";
 import { Skeleton } from "@/components/ui/Skeleton";
-import { cn } from "@/lib/utils";
-
-import TaskCard from "@/components/molecules/TaskCard";
-import { AnimatePresence } from "motion/react";
+import { cn, formatDueDate } from "@/lib/utils";
+import { useState } from "react";
+import { Button } from "../ui/Button";
+import { Card, CardContent } from "../ui/Card";
+import { Checkbox } from "../ui/Checkbox";
 
 export default function TaskListSection() {
+  const [visible, setVisible] = useState<boolean>(false);
+
   const { data: tasks } = useQuery<TaskWithCategory[]>({
     queryKey: ["tasks"],
     queryFn: async () => {
@@ -42,47 +44,135 @@ export default function TaskListSection() {
   const completedTasks = tasks.filter((task) => task.completed);
 
   return (
-    <div className="my-4 flex flex-col gap-4">
-      {/* Active Tasks */}
-      <div className="flex flex-col gap-3">
-        {activeTasks.length > 0 ? (
-          <ScrollArea
-            className={cn(activeTasks.length >= 5 ? "h-[300px]" : "h-fit")}
-          >
-            <div className="flex flex-col gap-2">
-              <AnimatePresence>
-                {activeTasks.map((task) => (
-                  <TaskCard key={task.id} task={task} />
-                ))}
-              </AnimatePresence>
-            </div>
-          </ScrollArea>
-        ) : (
-          <p className="text-muted-foreground py-3 text-center text-sm">
-            No active tasks. Add a new task to get started!
-          </p>
-        )}
-      </div>
+    // <div className="my-4 flex flex-col gap-4">
+    //   {/* Active Tasks */}
+    //   <div className="flex flex-col gap-3">
+    //     {activeTasks.length > 0 ? (
+    //       <ScrollArea
+    //         className={cn(activeTasks.length >= 5 ? "h-[300px]" : "h-fit")}
+    //       >
+    //         <div className="flex flex-col gap-2">
+    //           <AnimatePresence>
+    //             {activeTasks.map((task) => (
+    //               <TaskCard key={task.id} task={task} />
+    //             ))}
+    //           </AnimatePresence>
+    //         </div>
+    //       </ScrollArea>
+    //     ) : (
+    //       <p className="text-muted-foreground py-3 text-center text-sm">
+    //         No active tasks. Add a new task to get started!
+    //       </p>
+    //     )}
+    //   </div>
 
-      {/* Completed Tasks */}
-      <div className="flex flex-col gap-3">
-        <h2 className="font-semibold">Done today · {completedTasks.length}</h2>
+    //   {/* Completed Tasks */}
+    //   <div className="flex flex-col gap-3">
+    //     <h2 className="font-semibold">Done today · {completedTasks.length}</h2>
 
-        {activeTasks.length > 0 ? (
-          <ScrollArea
-            className={cn(completedTasks.length >= 5 ? "h-[300px]" : "h-fit")}
+    //     {activeTasks.length > 0 ? (
+    //       <ScrollArea
+    //         className={cn(completedTasks.length >= 5 ? "h-[300px]" : "h-fit")}
+    //       >
+    //         <div className="flex flex-col gap-2">
+    //           {completedTasks.map((task) => (
+    //             <TaskCard key={task.id} task={task} />
+    //           ))}
+    //         </div>
+    //       </ScrollArea>
+    //     ) : (
+    //       <p className="text-muted-foreground py-3 text-center text-sm">
+    //         No completed tasks yet.
+    //       </p>
+    //     )}
+    //   </div>
+    // </div>
+
+    <div className="pb-28">
+      {activeTasks.map((task, i) => {
+        const due = task.dueDate ? formatDueDate(task.dueDate) : null;
+
+        return (
+          <div
+            key={i}
+            className="border-line flex h-16 items-center gap-3.5 border-b"
           >
-            <div className="flex flex-col gap-2">
-              {completedTasks.map((task) => (
-                <TaskCard key={task.id} task={task} />
-              ))}
+            <span className="text-subtle w-[18px] font-mono text-xs">00</span>
+            <Checkbox className="rounded-check ring-stroke size-6 ring-[1.75px] ring-inset" />
+            <div className="flex min-w-0 flex-col gap-0.5">
+              <span className="text-task truncate font-medium">
+                {task.name}
+              </span>
+
+              <div>
+                {task.category && (
+                  <>
+                    <span className="inline-flex items-center gap-1.5">
+                      <span className="h-2 w-2 rounded-xs bg-blue-500" />
+                      <span className="truncate">{task.category.name}</span>
+                    </span>
+                    <span
+                      aria-hidden="true"
+                      className="text-muted-foreground/50"
+                    >
+                      ·
+                    </span>
+                  </>
+                )}
+                {due && (
+                  <span
+                    className={cn(
+                      due.overdue
+                        ? "text-destructive bg-destructive/15 rounded px-1.5 font-semibold"
+                        : "text-meta text-muted-2",
+                    )}
+                  >
+                    {due.label}
+                  </span>
+                )}
+              </div>
             </div>
-          </ScrollArea>
-        ) : (
-          <p className="text-muted-foreground py-3 text-center text-sm">
-            No completed tasks yet.
-          </p>
-        )}
+          </div>
+        );
+      })}
+
+      <Card className="bg-paper-2 my-4">
+        <CardContent className="flex items-center justify-between">
+          <span className="font-medium tracking-[.08em] uppercase">
+            DONE TODAY · {completedTasks.length}
+          </span>
+
+          <Button
+            variant={"ghost"}
+            type="button"
+            onClick={() => setVisible(!visible)}
+            className="text-accent text-[15px] font-semibold"
+          >
+            Show
+          </Button>
+        </CardContent>
+      </Card>
+
+      <div className={cn(visible ? "flex flex-col" : "hidden")}>
+        {completedTasks.map((task, i) => (
+          <div
+            key={i}
+            className="border-line mx-5 flex h-14 items-center justify-between gap-3.5"
+          >
+            <div className="flex min-w-0 items-center gap-2">
+              <Checkbox
+                checked
+                className="rounded-check bg-accent size-6 text-white"
+              />
+              <span className="text-task text-muted truncate font-medium line-through">
+                {task.name}
+              </span>
+            </div>
+            {task.category && (
+              <div className="h-2 min-w-2 rounded-xs bg-blue-500" />
+            )}
+          </div>
+        ))}
       </div>
     </div>
   );

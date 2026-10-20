@@ -10,8 +10,8 @@ import { Button } from "../ui/Button";
 
 export default function MobileNav() {
   return (
-    <nav className="bg-background fixed inset-x-0 bottom-0 z-50 border-t pt-2 pb-10">
-      <ul className="flex justify-between px-4">
+    <nav className="bg-paper-2 fixed inset-x-0 bottom-0 z-50 border-t pt-2 pb-10">
+      <ul className="grid grid-cols-5 px-4">
         <li className="flex flex-col items-center gap-1">
           <SquareIcon size={"24"} />
           <Link href="/today">Today</Link>
