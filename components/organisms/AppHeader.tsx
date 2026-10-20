@@ -1,13 +1,21 @@
 "use client";
 
 import { authClient } from "@/lib/auth/client";
+import { TaskWithCategory } from "@/types";
 import { format } from "date-fns";
 import { useTheme } from "next-themes";
 import { redirect } from "next/navigation";
 
-export default function AppHeader() {
+interface AppHeaderProps {
+  initialTasks: TaskWithCategory[];
+}
+
+export default function AppHeader({ initialTasks }: AppHeaderProps) {
   const today = new Date();
   const { setTheme } = useTheme();
+
+  const activeTasks = initialTasks.filter((task) => !task.completed);
+  const completedTasks = initialTasks.filter((task) => task.completed);
 
   const handleSignOut = async () => {
     await authClient.signOut();
@@ -74,11 +82,13 @@ export default function AppHeader() {
             {format(today, "LLLL d")}
           </span>
         </h1>
-        <p className="text-body text-muted">2 done today · 4 open</p>
+        <p className="text-body text-muted">
+          {completedTasks.length} done today · {activeTasks.length} open
+        </p>
       </div>
 
-      <div>
-        <span>2</span>
+      <div className="bg-paper-3 font-display flex size-[68px] items-center justify-center rounded-[15px] text-[28px]">
+        {completedTasks.length}
       </div>
     </header>
   );

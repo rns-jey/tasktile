@@ -1,28 +1,25 @@
 "use client";
 
-import axios from "axios";
-
 import { TaskWithCategory } from "@/types";
-import { useQuery } from "@tanstack/react-query";
 
 import { Skeleton } from "@/components/ui/Skeleton";
+import { useTasks } from "@/hooks/useTasks";
 import { cn, formatDueDate } from "@/lib/utils";
 import { useState } from "react";
 import { Button } from "../ui/Button";
 import { Card, CardContent } from "../ui/Card";
 import { Checkbox } from "../ui/Checkbox";
 
-export default function TaskListSection() {
+interface TaskListSectionProps {
+  initialTasks: TaskWithCategory[];
+}
+
+export default function TaskListSection({
+  initialTasks,
+}: TaskListSectionProps) {
   const [visible, setVisible] = useState<boolean>(false);
 
-  const { data: tasks } = useQuery<TaskWithCategory[]>({
-    queryKey: ["tasks"],
-    queryFn: async () => {
-      const response = await axios.get("/api/tasks");
-
-      return response.data;
-    },
-  });
+  const { data: tasks } = useTasks(initialTasks);
 
   if (!tasks)
     return (

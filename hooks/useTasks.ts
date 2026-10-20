@@ -1,0 +1,17 @@
+"use client";
+
+import { TaskWithCategory } from "@/types";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+
+export function useTasks(initialTasks?: TaskWithCategory[]) {
+  return useQuery<TaskWithCategory[]>({
+    queryKey: ["tasks"],
+    queryFn: async () => {
+      const response = await axios.get("/api/tasks");
+      return response.data;
+    },
+    initialData: initialTasks,
+    staleTime: 60 * 1000,
+  });
+}
