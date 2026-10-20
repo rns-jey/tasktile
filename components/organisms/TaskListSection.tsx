@@ -1,3 +1,5 @@
+"use client";
+
 import axios from "axios";
 
 import { TaskWithCategory } from "@/types";
@@ -43,8 +45,6 @@ export default function TaskListSection() {
     <div className="my-4 flex flex-col gap-4">
       {/* Active Tasks */}
       <div className="flex flex-col gap-3">
-        <h2 className="font-semibold">TO DO ({activeTasks.length})</h2>
-
         {activeTasks.length > 0 ? (
           <ScrollArea
             className={cn(activeTasks.length >= 5 ? "h-[300px]" : "h-fit")}
@@ -66,7 +66,7 @@ export default function TaskListSection() {
 
       {/* Completed Tasks */}
       <div className="flex flex-col gap-3">
-        <h2 className="font-semibold">Completed ({completedTasks.length})</h2>
+        <h2 className="font-semibold">Done today · {completedTasks.length}</h2>
 
         {activeTasks.length > 0 ? (
           <ScrollArea

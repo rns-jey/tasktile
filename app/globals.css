@@ -76,6 +76,7 @@ body,
   --radius-4xl: calc(var(--radius) * 2.6);
 
   --color-paper: var(--paper);
+  --color-paper-3: var(--paper-3);
 }
 
 :root {
@@ -115,6 +116,7 @@ body,
   --foreground: oklch(0.145 0 0);
 
   --paper: oklch(0.9748 0.0079 73.74);
+  --paper-3: oklch(0.9447 0.0155 67.64);
 }
 
 /* .dark {

@@ -1,4 +1,6 @@
 import AppHeader from "../organisms/AppHeader";
+import MainSection from "../organisms/MainSection";
+import MobileNav from "../organisms/MobileNav";
 
 export default async function HomePage() {
   // const currentUser = await currentProfile();
@@ -8,8 +10,11 @@ export default async function HomePage() {
     //
     //   <Main />
     // </div>
-    <div className="p-6">
+    <div className="h-full px-6">
       <AppHeader />
+      <MainSection />
+
+      <MobileNav />
     </div>
   );
 }

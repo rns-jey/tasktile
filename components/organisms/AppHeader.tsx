@@ -64,7 +64,7 @@ export default function AppHeader() {
     //   </div>
     // </header>
 
-    <header className="flex justify-between">
+    <header className="flex justify-between pt-6">
       <div>
         <h1 className="flex flex-col">
           <span className="text-meta text-muted-2 font-medium tracking-[.08em] uppercase">
