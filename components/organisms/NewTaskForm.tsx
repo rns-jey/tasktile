@@ -18,10 +18,17 @@ import {
   DrawerTrigger,
 } from "../ui/Drawer";
 import { Field, FieldError, FieldGroup } from "../ui/Field";
-import { Input } from "../ui/Input";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+  InputGroupText,
+  InputGroupTextarea,
+} from "../ui/InputGroup";
 
 const formSchema = z.object({
   name: z.string().min(3, "Task name is required"),
+  description: z.string().max(120),
 });
 
 export default function NewTaskForm() {
@@ -31,6 +38,7 @@ export default function NewTaskForm() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
+      description: "",
     },
   });
 
@@ -41,6 +49,7 @@ export default function NewTaskForm() {
     Error,
     {
       name: string;
+      description: string;
     }
   >({
     mutationFn: async (newTask) => {
@@ -65,7 +74,7 @@ export default function NewTaskForm() {
           <PlusIcon />
         </Button>
       </DrawerTrigger>
-      <DrawerContent>
+      <DrawerContent className="pb-4">
         <DrawerHeader className="flex flex-row items-center justify-between">
           <DrawerClose disabled={addTask.isPending}>Cancel</DrawerClose>
           <DrawerTitle>Add Task</DrawerTitle>
@@ -78,8 +87,7 @@ export default function NewTaskForm() {
           </Button>
         </DrawerHeader>
 
-        <div className="flex items-center gap-2 p-4">
-          <SquareIcon />
+        <div className="flex items-center gap-2 px-4">
           <form
             id="form-add-task"
             onSubmit={form.handleSubmit(onSubmit, (errors) =>
@@ -94,12 +102,45 @@ export default function NewTaskForm() {
                 disabled={addTask.isPending}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-                    <Input
-                      {...field}
-                      id="form-add-task-name"
-                      aria-invalid={fieldState.invalid}
-                      placeholder="Add a task name .."
-                    />
+                    <div className="flex items-center gap-2">
+                      <InputGroup>
+                        <InputGroupAddon>
+                          <SquareIcon />
+                        </InputGroupAddon>
+                        <InputGroupInput
+                          {...field}
+                          id="form-add-task-name"
+                          aria-invalid={fieldState.invalid}
+                          placeholder="Add a task name .."
+                        />
+                      </InputGroup>
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </div>
+                  </Field>
+                )}
+              />
+
+              <Controller
+                name="description"
+                control={form.control}
+                disabled={addTask.isPending}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <InputGroup>
+                      <InputGroupTextarea
+                        {...field}
+                        id="form-add-task-description"
+                        aria-invalid={fieldState.invalid}
+                        placeholder="Add a description (optional)"
+                      />
+                      <InputGroupAddon align="block-end">
+                        <InputGroupText className="ml-auto">
+                          0/120
+                        </InputGroupText>
+                      </InputGroupAddon>
+                    </InputGroup>
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
                     )}
@@ -107,6 +148,10 @@ export default function NewTaskForm() {
                 )}
               />
             </FieldGroup>
+
+            <div className="text-label text-muted-2 mx-1 mt-3 mb-1.5 font-medium tracking-[.08em] uppercase">
+              Category · optional
+            </div>
           </form>
         </div>
       </DrawerContent>

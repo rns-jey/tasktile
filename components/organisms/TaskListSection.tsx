@@ -5,7 +5,9 @@ import { TaskWithCategory } from "@/types";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { useTasks } from "@/hooks/useTasks";
 import { cn, formatDueDate } from "@/lib/utils";
+
 import { useState } from "react";
+import TaskMeta from "../molecules/TaskMeta";
 import { Button } from "../ui/Button";
 import { Card, CardContent } from "../ui/Card";
 import { Checkbox } from "../ui/Checkbox";
@@ -101,33 +103,7 @@ export default function TaskListSection({
                 {task.name}
               </span>
 
-              <div>
-                {task.category && (
-                  <>
-                    <span className="inline-flex items-center gap-1.5">
-                      <span className="h-2 w-2 rounded-xs bg-blue-500" />
-                      <span className="truncate">{task.category.name}</span>
-                    </span>
-                    <span
-                      aria-hidden="true"
-                      className="text-muted-foreground/50"
-                    >
-                      ·
-                    </span>
-                  </>
-                )}
-                {due && (
-                  <span
-                    className={cn(
-                      due.overdue
-                        ? "text-destructive bg-destructive/15 rounded px-1.5 font-semibold"
-                        : "text-meta text-muted-2",
-                    )}
-                  >
-                    {due.label}
-                  </span>
-                )}
-              </div>
+              <TaskMeta task={task} />
             </div>
           </div>
         );
