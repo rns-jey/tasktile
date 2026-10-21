@@ -1,11 +1,12 @@
 "use client";
 
+import { useCategories } from "@/hooks/useCategories";
 import { TaskWithCategory } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { PlusIcon, SquareIcon } from "lucide-react";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "../ui/Button";
@@ -25,10 +26,12 @@ import {
   InputGroupText,
   InputGroupTextarea,
 } from "../ui/InputGroup";
+import { ToggleGroup, ToggleGroupItem } from "../ui/ToggleGroup";
 
 const formSchema = z.object({
   name: z.string().min(3, "Task name is required"),
   description: z.string().max(120),
+  categoryId: z.string().nullable(),
 });
 
 export default function NewTaskForm() {
@@ -39,8 +42,11 @@ export default function NewTaskForm() {
     defaultValues: {
       name: "",
       description: "",
+      categoryId: null,
     },
   });
+
+  const { data: categories } = useCategories();
 
   const queryClient = useQueryClient();
 
@@ -50,6 +56,7 @@ export default function NewTaskForm() {
     {
       name: string;
       description: string;
+      categoryId: string | null;
     }
   >({
     mutationFn: async (newTask) => {
@@ -76,12 +83,18 @@ export default function NewTaskForm() {
       </DrawerTrigger>
       <DrawerContent className="pb-4">
         <DrawerHeader className="flex flex-row items-center justify-between">
-          <DrawerClose disabled={addTask.isPending}>Cancel</DrawerClose>
+          <DrawerClose
+            disabled={addTask.isPending}
+            className="text-muted h-11 px-2 font-medium"
+          >
+            Cancel
+          </DrawerClose>
           <DrawerTitle>Add Task</DrawerTitle>
           <Button
             type="submit"
             form="form-add-task"
             disabled={addTask.isPending}
+            className="bg-ink text-paper h-11 px-4 font-semibold"
           >
             Add
           </Button>
@@ -114,10 +127,10 @@ export default function NewTaskForm() {
                           placeholder="Add a task name .."
                         />
                       </InputGroup>
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
                     </div>
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
                   </Field>
                 )}
               />
@@ -147,11 +160,54 @@ export default function NewTaskForm() {
                   </Field>
                 )}
               />
-            </FieldGroup>
 
-            <div className="text-label text-muted-2 mx-1 mt-3 mb-1.5 font-medium tracking-[.08em] uppercase">
-              Category · optional
-            </div>
+              <Controller
+                name="categoryId"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <div className="text-label text-muted-2 mx-1 mt-3 mb-1.5 font-medium tracking-[.08em] uppercase">
+                      Category · optional
+                    </div>
+
+                    <ToggleGroup
+                      variant={"outline"}
+                      value={field.value ? [field.value] : []}
+                      onValueChange={(v) => field.onChange(v[0] ?? null)}
+                      className="flex-wrap"
+                      disabled={addTask.isPending}
+                    >
+                      {categories && (
+                        <Fragment>
+                          {categories.map((category) => (
+                            <ToggleGroupItem
+                              key={category.id}
+                              value={category.id}
+                              className="flex items-center gap-2"
+                            >
+                              <span
+                                className="h-2 w-2 rounded-xs"
+                                style={{ backgroundColor: category.color }}
+                              />
+                              {category.name}
+                            </ToggleGroupItem>
+                          ))}
+                        </Fragment>
+                      )}
+
+                      <Button
+                        variant={"outline"}
+                        type="button"
+                        disabled={addTask.isPending}
+                        className={"h-11 bg-transparent"}
+                      >
+                        + New
+                      </Button>
+                    </ToggleGroup>
+                  </Field>
+                )}
+              />
+            </FieldGroup>
           </form>
         </div>
       </DrawerContent>

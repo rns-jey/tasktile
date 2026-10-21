@@ -9,7 +9,7 @@ export async function GET(req: Request) {
     if (!profile) return new NextResponse("Unauthorized", { status: 401 });
 
     const tasks = await db.category.findMany({
-      where: { userId: profile.id },
+      where: { userId: profile.userID },
       orderBy: [{ createdAt: "desc" }],
     });
 
