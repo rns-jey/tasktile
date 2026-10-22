@@ -1,5 +1,6 @@
 import React from "react";
 
+import AppSidebar from "@/components/organisms/AppSidebar";
 import Providers from "@/components/providers/Providers";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import currentProfile from "@/lib/current-profile";
@@ -23,7 +24,10 @@ export default async function MainLayout({
       enableSystem
       disableTransitionOnChange
     >
-      <Providers profile={profile}>{children}</Providers>
+      <Providers profile={profile}>
+        <AppSidebar profile={profile} />
+        {children}
+      </Providers>
     </ThemeProvider>
   );
 }

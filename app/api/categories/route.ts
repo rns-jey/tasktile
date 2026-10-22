@@ -8,12 +8,12 @@ export async function GET(req: Request) {
 
     if (!profile) return new NextResponse("Unauthorized", { status: 401 });
 
-    const tasks = await db.category.findMany({
+    const categories = await db.category.findMany({
       where: { userId: profile.userID },
       orderBy: [{ createdAt: "desc" }],
     });
 
-    return NextResponse.json(tasks);
+    return NextResponse.json(categories);
   } catch (error) {
     console.log(error);
     return new NextResponse("Internal Server Error", { status: 500 });
