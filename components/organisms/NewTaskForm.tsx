@@ -9,6 +9,7 @@ import { PlusIcon, SquareIcon } from "lucide-react";
 import { Fragment, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
+import DatePicker from "../molecules/DatePicker";
 import { Button } from "../ui/Button";
 import {
   Drawer,
@@ -32,6 +33,7 @@ const formSchema = z.object({
   name: z.string().min(3, "Task name is required"),
   description: z.string().max(120),
   categoryId: z.string().nullable(),
+  dueDate: z.date().optional(),
 });
 
 export default function NewTaskForm() {
@@ -43,6 +45,7 @@ export default function NewTaskForm() {
       name: "",
       description: "",
       categoryId: null,
+      dueDate: undefined,
     },
   });
 
@@ -57,6 +60,7 @@ export default function NewTaskForm() {
       name: string;
       description: string;
       categoryId: string | null;
+      dueDate?: Date | undefined;
     }
   >({
     mutationFn: async (newTask) => {
@@ -157,6 +161,20 @@ export default function NewTaskForm() {
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
                     )}
+                  </Field>
+                )}
+              />
+
+              <Controller
+                name="dueDate"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <DatePicker
+                      value={field.value}
+                      onChange={field.onChange}
+                      disabled={addTask.isPending}
+                    />
                   </Field>
                 )}
               />

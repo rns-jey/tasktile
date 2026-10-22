@@ -32,9 +32,13 @@ export function formatDueDate(date: Date) {
     };
 
   if (days > 0 && days < 7)
-    if (isTomorrow(date))
-      return {
-        label: `due ${format(date, "EEE")}`,
-        overdue: false,
-      };
+    return {
+      label: `due ${format(date, "EEE")}`,
+      overdue: false,
+    };
+
+  return {
+    label: `due ${format(date, "MMM d")}`,
+    overdue: false,
+  };
 }

@@ -45,7 +45,7 @@ export default function DatePicker({
           disabled={disabled}
         >
           <CalendarIcon />
-          {value ? format(value, "PP") : <span>Pick a date</span>}
+          {value ? format(value, "PP") : <span>Pick a date (optional)</span>}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
