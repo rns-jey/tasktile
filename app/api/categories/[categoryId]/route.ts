@@ -14,10 +14,11 @@ export async function DELETE(req: Request, props: { params: tParams }) {
 
     const { categoryId } = await props.params;
 
-    if (!categoryId) return new NextResponse("Task ID is required", { status: 404 });
+    if (!categoryId)
+      return new NextResponse("Task ID is required", { status: 404 });
 
     const category = await db.category.delete({
-      where: { id: categoryId, userId: profile.id },
+      where: { id: categoryId, userId: profile.userID },
     });
 
     return NextResponse.json(category);

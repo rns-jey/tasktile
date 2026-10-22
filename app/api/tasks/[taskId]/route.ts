@@ -14,10 +14,11 @@ export async function DELETE(req: Request, props: { params: tParams }) {
 
     const { taskId } = await props.params;
 
-    if (!taskId) return new NextResponse("Task ID is required", { status: 404 });
+    if (!taskId)
+      return new NextResponse("Task ID is required", { status: 404 });
 
     const task = await db.task.delete({
-      where: { id: taskId, userId: profile.id },
+      where: { id: taskId, userId: profile.userID },
     });
 
     return NextResponse.json(task);
@@ -35,12 +36,13 @@ export async function PATCH(req: Request, props: { params: tParams }) {
 
     const { taskId } = await props.params;
 
-    if (!taskId) return new NextResponse("Task ID is required", { status: 404 });
+    if (!taskId)
+      return new NextResponse("Task ID is required", { status: 404 });
 
     const { name, description, categoryId, dueDate } = await req.json();
 
     const newTask = await db.task.update({
-      where: { id: taskId, userId: profile.id },
+      where: { id: taskId, userId: profile.userID },
       data: {
         name,
         description,

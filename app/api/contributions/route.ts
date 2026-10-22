@@ -22,7 +22,7 @@ export async function GET(req: Request) {
         db.task.groupBy({
           by: ["completedAt"],
           where: {
-            userId: profile.id,
+            userId: profile.userID,
             completedAt: {
               gte: start,
               lte: end,
@@ -34,7 +34,7 @@ export async function GET(req: Request) {
         }),
         db.task.count({
           where: {
-            userId: profile.id,
+            userId: profile.userID,
             completedAt: {
               gte: start,
               lte: end,
@@ -43,14 +43,14 @@ export async function GET(req: Request) {
         }),
         db.task.count({
           where: {
-            userId: profile.id,
+            userId: profile.userID,
             completedAt: today,
           },
         }),
         db.task.groupBy({
           by: ["completedAt"],
           where: {
-            userId: profile.id,
+            userId: profile.userID,
             completed: true,
             completedAt: {
               not: null,

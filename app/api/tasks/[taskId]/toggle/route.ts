@@ -24,7 +24,7 @@ export async function PATCH(req: Request, props: { params: tParams }) {
     const completedAt = completed ? today : null;
 
     const newTask = await db.task.update({
-      where: { id: taskId, userId: profile.id },
+      where: { id: taskId, userId: profile.userID },
       data: {
         completed,
         completedAt,

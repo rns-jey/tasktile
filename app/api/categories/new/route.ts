@@ -14,7 +14,7 @@ export async function POST(req: Request) {
       data: {
         name,
         color,
-        userId: profile.id,
+        userId: profile.userID,
       },
     });
 
