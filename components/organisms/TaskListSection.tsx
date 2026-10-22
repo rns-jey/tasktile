@@ -87,7 +87,7 @@ export default function TaskListSection({
     //   </div>
     // </div>
 
-    <div className="pb-28">
+    <div>
       {activeTasks.map((task, i) => {
         const due = task.dueDate ? formatDueDate(task.dueDate) : null;
 

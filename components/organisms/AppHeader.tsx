@@ -72,7 +72,7 @@ export default function AppHeader({ initialTasks }: AppHeaderProps) {
     //   </div>
     // </header>
 
-    <header className="flex justify-between pt-6">
+    <header className="flex justify-between pb-4">
       <div>
         <h1 className="flex flex-col">
           <span className="text-meta text-muted-2 font-medium tracking-[.08em] uppercase">

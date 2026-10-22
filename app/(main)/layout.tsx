@@ -1,23 +1,14 @@
 import React from "react";
 
-import AppSidebar from "@/components/organisms/AppSidebar";
-import Providers from "@/components/providers/Providers";
+import ReactQueryProvider from "@/components/providers/ReactQueryProvider";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
-import { SidebarInset } from "@/components/ui/Sidebar";
-import currentProfile from "@/lib/current-profile";
-import { redirect } from "next/navigation";
+import { SidebarProvider } from "@/components/ui/Sidebar";
 
-export default async function MainLayout({
+export default function MainLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const profile = await currentProfile();
-
-  if (!profile) {
-    if (!profile) redirect("/sign-in");
-  }
-
   return (
     <ThemeProvider
       attribute="class"
@@ -25,10 +16,9 @@ export default async function MainLayout({
       enableSystem
       disableTransitionOnChange
     >
-      <Providers profile={profile}>
-        <AppSidebar profile={profile} />
-        <SidebarInset>{children}</SidebarInset>
-      </Providers>
+      <ReactQueryProvider>
+        <SidebarProvider>{children}</SidebarProvider>
+      </ReactQueryProvider>
     </ThemeProvider>
   );
 }
