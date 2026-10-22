@@ -87,7 +87,7 @@ export default function TaskListSection({
     //   </div>
     // </div>
 
-    <div>
+    <div className="flex flex-col">
       {activeTasks.map((task, i) => {
         const due = task.dueDate ? formatDueDate(task.dueDate) : null;
 
@@ -109,7 +109,7 @@ export default function TaskListSection({
         );
       })}
 
-      <Card className="bg-paper-2 my-4">
+      <Card className="bg-paper-2 mx-2 my-4">
         <CardContent className="flex items-center justify-between">
           <span className="font-medium tracking-[.08em] uppercase">
             DONE TODAY · {completedTasks.length}
@@ -126,7 +126,7 @@ export default function TaskListSection({
         </CardContent>
       </Card>
 
-      <div className={cn(visible ? "flex flex-col" : "hidden")}>
+      <div className={cn(visible ? "flex flex-col" : "hidden", "w-full")}>
         {completedTasks.map((task, i) => (
           <div
             key={i}
