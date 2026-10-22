@@ -3,6 +3,7 @@ import React from "react";
 import AppSidebar from "@/components/organisms/AppSidebar";
 import Providers from "@/components/providers/Providers";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import { SidebarInset } from "@/components/ui/Sidebar";
 import currentProfile from "@/lib/current-profile";
 import { redirect } from "next/navigation";
 
@@ -26,7 +27,7 @@ export default async function MainLayout({
     >
       <Providers profile={profile}>
         <AppSidebar profile={profile} />
-        {children}
+        <SidebarInset>{children}</SidebarInset>
       </Providers>
     </ThemeProvider>
   );

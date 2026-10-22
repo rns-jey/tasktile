@@ -1,6 +1,13 @@
 import { db } from "@/lib/db";
 import { Profile } from "@/lib/generated/prisma/client";
-import { Diamond, LayoutGrid, List, Settings, Square } from "lucide-react";
+import {
+  Diamond,
+  LayoutGrid,
+  List,
+  PanelLeftIcon,
+  Settings,
+  Square,
+} from "lucide-react";
 import Link from "next/link";
 import {
   Sidebar,
@@ -12,6 +19,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
+  SidebarTrigger,
 } from "../ui/Sidebar";
 
 const navMain = [
@@ -53,14 +61,23 @@ export default async function AppSidebar({
   });
 
   return (
-    <Sidebar className="border-r-0" {...props}>
+    <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <div className="flex gap-2">
-          <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-5 items-center justify-center rounded-md">
-            <Diamond className="size-3" />
-          </div>
-          <span className="truncate font-medium">TaskTile</span>
-        </div>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarTrigger className="w-full overflow-hidden px-1 hover:bg-transparent">
+              <div className="flex w-full items-center gap-2">
+                <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-5 cursor-pointer items-center justify-center rounded-md">
+                  <Diamond className="size-3" />
+                </div>
+                <span className="truncate font-medium">TaskTile</span>
+                <div className="hover:bg-muted hover:text-paper ml-auto cursor-pointer rounded-lg p-2">
+                  <PanelLeftIcon />
+                </div>
+              </div>
+            </SidebarTrigger>
+          </SidebarMenuItem>
+        </SidebarMenu>
 
         <SidebarMenu>
           {navMain.map((nav) => (
@@ -84,7 +101,7 @@ export default async function AppSidebar({
               <SidebarMenuItem key={category.id}>
                 <SidebarMenuButton render={<Link href={"#"} />}>
                   <span
-                    className="h-2 w-2 rounded-xs"
+                    className="h-4 min-w-4 rounded-xs"
                     style={{ backgroundColor: category.color }}
                   />
                   <span>{category.name}</span>
