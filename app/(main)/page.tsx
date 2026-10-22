@@ -25,7 +25,7 @@ export default async function Home() {
     <Fragment>
       <AppSidebar profile={currentUser} />
       <SidebarInset className="flex h-dvh w-full flex-col overflow-hidden">
-        <main className="flex min-h-0 flex-1 flex-col">
+        <main className="mx-auto flex min-h-0 w-full max-w-7xl flex-1 flex-col">
           <ScrollArea className="min-h-0 flex-1 p-4">
             <AppHeader initialTasks={tasks} />
 
