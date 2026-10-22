@@ -36,7 +36,7 @@ const formSchema = z.object({
   name: z.string().min(3, "Task name is required"),
   description: z.string().max(120),
   categoryId: z.string().nullable(),
-  dueDate: z.date().optional(),
+  dueDate: z.date().nullable(),
 });
 
 export default function OpenTaskCard({ task }: { task: TaskWithCategory }) {
@@ -52,7 +52,7 @@ export default function OpenTaskCard({ task }: { task: TaskWithCategory }) {
       name: name,
       description: description,
       categoryId: categoryId,
-      dueDate: dueDate ? new Date(dueDate) : undefined,
+      dueDate: dueDate ? new Date(dueDate) : null,
     },
   });
 
@@ -83,7 +83,13 @@ export default function OpenTaskCard({ task }: { task: TaskWithCategory }) {
   }
 
   return (
-    <Drawer open={open} onOpenChange={setOpen}>
+    <Drawer
+      open={open}
+      onOpenChange={(next) => {
+        if (!next) form.reset();
+        setOpen(next);
+      }}
+    >
       <DrawerTrigger asChild>
         <div className="border-line flex h-16 cursor-pointer items-center gap-3.5 border-b px-2 hover:bg-white">
           <span className="text-subtle w-[18px] font-mono text-xs">00</span>

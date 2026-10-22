@@ -33,7 +33,7 @@ const formSchema = z.object({
   name: z.string().min(3, "Task name is required"),
   description: z.string().max(120),
   categoryId: z.string().nullable(),
-  dueDate: z.date().optional(),
+  dueDate: z.date().nullish(),
 });
 
 export default function NewTaskForm() {
@@ -45,7 +45,7 @@ export default function NewTaskForm() {
       name: "",
       description: "",
       categoryId: null,
-      dueDate: undefined,
+      dueDate: null,
     },
   });
 
@@ -60,7 +60,7 @@ export default function NewTaskForm() {
       name: string;
       description: string;
       categoryId: string | null;
-      dueDate?: Date | undefined;
+      dueDate?: Date | null;
     }
   >({
     mutationFn: async (newTask) => {
@@ -171,7 +171,7 @@ export default function NewTaskForm() {
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
                     <DatePicker
-                      value={field.value}
+                      value={field.value ?? null}
                       onChange={field.onChange}
                       disabled={addTask.isPending}
                     />

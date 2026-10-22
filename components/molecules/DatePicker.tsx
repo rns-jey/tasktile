@@ -21,8 +21,8 @@ interface DatePickerProps {
     | "xs"
     | null
     | undefined;
-  value: Date | undefined;
-  onChange: (value: Date | undefined) => void;
+  value: Date | null;
+  onChange: (value: Date | null) => void;
   disabled?: boolean;
 }
 
@@ -52,13 +52,17 @@ export default function DatePicker({
         align="center"
         className="flex w-auto flex-col items-center justify-center gap-1"
       >
-        <Calendar mode="single" selected={value} onSelect={onChange} />
+        <Calendar
+          mode="single"
+          selected={value ?? undefined}
+          onSelect={(d) => onChange(d ?? null)}
+        />
         <div className="flex justify-between gap-1">
           <Button
             variant={"outline"}
             size={"xs"}
             onClick={() => {
-              onChange(undefined);
+              onChange(null);
               setIsOpen(false);
             }}
           >
