@@ -4,10 +4,10 @@ import { TaskWithCategory } from "@/types";
 
 import { Skeleton } from "@/components/ui/Skeleton";
 import { useTasks } from "@/hooks/useTasks";
-import { cn, formatDueDate } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 
 import { useState } from "react";
-import TaskMeta from "../molecules/TaskMeta";
+import OpenTaskCard from "../molecules/OpenTaskCard";
 import { Button } from "../ui/Button";
 import { Card, CardContent } from "../ui/Card";
 import { Checkbox } from "../ui/Checkbox";
@@ -88,26 +88,9 @@ export default function TaskListSection({
     // </div>
 
     <div className="flex flex-col">
-      {activeTasks.map((task, i) => {
-        const due = task.dueDate ? formatDueDate(task.dueDate) : null;
-
-        return (
-          <div
-            key={i}
-            className="border-line flex h-16 items-center gap-3.5 border-b"
-          >
-            <span className="text-subtle w-[18px] font-mono text-xs">00</span>
-            <Checkbox className="rounded-check ring-stroke size-6 ring-[1.75px] ring-inset" />
-            <div className="flex min-w-0 flex-col gap-0.5">
-              <span className="text-task truncate font-medium">
-                {task.name}
-              </span>
-
-              <TaskMeta task={task} />
-            </div>
-          </div>
-        );
-      })}
+      {activeTasks.map((task) => (
+        <OpenTaskCard key={task.id} task={task} />
+      ))}
 
       <Card className="bg-paper-2 mx-2 my-4">
         <CardContent className="flex items-center justify-between">
