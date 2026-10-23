@@ -1,12 +1,13 @@
 "use client";
 
 import { useCategories } from "@/hooks/useCategories";
+import { flushPendingDeletes, useDeleteTask } from "@/hooks/useDeleteTask";
 import { TaskWithCategory } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { SquareIcon } from "lucide-react";
-import { Fragment, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "../ui/Button";
@@ -45,6 +46,9 @@ export default function OpenTaskCard({ task }: { task: TaskWithCategory }) {
   const { name, description, categoryId, dueDate } = task;
 
   const { data: categories } = useCategories();
+
+  const pendingDelete = useRef(false);
+  const removeTask = useDeleteTask();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -86,8 +90,16 @@ export default function OpenTaskCard({ task }: { task: TaskWithCategory }) {
     <Drawer
       open={open}
       onOpenChange={(next) => {
-        if (!next) form.reset();
+        if (next) flushPendingDeletes();
+        else form.reset();
         setOpen(next);
+      }}
+      onAnimationEnd={(isOpen) => {
+        console.log("animationEnd", isOpen, pendingDelete.current, task.name);
+        if (!isOpen && pendingDelete.current) {
+          pendingDelete.current = false;
+          removeTask(task);
+        }
       }}
     >
       <DrawerTrigger asChild>
@@ -101,7 +113,7 @@ export default function OpenTaskCard({ task }: { task: TaskWithCategory }) {
           </div>
         </div>
       </DrawerTrigger>
-      <DrawerContent className="pb-4">
+      <DrawerContent className="pb-4" aria-describedby={undefined}>
         <DrawerHeader className="flex flex-row items-center justify-between">
           <DrawerClose
             disabled={updateTask.isPending}
@@ -252,14 +264,19 @@ export default function OpenTaskCard({ task }: { task: TaskWithCategory }) {
 
           <Separator className="my-2" />
 
-          <Button
-            className="h-11 w-full cursor-pointer"
-            variant={"destructive"}
-            type="button"
-            disabled={updateTask.isPending}
-          >
-            Delete task
-          </Button>
+          <DrawerClose asChild>
+            <Button
+              className="h-11 w-full cursor-pointer"
+              variant={"destructive"}
+              type="button"
+              onClick={() => {
+                pendingDelete.current = true;
+              }}
+              disabled={updateTask.isPending}
+            >
+              Delete task
+            </Button>
+          </DrawerClose>
         </div>
       </DrawerContent>
     </Drawer>

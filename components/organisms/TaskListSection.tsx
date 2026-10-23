@@ -6,6 +6,7 @@ import { Skeleton } from "@/components/ui/Skeleton";
 import { useTasks } from "@/hooks/useTasks";
 import { cn } from "@/lib/utils";
 
+import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
 import OpenTaskCard from "../molecules/OpenTaskCard";
 import { Button } from "../ui/Button";
@@ -88,9 +89,20 @@ export default function TaskListSection({
     // </div>
 
     <div className="flex flex-col">
-      {activeTasks.map((task) => (
-        <OpenTaskCard key={task.id} task={task} />
-      ))}
+      <AnimatePresence initial={false}>
+        {activeTasks.map((task) => (
+          <motion.div
+            key={task.id}
+            layout
+            initial={{ x: -100, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: 100, opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <OpenTaskCard task={task} />
+          </motion.div>
+        ))}
+      </AnimatePresence>
 
       <Card className="bg-paper-2 mx-2 my-4">
         <CardContent className="flex items-center justify-between">
