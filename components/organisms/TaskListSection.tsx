@@ -9,9 +9,9 @@ import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
 import OpenTaskCard from "../molecules/OpenTaskCard";
+import ToggleTask from "../molecules/ToggleTask";
 import { Button } from "../ui/Button";
 import { Card, CardContent } from "../ui/Card";
-import { Checkbox } from "../ui/Checkbox";
 
 interface TaskListSectionProps {
   initialTasks: TaskWithCategory[];
@@ -128,10 +128,7 @@ export default function TaskListSection({
             className="border-line mx-5 flex h-14 items-center justify-between gap-3.5"
           >
             <div className="flex min-w-0 items-center gap-2">
-              <Checkbox
-                checked
-                className="rounded-check bg-accent size-6 text-white"
-              />
+              <ToggleTask task={task} />
               <span className="text-task text-muted truncate font-medium line-through">
                 {task.name}
               </span>
