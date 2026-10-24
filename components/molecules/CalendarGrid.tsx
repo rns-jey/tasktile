@@ -1,11 +1,4 @@
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/Tooltip";
 import { CalendarDay } from "@/types";
-import { format } from "date-fns";
 
 interface CalendarGridProps {
   days: CalendarDay[];
@@ -24,7 +17,7 @@ export default function CalendarGrid({ days }: CalendarGridProps) {
 
   return (
     <div>
-      <div className="grid grid-cols-7 gap-1">
+      {/* <div className="grid grid-cols-7 gap-1">
         {days.map((dayObj: CalendarDay) => (
           <TooltipProvider key={dayObj.completedAt.toISOString()}>
             <Tooltip>
@@ -42,7 +35,7 @@ export default function CalendarGrid({ days }: CalendarGridProps) {
             </Tooltip>
           </TooltipProvider>
         ))}
-      </div>
+      </div> */}
     </div>
   );
 }
