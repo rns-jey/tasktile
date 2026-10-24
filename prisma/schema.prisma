@@ -39,9 +39,17 @@ model Task {
   categoryId String?
   category Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
 
+  scheduledOn DateTime? @db.Date
+
   completedAt DateTime?
+  completedOn DateTime? @db.Date
+  completedTz String @default("")
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([userId, scheduledOn])
+  @@index([userId, completedOn])
 }
 
 model Category {

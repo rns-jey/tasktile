@@ -1,3 +1,4 @@
+import { localDay, localTz } from "@/lib/date";
 import { TaskWithCategory } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
@@ -10,6 +11,8 @@ export default function ToggleTask({ task }: { task: TaskWithCategory }) {
     mutationFn: async (task: TaskWithCategory) => {
       const response = await axios.patch(`/api/tasks/${task.id}/toggle`, {
         completed: !task.completed,
+        localDay: localDay(),
+        tz: localTz(),
       });
       return response.data;
     },
