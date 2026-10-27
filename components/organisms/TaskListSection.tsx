@@ -3,9 +3,10 @@
 import { TaskWithCategory } from "@/types";
 
 import { Skeleton } from "@/components/ui/Skeleton";
-import { useTasks } from "@/hooks/useTasks";
+
 import { cn } from "@/lib/utils";
 
+import { useTodayTasks } from "@/hooks/useTasks";
 import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
 import OpenTaskCard from "../molecules/OpenTaskCard";
@@ -22,7 +23,7 @@ export default function TaskListSection({
 }: TaskListSectionProps) {
   const [visible, setVisible] = useState<boolean>(false);
 
-  const { data: tasks } = useTasks(initialTasks);
+  const { data: tasks } = useTodayTasks(initialTasks);
 
   if (!tasks)
     return (
