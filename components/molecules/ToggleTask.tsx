@@ -21,11 +21,24 @@ export default function ToggleTask({ task }: { task: TaskWithCategory }) {
       await queryClient.cancelQueries({ queryKey: ["tasks"] });
 
       // Snapshot previous value
-      const previousTasks = queryClient.getQueryData(["tasks"]);
+      const previousTasks = queryClient.getQueryData<TaskWithCategory[]>([
+        "tasks",
+      ]);
 
       // Optimistically remove the task from cache immediately
-      queryClient.setQueryData(["tasks"], (old: TaskWithCategory[]) =>
-        old.filter((t) => t.id !== task.id),
+      queryClient.setQueryData<TaskWithCategory[]>(["tasks"], (old) =>
+        old?.map((t) =>
+          t.id === task.id
+            ? {
+                ...t,
+                completed: !t.completed,
+                completedAt: !t.completed ? new Date() : null,
+                completedOn: !t.completed
+                  ? new Date(`${localDay()}T00:00:00Z`)
+                  : null,
+              }
+            : t,
+        ),
       );
 
       return { previousTasks };
@@ -34,9 +47,9 @@ export default function ToggleTask({ task }: { task: TaskWithCategory }) {
       // Roll back on error
       queryClient.setQueryData(["tasks"], context?.previousTasks);
     },
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["tasks"] }); // Wait for refetch to complete
-      // await queryClient.invalidateQueries({ queryKey: ["contributions"] }); // Wait for refetch to complete
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+      queryClient.invalidateQueries({ queryKey: ["contributions"] });
     },
   });
 
