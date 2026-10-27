@@ -1,6 +1,7 @@
 "use client";
 
 import { useCategories } from "@/hooks/useCategories";
+import { localDay } from "@/lib/date";
 import { TaskWithCategory } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -56,12 +57,7 @@ export default function NewTaskForm() {
   const addTask = useMutation<
     TaskWithCategory,
     Error,
-    {
-      name: string;
-      description: string;
-      categoryId: string | null;
-      dueDate?: Date | null;
-    }
+    z.infer<typeof formSchema> & { scheduledOn: string }
   >({
     mutationFn: async (newTask) => {
       const response = await axios.post("api/tasks/new", newTask);
@@ -75,7 +71,7 @@ export default function NewTaskForm() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    addTask.mutate(values);
+    addTask.mutate({ ...values, scheduledOn: localDay() });
   }
 
   return (
