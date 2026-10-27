@@ -6,8 +6,6 @@ settings:
 
 overrides:
   zod: 4.6.6
-  proxy-addr: ^2.0.8
-  hono: ^4.13.11
 
 importers:
 
