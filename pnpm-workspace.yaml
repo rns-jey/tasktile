@@ -7,4 +7,5 @@ allowBuilds:
   prisma: true
   sharp: true
 overrides:
-  zod: 4.4.3
+  zod: 4.6.6
+  proxy-addr: ^2.0.8
