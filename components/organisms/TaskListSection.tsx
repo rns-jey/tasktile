@@ -117,7 +117,7 @@ export default function TaskListSection({
             onClick={() => setVisible(!visible)}
             className="text-accent text-[15px] font-semibold"
           >
-            Show
+            {visible ? "Hide" : "Show"}
           </Button>
         </CardContent>
       </Card>
