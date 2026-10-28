@@ -1,6 +1,14 @@
+import { categColors } from "@/lib/colors";
 import currentProfile from "@/lib/current-profile";
 import { db } from "@/lib/db";
+import { Prisma } from "@/lib/generated/prisma/client";
 import { NextResponse } from "next/server";
+import { z } from "zod";
+
+const bodySchema = z.object({
+  name: z.string().trim().min(2, "Category name is required"),
+  color: z.enum(categColors),
+});
 
 export async function POST(req: Request) {
   try {
@@ -8,11 +16,16 @@ export async function POST(req: Request) {
 
     if (!profile) return new NextResponse("Unauthorized", { status: 401 });
 
-    const { name, color } = await req.json();
+    const parsed = bodySchema.safeParse(await req.json());
+    if (!parsed.success)
+      return new NextResponse("Invalid body", { status: 400 });
+
+    const { name, color } = parsed.data;
 
     const newCategory = await db.category.create({
       data: {
         name,
+        nameKey: name.toLowerCase(),
         color,
         userId: profile.userID,
       },
@@ -20,10 +33,15 @@ export async function POST(req: Request) {
 
     return NextResponse.json(newCategory);
   } catch (error) {
-    if (error instanceof Error && "code" in error && error.code === "P2002") {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2002"
+    ) {
       return new NextResponse("Category name already exists", { status: 409 });
     }
 
-    return new NextResponse("Internal Server Errorsss", { status: 500 });
+    console.log(error);
+
+    return new NextResponse("Internal Server Error", { status: 500 });
   }
 }

@@ -1,6 +1,6 @@
 import { LayoutGridIcon, ListIcon, Settings, SquareIcon } from "lucide-react";
 import Link from "next/link";
-import NewTaskForm from "./NewTaskForm";
+import NewTaskDrawer from "./NewTaskDrawer";
 
 export default function MobileNav() {
   return (
@@ -15,7 +15,7 @@ export default function MobileNav() {
           <Link href="/tasks">Tasks</Link>
         </li>
         <li className="-mt-8 flex items-center justify-center">
-          <NewTaskForm />
+          <NewTaskDrawer />
         </li>
         <li className="flex flex-col items-center gap-1">
           <LayoutGridIcon />
