@@ -1,11 +1,12 @@
 "use client";
 
-import { taskFormSchema } from "@/lib/schemas/task";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PlusIcon } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+
+import { taskFormSchema, TaskFormValues } from "@/lib/schemas/task";
+
 import { Button } from "../ui/Button";
 import { Drawer, DrawerContent, DrawerTrigger } from "../ui/Drawer";
 import NewCategoryForm from "./NewCategoryForm";
@@ -15,7 +16,7 @@ export default function NewTaskDrawer() {
   const [open, setOpen] = useState(false);
   const [newCateg, setNewCateg] = useState(false);
 
-  const taskForm = useForm<z.infer<typeof taskFormSchema>>({
+  const taskForm = useForm<TaskFormValues>({
     resolver: zodResolver(taskFormSchema),
     defaultValues: {
       name: "",

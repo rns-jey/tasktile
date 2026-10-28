@@ -41,7 +41,10 @@ export default function EditTaskDrawer({ task }: { task: TaskWithCategory }) {
       open={open}
       onOpenChange={(next) => {
         if (next) flushPendingDeletes();
-        else taskForm.reset();
+        else {
+          taskForm.reset();
+          setNewCateg(false);
+        }
         setOpen(next);
       }}
       onAnimationEnd={(isOpen) => {
