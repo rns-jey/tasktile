@@ -9,7 +9,7 @@ import { z } from "zod";
 import { Button } from "../ui/Button";
 import { Drawer, DrawerContent, DrawerTrigger } from "../ui/Drawer";
 import NewCategoryForm from "./NewCategoryForm";
-import NewTaskForm from "./NewTaskForm";
+import TaskForm from "./TaskForm";
 
 export default function NewTaskDrawer() {
   const [open, setOpen] = useState(false);
@@ -40,8 +40,9 @@ export default function NewTaskDrawer() {
       </DrawerTrigger>
       <DrawerContent className="pb-4">
         <div hidden={newCateg}>
-          <NewTaskForm
+          <TaskForm
             form={taskForm}
+            formId="form-add-task"
             setOpen={setOpen}
             setNewCateg={setNewCateg}
           />

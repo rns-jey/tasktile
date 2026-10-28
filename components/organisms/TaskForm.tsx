@@ -1,14 +1,17 @@
 "use client";
 
-import { useCategories } from "@/hooks/useCategories";
-import { taskFormSchema, TaskFormValues } from "@/lib/schemas/task";
-import { TaskWithCategory } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { SquareIcon } from "lucide-react";
 import { Fragment } from "react";
 import { Controller, UseFormReturn } from "react-hook-form";
-import { z } from "zod";
+
+import { useCategories } from "@/hooks/useCategories";
+import { localDay } from "@/lib/date";
+import { TaskFormValues } from "@/lib/schemas/task";
+import { TaskWithCategory } from "@/types";
+
+import { toast } from "sonner";
 import DatePicker from "../molecules/DatePicker";
 import { Button } from "../ui/Button";
 import { DrawerClose, DrawerHeader, DrawerTitle } from "../ui/Drawer";
@@ -23,97 +26,115 @@ import {
 import { Separator } from "../ui/Separator";
 import { ToggleGroup, ToggleGroupItem } from "../ui/ToggleGroup";
 
-interface EditTaskFormProps {
-  task: TaskWithCategory;
+interface TaskFormProps {
+  task?: TaskWithCategory;
   form: UseFormReturn<TaskFormValues>;
+  formId: string;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setNewCateg: React.Dispatch<React.SetStateAction<boolean>>;
-  onDelete: () => void;
+  onDelete?: () => void;
 }
 
-export default function EditTaskForm({
+export default function TaskForm({
   task,
   form,
+  formId,
   setOpen,
   setNewCateg,
   onDelete,
-}: EditTaskFormProps) {
+}: TaskFormProps) {
+  const isEditing = Boolean(task);
+
   const { data: categories } = useCategories();
+
+  const description = form.watch("description") ?? "";
 
   const queryClient = useQueryClient();
 
-  const updateTask = useMutation<
+  const addTask = useMutation<
     TaskWithCategory,
     Error,
-    {
-      name: string;
-      description: string;
-      categoryId?: string | null;
-      dueDate?: Date | null;
-    }
+    TaskFormValues & { scheduledOn: string }
   >({
-    mutationFn: async (updatedTask) => {
-      const response = await axios.patch(`/api/tasks/${task.id}`, updatedTask);
+    mutationFn: async (newTask) => {
+      const response = await axios.post("/api/tasks/new", newTask);
       return response.data;
     },
+    onError: () => toast.error("Couldn't save task"),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["tasks"] }); // Wait for refetch to complete
+      form.reset();
+      setOpen(false);
+    },
+  });
+
+  const updateTask = useMutation<TaskWithCategory, Error, TaskFormValues>({
+    mutationFn: async (updatedTask) => {
+      const response = await axios.patch(`/api/tasks/${task?.id}`, updatedTask);
+      return response.data;
+    },
+    onError: () => toast.error("Couldn't save task"),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["tasks"] }); // Wait for refetch to complete
       setOpen(false);
     },
   });
 
-  function onSubmit(values: z.infer<typeof taskFormSchema>) {
-    updateTask.mutate(values);
+  function onSubmit(values: TaskFormValues) {
+    if (isEditing) {
+      updateTask.mutate(values);
+    } else {
+      addTask.mutate({ ...values, scheduledOn: localDay() });
+    }
   }
+
+  const formPending = addTask.isPending || updateTask.isPending;
 
   return (
     <Fragment>
       <DrawerHeader className="flex flex-row items-center justify-between">
         <DrawerClose
-          disabled={updateTask.isPending}
+          disabled={formPending}
           className="text-muted h-11 px-2 font-medium"
         >
           Cancel
         </DrawerClose>
-        <DrawerTitle>Edit Task</DrawerTitle>
+        <DrawerTitle>{isEditing ? "Edit Task" : "Add Task"}</DrawerTitle>
         <Button
           type="submit"
-          form="form-edit-task"
-          disabled={updateTask.isPending}
+          form={formId}
+          disabled={formPending}
           className="bg-ink text-paper h-11 px-4 font-semibold"
         >
-          Save
+          {isEditing ? "Save" : "Add"}
         </Button>
       </DrawerHeader>
 
       <div className="flex flex-col items-center gap-2 px-4">
         <form
-          id="form-edit-task"
-          onSubmit={form.handleSubmit(onSubmit, (errors) =>
-            console.log("Validation errors:", errors),
-          )}
+          id={formId}
+          onSubmit={form.handleSubmit(onSubmit)}
           className="w-full"
         >
           <FieldGroup>
             <Controller
               name="name"
               control={form.control}
-              disabled={updateTask.isPending}
+              disabled={formPending}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <div className="flex items-center gap-2">
-                    <InputGroup>
-                      <InputGroupAddon>
-                        <SquareIcon />
-                      </InputGroupAddon>
-                      <InputGroupInput
-                        {...field}
-                        id="form-edit-task-name"
-                        aria-invalid={fieldState.invalid}
-                        placeholder="Add a task name .."
-                      />
-                    </InputGroup>
-                  </div>
+                  <InputGroup>
+                    <InputGroupAddon>
+                      <SquareIcon />
+                    </InputGroupAddon>
+                    <InputGroupInput
+                      {...field}
+                      id={`${formId}-name`}
+                      aria-invalid={fieldState.invalid}
+                      placeholder="Add a task name .."
+                    />
+                  </InputGroup>
+
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
                   )}
@@ -124,18 +145,21 @@ export default function EditTaskForm({
             <Controller
               name="description"
               control={form.control}
-              disabled={updateTask.isPending}
+              disabled={formPending}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <InputGroup>
                     <InputGroupTextarea
                       {...field}
-                      id="form-edit-task-description"
+                      id={`${formId}-description`}
                       aria-invalid={fieldState.invalid}
+                      maxLength={120}
                       placeholder="Add a description (optional)"
                     />
                     <InputGroupAddon align="block-end">
-                      <InputGroupText className="ml-auto">0/120</InputGroupText>
+                      <InputGroupText className="ml-auto">
+                        {description.length}/120
+                      </InputGroupText>
                     </InputGroupAddon>
                   </InputGroup>
                   {fieldState.invalid && (
@@ -151,13 +175,10 @@ export default function EditTaskForm({
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <DatePicker
-                    value={field.value}
+                    value={field.value ?? null}
                     onChange={field.onChange}
-                    disabled={updateTask.isPending}
+                    disabled={formPending}
                   />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
                 </Field>
               )}
             />
@@ -171,16 +192,16 @@ export default function EditTaskForm({
                     Category · optional
                   </div>
 
-                  <ToggleGroup
-                    variant={"outline"}
-                    value={field.value ? [field.value] : []}
-                    onValueChange={(v) => field.onChange(v[0] ?? null)}
-                    className="flex-wrap"
-                    disabled={updateTask.isPending}
-                  >
-                    {categories && (
-                      <Fragment>
-                        {categories.map((category) => (
+                  <div className="flex flex-wrap gap-2">
+                    <ToggleGroup
+                      variant={"outline"}
+                      value={field.value ? [field.value] : []}
+                      onValueChange={(v) => field.onChange(v[0] ?? null)}
+                      className="contents"
+                      disabled={formPending}
+                    >
+                      {categories &&
+                        categories.map((category) => (
                           <ToggleGroupItem
                             key={category.id}
                             value={category.id}
@@ -193,40 +214,41 @@ export default function EditTaskForm({
                             {category.name}
                           </ToggleGroupItem>
                         ))}
-                      </Fragment>
-                    )}
+                    </ToggleGroup>
 
                     <Button
                       variant={"outline"}
                       type="button"
-                      disabled={updateTask.isPending}
+                      disabled={formPending}
+                      onClick={() => setNewCateg(true)}
                       className={"h-11 bg-transparent"}
                     >
                       + New
                     </Button>
-                  </ToggleGroup>
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
+                  </div>
                 </Field>
               )}
             />
           </FieldGroup>
         </form>
 
-        <Separator className="my-2" />
+        {isEditing && (
+          <>
+            <Separator className="my-2" />
 
-        <DrawerClose asChild>
-          <Button
-            className="h-11 w-full cursor-pointer"
-            variant={"destructive"}
-            type="button"
-            onClick={onDelete}
-            disabled={updateTask.isPending}
-          >
-            Delete task
-          </Button>
-        </DrawerClose>
+            <DrawerClose asChild>
+              <Button
+                className="h-11 w-full cursor-pointer"
+                variant="destructive"
+                type="button"
+                onClick={onDelete}
+                disabled={formPending}
+              >
+                Delete task
+              </Button>
+            </DrawerClose>
+          </>
+        )}
       </div>
     </Fragment>
   );

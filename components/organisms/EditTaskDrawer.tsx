@@ -1,18 +1,17 @@
 "use client";
 
-import { TaskWithCategory } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 import { flushPendingDeletes, useDeleteTask } from "@/hooks/useDeleteTask";
+import { taskFormSchema, TaskFormValues } from "@/lib/schemas/task";
+import { TaskWithCategory } from "@/types";
 
 import TaskMeta from "../molecules/TaskMeta";
-
-import { taskFormSchema } from "@/lib/schemas/task";
 import { Drawer, DrawerContent, DrawerTrigger } from "../ui/Drawer";
-import EditTaskForm from "./EditTaskForm";
+import NewCategoryForm from "./NewCategoryForm";
+import TaskForm from "./TaskForm";
 
 export default function EditTaskDrawer({ task }: { task: TaskWithCategory }) {
   const [open, setOpen] = useState(false);
@@ -21,7 +20,7 @@ export default function EditTaskDrawer({ task }: { task: TaskWithCategory }) {
 
   const { name, description, categoryId, dueDate } = task;
 
-  const taskForm = useForm<z.infer<typeof taskFormSchema>>({
+  const taskForm = useForm<TaskFormValues>({
     resolver: zodResolver(taskFormSchema),
     values: {
       name: name,
@@ -33,7 +32,6 @@ export default function EditTaskDrawer({ task }: { task: TaskWithCategory }) {
 
   const handleDelete = () => {
     pendingDelete.current = true;
-    setOpen(false);
   };
 
   const removeTask = useDeleteTask();
@@ -47,7 +45,6 @@ export default function EditTaskDrawer({ task }: { task: TaskWithCategory }) {
         setOpen(next);
       }}
       onAnimationEnd={(isOpen) => {
-        console.log("animationEnd", isOpen, pendingDelete.current, task.name);
         if (!isOpen && pendingDelete.current) {
           pendingDelete.current = false;
           removeTask(task);
@@ -69,14 +66,22 @@ export default function EditTaskDrawer({ task }: { task: TaskWithCategory }) {
       </DrawerTrigger>
       <DrawerContent className="pb-4" aria-describedby={undefined}>
         <div hidden={newCateg}>
-          <EditTaskForm
+          <TaskForm
             task={task}
             form={taskForm}
+            formId="form-edit-task"
             setOpen={setOpen}
             setNewCateg={setNewCateg}
             onDelete={handleDelete}
           />
         </div>
+
+        {newCateg && (
+          <NewCategoryForm
+            setNewCateg={setNewCateg}
+            onCreated={(id) => taskForm.setValue("categoryId", id)}
+          />
+        )}
       </DrawerContent>
     </Drawer>
   );
