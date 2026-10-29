@@ -1,9 +1,4 @@
-import {
-  differenceInCalendarDays,
-  format,
-  isToday,
-  isYesterday,
-} from "date-fns";
+import { differenceInCalendarDays, format } from "date-fns";
 import { fromDbDay } from "./date";
 
 export { cn } from "cn";
@@ -46,10 +41,19 @@ export function formatDueDate(value: Date | string, todayKey: string) {
   };
 }
 
-export function formatClosedDate(date: Date) {
-  const days = differenceInCalendarDays(date, new Date());
+export function formatClosedDate(value: Date | string, todayKey: string) {
+  const date = fromDbDay(value);
+  const today = fromDbDay(`${todayKey}T00:00:00Z`);
+  const daysAgo = differenceInCalendarDays(today, date);
 
-  if (isToday(date)) return "Done today";
+  if (daysAgo === 0) return "Closed today";
 
-  if (isYesterday(date)) return "Done yesterday";
+  if (daysAgo === 1) return "Closed yesterday";
+
+  if (daysAgo < 7) return `Closed ${format(date, "EEE")}`;
+
+  if (date.getFullYear() === today.getFullYear())
+    return `Closed ${format(date, "d MMM")}`;
+
+  return `Closed ${format(date, "d MMM yyyy")}`;
 }

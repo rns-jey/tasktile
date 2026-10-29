@@ -1,5 +1,6 @@
-import { db } from "@/lib/db";
-import { Profile } from "@/lib/generated/prisma/client";
+"use client";
+
+import { useCategories } from "@/hooks/useCategories";
 import {
   Diamond,
   LayoutGrid,
@@ -47,18 +48,10 @@ const navMain = [
   },
 ];
 
-type AppSidebarProps = React.ComponentProps<typeof Sidebar> & {
-  profile: Profile;
-};
+type AppSidebarProps = React.ComponentProps<typeof Sidebar> & {};
 
-export default async function AppSidebar({
-  profile,
-  ...props
-}: AppSidebarProps) {
-  const categories = await db.category.findMany({
-    where: { userId: profile.userID },
-    orderBy: [{ createdAt: "desc" }],
-  });
+export default function AppSidebar({ ...props }: AppSidebarProps) {
+  const { data: categories } = useCategories();
 
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -97,7 +90,7 @@ export default async function AppSidebar({
         <SidebarGroup>
           <SidebarGroupLabel>Categories</SidebarGroupLabel>
           <SidebarMenu>
-            {categories.map((category) => (
+            {categories?.map((category) => (
               <SidebarMenuItem key={category.id}>
                 <SidebarMenuButton render={<Link href={"#"} />}>
                   <span

@@ -1,4 +1,4 @@
-import { cn, formatDueDate } from "@/lib/utils";
+import { cn, formatClosedDate, formatDueDate } from "@/lib/utils";
 import { TaskWithCategory } from "@/types";
 import { AlignLeftIcon } from "lucide-react";
 import { Fragment } from "react";
@@ -8,7 +8,9 @@ export default function TaskMeta({ task }: { task: TaskWithCategory }) {
   const todayKey = useTodayKey();
 
   const due = task.dueDate ? formatDueDate(task.dueDate, todayKey) : null;
-  // const close = task.completedOn ? fo
+  const closed = task.completedOn
+    ? formatClosedDate(task.completedOn, todayKey)
+    : null;
   const isCompleted = task.completed;
 
   const items = [
@@ -31,6 +33,9 @@ export default function TaskMeta({ task }: { task: TaskWithCategory }) {
       >
         {due.label}
       </span>
+    ),
+    closed && isCompleted && (
+      <span className="text-meta text-muted-2">{closed}</span>
     ),
     task.description && (
       <AlignLeftIcon className="w-4" aria-label="Has description" />

@@ -19,3 +19,13 @@ export function getTodayTasks(userId: string, today: Date) {
     orderBy: [{ createdAt: "desc" }],
   });
 }
+
+export function getTasks(userId: string) {
+  return db.task.findMany({
+    where: {
+      userId: userId,
+    },
+    include: { category: true },
+    orderBy: [{ createdAt: "desc" }],
+  });
+}

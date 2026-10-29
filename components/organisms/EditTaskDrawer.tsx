@@ -9,12 +9,20 @@ import { taskFormSchema, TaskFormValues } from "@/lib/schemas/task";
 import { TaskWithCategory } from "@/types";
 
 import { fromDbDay } from "@/lib/date";
+import { cn } from "@/lib/utils";
 import TaskMeta from "../molecules/TaskMeta";
 import { Drawer, DrawerContent, DrawerTrigger } from "../ui/Drawer";
 import NewCategoryForm from "./NewCategoryForm";
 import TaskForm from "./TaskForm";
 
-export default function EditTaskDrawer({ task }: { task: TaskWithCategory }) {
+type EditTaskDrawerProps = {
+  task: TaskWithCategory;
+  variant?: "full" | "compact";
+};
+
+export default function EditTaskDrawer({ task, variant }: EditTaskDrawerProps) {
+  const compact = variant === "compact";
+
   const [open, setOpen] = useState(false);
   const [newCateg, setNewCateg] = useState(false);
   const pendingDelete = useRef(false);
@@ -56,17 +64,36 @@ export default function EditTaskDrawer({ task }: { task: TaskWithCategory }) {
       }}
     >
       <DrawerTrigger asChild>
-        <div className="flex w-full cursor-pointer">
-          <div className="flex min-w-0 grow-0 flex-col gap-0.5">
-            <span className="text-task w-full truncate font-medium">
+        <button type="button" className="flex w-full cursor-pointer text-left">
+          <div
+            className={cn(
+              compact
+                ? "w-full flex-row items-center justify-between"
+                : "flex-col gap-0.5",
+              "flex min-w-0",
+            )}
+          >
+            <span
+              className={cn(
+                task.completed && "text-muted line-through",
+                "text-task w-full truncate font-medium",
+              )}
+            >
               {task.name}
             </span>
 
-            <TaskMeta task={task} />
+            {compact ? (
+              task.category && (
+                <div
+                  className="h-3 min-w-3 rounded-xs"
+                  style={{ backgroundColor: task.category.color }}
+                />
+              )
+            ) : (
+              <TaskMeta task={task} />
+            )}
           </div>
-
-          <div className="flex-1" />
-        </div>
+        </button>
       </DrawerTrigger>
       <DrawerContent className="pb-4" aria-describedby={undefined}>
         <div hidden={newCateg}>

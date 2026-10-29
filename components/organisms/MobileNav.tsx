@@ -8,7 +8,7 @@ export default function MobileNav() {
       <ul className="grid grid-cols-5 px-4">
         <li className="flex flex-col items-center gap-1">
           <SquareIcon size={"24"} />
-          <Link href="/today">Today</Link>
+          <Link href="/">Today</Link>
         </li>
         <li className="flex flex-col items-center gap-1">
           <ListIcon size={"24"} />
