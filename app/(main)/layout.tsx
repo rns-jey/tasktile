@@ -12,6 +12,7 @@ import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import TimezoneSync from "@/components/providers/TimezoneSync";
 import { TodayProvider } from "@/components/providers/TodayProvider";
 import { UserProvider } from "@/components/providers/UserProvider";
+import ContentShell from "@/components/templates/ContentShell";
 import { SidebarInset, SidebarProvider } from "@/components/ui/Sidebar";
 
 export default async function MainLayout({
@@ -40,9 +41,11 @@ export default async function MainLayout({
               <AppSidebar />
 
               <SidebarInset className="flex h-dvh w-full flex-col overflow-hidden">
-                {children}
+                <ContentShell>
+                  {children}
 
-                <MobileNav />
+                  <MobileNav />
+                </ContentShell>
               </SidebarInset>
             </SidebarProvider>
           </ReactQueryProvider>
