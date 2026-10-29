@@ -5,8 +5,8 @@ import { getTodayTasks } from "@/lib/queries/task";
 import { getToday } from "@/lib/today";
 
 import UnfinishedBanner from "@/components/molecules/UnfinishedBanner";
-import TaskListSection from "@/components/organisms/TaskListSection";
 import TodayHeader from "@/components/organisms/TodayHeader";
+import TodayTaskSection from "@/components/organisms/TodayTaskSection";
 import { ScrollArea } from "@/components/ui/ScrollArea";
 
 export default async function Home() {
@@ -23,7 +23,7 @@ export default async function Home() {
 
         <UnfinishedBanner />
 
-        <TaskListSection initialTasks={tasks} />
+        <TodayTaskSection initialTasks={tasks} />
       </ScrollArea>
     </main>
   );

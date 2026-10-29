@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import currentProfile from "@/lib/profile";
 import { getTasks } from "@/lib/queries/task";
 
-import TaskList from "@/components/organisms/TaskList";
+import TaskListSection from "@/components/organisms/TaskListSection";
 import { Field } from "@/components/ui/Field";
 import {
   InputGroup,
@@ -12,7 +12,6 @@ import {
   InputGroupInput,
 } from "@/components/ui/InputGroup";
 import { ScrollArea } from "@/components/ui/ScrollArea";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 
 export default async function TasksPage() {
   const currentUser = await currentProfile();
@@ -20,9 +19,6 @@ export default async function TasksPage() {
   if (!currentUser) redirect("/sign-in");
 
   const tasks = await getTasks(currentUser.userID);
-
-  const activeTasks = tasks.filter((task) => !task.completed);
-  const completedTasks = tasks.filter((task) => task.completed);
 
   return (
     <main className="mx-auto flex min-h-0 w-full max-w-7xl flex-1 flex-col">
@@ -46,24 +42,7 @@ export default async function TasksPage() {
           </Field>
         </header>
 
-        <Tabs defaultValue="open">
-          <TabsList>
-            <TabsTrigger value="open">
-              <span>Open</span>
-              <span>{activeTasks.length}</span>
-            </TabsTrigger>
-            <TabsTrigger value="closed">
-              <span>Closed</span>
-              <span>{completedTasks.length}</span>
-            </TabsTrigger>
-          </TabsList>
-          <TabsContent value="open">
-            <TaskList tasks={activeTasks} />
-          </TabsContent>
-          <TabsContent value="closed">
-            <TaskList tasks={completedTasks} />
-          </TabsContent>
-        </Tabs>
+        <TaskListSection initialTasks={tasks} />
       </ScrollArea>
     </main>
   );

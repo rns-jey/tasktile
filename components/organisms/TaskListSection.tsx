@@ -4,10 +4,9 @@ import { TaskWithCategory } from "@/types";
 
 import { Skeleton } from "@/components/ui/Skeleton";
 
-import { useTodayTasks } from "@/hooks/useTasks";
+import { useTasks } from "@/hooks/useTasks";
 import { useState } from "react";
-import { Button } from "../ui/Button";
-import { Card, CardContent } from "../ui/Card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/Tabs";
 import TaskList from "./TaskList";
 
 interface TaskListSectionProps {
@@ -19,7 +18,7 @@ export default function TaskListSection({
 }: TaskListSectionProps) {
   const [visible, setVisible] = useState<boolean>(false);
 
-  const { data: tasks } = useTodayTasks(initialTasks);
+  const { data: tasks } = useTasks(initialTasks);
 
   if (!tasks)
     return (
@@ -37,77 +36,56 @@ export default function TaskListSection({
       </div>
     );
 
-  const activeTasks = tasks.filter((task) => !task.completed);
-  const completedTasks = tasks.filter((task) => task.completed);
+  const activeTasks = tasks
+    .filter((t) => !t.completed)
+    .sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt));
+
+  const completedTasks = tasks
+    .filter((t) => t.completed)
+    .sort((a, b) => +new Date(b.completedAt!) - +new Date(a.completedAt!));
 
   return (
-    // <div className="my-4 flex flex-col gap-4">
-    //   {/* Active Tasks */}
-    //   <div className="flex flex-col gap-3">
-    //     {activeTasks.length > 0 ? (
-    //       <ScrollArea
-    //         className={cn(activeTasks.length >= 5 ? "h-[300px]" : "h-fit")}
-    //       >
-    //         <div className="flex flex-col gap-2">
-    //           <AnimatePresence>
-    //             {activeTasks.map((task) => (
-    //               <TaskCard key={task.id} task={task} />
-    //             ))}
-    //           </AnimatePresence>
-    //         </div>
-    //       </ScrollArea>
-    //     ) : (
-    //       <p className="text-muted-foreground py-3 text-center text-sm">
-    //         No active tasks. Add a new task to get started!
-    //       </p>
-    //     )}
-    //   </div>
+    // <div className="flex flex-col">
+    //   <TaskList tasks={activeTasks} />
 
-    //   {/* Completed Tasks */}
-    //   <div className="flex flex-col gap-3">
-    //     <h2 className="font-semibold">Done today · {completedTasks.length}</h2>
+    //   <Card className="bg-paper-2 mx-2 my-4">
+    //     <CardContent className="flex items-center justify-between">
+    //       <span className="font-medium tracking-[.08em] uppercase">
+    //         DONE TODAY · {completedTasks.length}
+    //       </span>
 
-    //     {activeTasks.length > 0 ? (
-    //       <ScrollArea
-    //         className={cn(completedTasks.length >= 5 ? "h-[300px]" : "h-fit")}
+    //       <Button
+    //         variant={"ghost"}
+    //         type="button"
+    //         onClick={() => setVisible(!visible)}
+    //         className="text-accent text-[15px] font-semibold"
     //       >
-    //         <div className="flex flex-col gap-2">
-    //           {completedTasks.map((task) => (
-    //             <TaskCard key={task.id} task={task} />
-    //           ))}
-    //         </div>
-    //       </ScrollArea>
-    //     ) : (
-    //       <p className="text-muted-foreground py-3 text-center text-sm">
-    //         No completed tasks yet.
-    //       </p>
-    //     )}
+    //         {visible ? "Hide" : "Show"}
+    //       </Button>
+    //     </CardContent>
+    //   </Card>
+
+    //   <div hidden={!visible}>
+    //     <TaskList tasks={completedTasks} variant="compact" />
     //   </div>
     // </div>
-
-    <div className="flex flex-col">
-      <TaskList tasks={activeTasks} />
-
-      <Card className="bg-paper-2 mx-2 my-4">
-        <CardContent className="flex items-center justify-between">
-          <span className="font-medium tracking-[.08em] uppercase">
-            DONE TODAY · {completedTasks.length}
-          </span>
-
-          <Button
-            variant={"ghost"}
-            type="button"
-            onClick={() => setVisible(!visible)}
-            className="text-accent text-[15px] font-semibold"
-          >
-            {visible ? "Hide" : "Show"}
-          </Button>
-        </CardContent>
-      </Card>
-
-      <div hidden={!visible}>
-        <TaskList tasks={completedTasks} variant="compact" />
-      </div>
-    </div>
+    <Tabs defaultValue="open">
+      <TabsList>
+        <TabsTrigger value="open">
+          <span>Open</span>
+          <span>{activeTasks.length}</span>
+        </TabsTrigger>
+        <TabsTrigger value="closed">
+          <span>Closed</span>
+          <span>{completedTasks.length}</span>
+        </TabsTrigger>
+      </TabsList>
+      <TabsContent value="open">
+        <TaskList tasks={activeTasks} />
+      </TabsContent>
+      <TabsContent value="closed">
+        <TaskList tasks={completedTasks} />
+      </TabsContent>
+    </Tabs>
   );
 }

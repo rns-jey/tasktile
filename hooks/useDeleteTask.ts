@@ -16,14 +16,23 @@ export function useDeleteTask() {
   return function removeTask(task: TaskWithCategory) {
     flushPendingDeletes(); // send any earlier delete first
 
-    const list = queryClient.getQueryData<TaskWithCategory[]>(["tasks"]) ?? [];
-    const nextId = list[list.findIndex((t) => t.id === task.id) + 1]?.id;
+    // Remember the task below it, in each list
+    const snapshots = queryClient.getQueriesData<TaskWithCategory[]>({
+      queryKey: ["tasks"],
+    });
+    const neighbours = snapshots
+      .filter(([, list]) => list?.some((t) => t.id === task.id))
+      .map(([key, list = []]) => ({
+        key,
+        nextId: list[list.findIndex((t) => t.id === task.id) + 1]?.id,
+      }));
 
     pendingDeletes.add(task.id);
 
-    // Optimistically remove the task from cache immediately
-    queryClient.setQueryData<TaskWithCategory[]>(["tasks"], (old) =>
-      old?.filter((t) => t.id !== task.id),
+    // Optimistically remove the task from every list
+    queryClient.setQueriesData<TaskWithCategory[]>(
+      { queryKey: ["tasks"] },
+      (old) => old?.filter((t) => t.id !== task.id),
     );
 
     let undone = false;
@@ -55,15 +64,20 @@ export function useDeleteTask() {
       pendingDeletes.delete(task.id);
       pendingCommits.delete(task.id);
 
-      queryClient.setQueryData<TaskWithCategory[]>(["tasks"], (old = []) => {
-        const at = old.findIndex((t) => t.id === nextId);
-        const next = [...old];
-        next.splice(at < 0 ? next.length : at, 0, task);
-        return next;
+      neighbours.forEach(({ key, nextId }) => {
+        queryClient.setQueryData<TaskWithCategory[]>(key, (old = []) => {
+          const at = old.findIndex((t) => t.id === nextId);
+          const next = [...old];
+          next.splice(at < 0 ? next.length : at, 0, task);
+          return next;
+        });
       });
     };
 
+    pendingCommits.set(task.id, commit);
+
     toast("Task deleted", {
+      id: task.id,
       duration: 5000,
       position: "top-center",
       action: {

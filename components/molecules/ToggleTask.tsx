@@ -1,7 +1,8 @@
-import { localDay, localTz } from "@/lib/date";
-import { TaskWithCategory } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+
+import { localDay, localTz } from "@/lib/date";
+import { TaskWithCategory } from "@/types";
 import { Checkbox } from "../ui/Checkbox";
 
 export default function ToggleTask({ task }: { task: TaskWithCategory }) {
@@ -21,31 +22,35 @@ export default function ToggleTask({ task }: { task: TaskWithCategory }) {
       await queryClient.cancelQueries({ queryKey: ["tasks"] });
 
       // Snapshot previous value
-      const previousTasks = queryClient.getQueryData<TaskWithCategory[]>([
-        "tasks",
-      ]);
+      const previous = queryClient.getQueriesData<TaskWithCategory[]>({
+        queryKey: ["tasks"],
+      });
 
-      // Optimistically remove the task from cache immediately
-      queryClient.setQueryData<TaskWithCategory[]>(["tasks"], (old) =>
-        old?.map((t) =>
-          t.id === task.id
-            ? {
-                ...t,
-                completed: !t.completed,
-                completedAt: !t.completed ? new Date() : null,
-                completedOn: !t.completed
-                  ? new Date(`${localDay()}T00:00:00Z`)
-                  : null,
-              }
-            : t,
-        ),
+      // Optimistically toggle the task from cache immediately
+      queryClient.setQueriesData<TaskWithCategory[]>(
+        { queryKey: ["tasks"] },
+        (old) =>
+          old?.map((t) =>
+            t.id === task.id
+              ? {
+                  ...t,
+                  completed: !t.completed,
+                  completedAt: !t.completed ? new Date() : null,
+                  completedOn: !t.completed
+                    ? new Date(`${localDay()}T00:00:00Z`)
+                    : null,
+                }
+              : t,
+          ),
       );
 
-      return { previousTasks };
+      return { previous };
     },
     onError: (err, task, context) => {
       // Roll back on error
-      queryClient.setQueryData(["tasks"], context?.previousTasks);
+      context?.previous.forEach(([key, data]) =>
+        queryClient.setQueryData(key, data),
+      );
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
