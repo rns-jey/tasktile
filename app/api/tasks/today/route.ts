@@ -1,8 +1,9 @@
-import currentProfile from "@/lib/current-profile";
-import { getTodayTasks } from "@/lib/queries/task";
-import { getToday } from "@/lib/today";
 import { NextResponse } from "next/server";
 import { z } from "zod";
+
+import currentProfile from "@/lib/profile";
+import { getTodayTasks } from "@/lib/queries/task";
+import { getToday } from "@/lib/today";
 
 const daySchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
 

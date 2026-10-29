@@ -1,7 +1,8 @@
-import currentProfile from "@/lib/current-profile";
-import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 import { z } from "zod";
+
+import { db } from "@/lib/db";
+import currentProfile from "@/lib/profile";
 
 const bodySchema = z.object({
   name: z.string().min(3),

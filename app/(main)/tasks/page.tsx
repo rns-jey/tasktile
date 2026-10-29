@@ -1,3 +1,9 @@
+import { SearchIcon } from "lucide-react";
+import { redirect } from "next/navigation";
+
+import currentProfile from "@/lib/profile";
+import { getTasks } from "@/lib/queries/task";
+
 import TaskList from "@/components/organisms/TaskList";
 import { Field } from "@/components/ui/Field";
 import {
@@ -7,10 +13,6 @@ import {
 } from "@/components/ui/InputGroup";
 import { ScrollArea } from "@/components/ui/ScrollArea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
-import currentProfile from "@/lib/current-profile";
-import { getTasks } from "@/lib/queries/task";
-import { SearchIcon } from "lucide-react";
-import { redirect } from "next/navigation";
 
 export default async function TasksPage() {
   const currentUser = await currentProfile();

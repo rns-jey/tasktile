@@ -1,6 +1,7 @@
-import currentProfile from "@/lib/current-profile";
-import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
+
+import { db } from "@/lib/db";
+import currentProfile from "@/lib/profile";
 
 type tParams = Promise<{ categoryId: string }>;
 

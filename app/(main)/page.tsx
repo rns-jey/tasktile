@@ -1,11 +1,13 @@
+import { redirect } from "next/navigation";
+
+import currentProfile from "@/lib/profile";
+import { getTodayTasks } from "@/lib/queries/task";
+import { getToday } from "@/lib/today";
+
 import UnfinishedBanner from "@/components/molecules/UnfinishedBanner";
 import TaskListSection from "@/components/organisms/TaskListSection";
 import TodayHeader from "@/components/organisms/TodayHeader";
 import { ScrollArea } from "@/components/ui/ScrollArea";
-import currentProfile from "@/lib/current-profile";
-import { getTodayTasks } from "@/lib/queries/task";
-import { getToday } from "@/lib/today";
-import { redirect } from "next/navigation";
 
 export default async function Home() {
   const currentUser = await currentProfile();

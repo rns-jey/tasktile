@@ -1,4 +1,9 @@
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import React from "react";
+
+import { dayInTz } from "@/lib/date";
+import currentProfile from "@/lib/profile";
 
 import AppSidebar from "@/components/organisms/AppSidebar";
 import MobileNav from "@/components/organisms/MobileNav";
@@ -6,15 +11,18 @@ import ReactQueryProvider from "@/components/providers/ReactQueryProvider";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import TimezoneSync from "@/components/providers/TimezoneSync";
 import { TodayProvider } from "@/components/providers/TodayProvider";
+import { UserProvider } from "@/components/providers/UserProvider";
 import { SidebarInset, SidebarProvider } from "@/components/ui/Sidebar";
-import { dayInTz } from "@/lib/date";
-import { cookies } from "next/headers";
 
 export default async function MainLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const currentUser = await currentProfile();
+
+  if (!currentUser) redirect("/sign-in");
+
   const tz = (await cookies()).get("tz")?.value ?? "UTC";
 
   return (
@@ -25,18 +33,20 @@ export default async function MainLayout({
       disableTransitionOnChange
     >
       <TodayProvider todayKey={dayInTz(tz)}>
-        <ReactQueryProvider>
-          <TimezoneSync />
-          <SidebarProvider>
-            <AppSidebar />
+        <UserProvider user={currentUser}>
+          <ReactQueryProvider>
+            <TimezoneSync />
+            <SidebarProvider>
+              <AppSidebar />
 
-            <SidebarInset className="flex h-dvh w-full flex-col overflow-hidden">
-              {children}
+              <SidebarInset className="flex h-dvh w-full flex-col overflow-hidden">
+                {children}
 
-              <MobileNav />
-            </SidebarInset>
-          </SidebarProvider>
-        </ReactQueryProvider>
+                <MobileNav />
+              </SidebarInset>
+            </SidebarProvider>
+          </ReactQueryProvider>
+        </UserProvider>
       </TodayProvider>
     </ThemeProvider>
   );

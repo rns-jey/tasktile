@@ -1,9 +1,10 @@
-import { categColors } from "@/lib/colors";
-import currentProfile from "@/lib/current-profile";
-import { db } from "@/lib/db";
-import { Prisma } from "@/lib/generated/prisma/client";
 import { NextResponse } from "next/server";
 import { z } from "zod";
+
+import { categColors } from "@/lib/colors";
+import { db } from "@/lib/db";
+import { Prisma } from "@/lib/generated/prisma/client";
+import currentProfile from "@/lib/profile";
 
 const bodySchema = z.object({
   name: z.string().trim().min(2, "Category name is required"),
