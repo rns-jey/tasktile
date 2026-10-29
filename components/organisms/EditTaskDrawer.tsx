@@ -8,6 +8,7 @@ import { flushPendingDeletes, useDeleteTask } from "@/hooks/useDeleteTask";
 import { taskFormSchema, TaskFormValues } from "@/lib/schemas/task";
 import { TaskWithCategory } from "@/types";
 
+import { fromDbDay } from "@/lib/date";
 import TaskMeta from "../molecules/TaskMeta";
 import { Drawer, DrawerContent, DrawerTrigger } from "../ui/Drawer";
 import NewCategoryForm from "./NewCategoryForm";
@@ -26,7 +27,7 @@ export default function EditTaskDrawer({ task }: { task: TaskWithCategory }) {
       name: name,
       description: description,
       categoryId: categoryId,
-      dueDate: dueDate ? new Date(dueDate) : null,
+      dueDate: dueDate ? fromDbDay(dueDate) : null,
     },
   });
 

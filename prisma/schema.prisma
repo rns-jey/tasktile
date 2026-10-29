@@ -31,7 +31,7 @@ model Task {
   name String
   description String @default("")
   completed Boolean @default(false)
-  dueDate DateTime?
+  dueDate DateTime? @db.Date
 
   userId String
   user Profile @relation(fields: [userId], references: [userID])

@@ -1,15 +1,18 @@
 "use client";
 
 import { useTodayTasks } from "@/hooks/useTasks";
+import { fromDbDay } from "@/lib/date";
 import { TaskWithCategory } from "@/types";
 import { format } from "date-fns";
+import { useTodayKey } from "../providers/TodayProvider";
 
 export default function TodayHeader({
   initialTasks,
 }: {
   initialTasks: TaskWithCategory[];
 }) {
-  const today = new Date();
+  const todayKey = useTodayKey();
+  const today = fromDbDay(`${todayKey}T00:00:00Z`);
 
   const { data: tasks } = useTodayTasks(initialTasks);
 

@@ -2,9 +2,14 @@ import { cn, formatDueDate } from "@/lib/utils";
 import { TaskWithCategory } from "@/types";
 import { AlignLeftIcon } from "lucide-react";
 import { Fragment } from "react";
+import { useTodayKey } from "../providers/TodayProvider";
 
 export default function TaskMeta({ task }: { task: TaskWithCategory }) {
-  const due = task.dueDate ? formatDueDate(task.dueDate) : null;
+  const todayKey = useTodayKey();
+
+  const due = task.dueDate ? formatDueDate(task.dueDate, todayKey) : null;
+  // const close = task.completedOn ? fo
+  const isCompleted = task.completed;
 
   const items = [
     task.category && (
@@ -16,7 +21,7 @@ export default function TaskMeta({ task }: { task: TaskWithCategory }) {
         <span className="truncate">{task.category.name}</span>
       </span>
     ),
-    due && (
+    due && !isCompleted && (
       <span
         className={cn(
           due.overdue

@@ -1,6 +1,6 @@
 import UnfinishedBanner from "@/components/molecules/UnfinishedBanner";
-import AppHeader from "@/components/organisms/AppHeader";
 import TaskListSection from "@/components/organisms/TaskListSection";
+import TodayHeader from "@/components/organisms/TodayHeader";
 import { ScrollArea } from "@/components/ui/ScrollArea";
 import currentProfile from "@/lib/current-profile";
 import { getTodayTasks } from "@/lib/queries/task";
@@ -17,7 +17,7 @@ export default async function Home() {
   return (
     <main className="mx-auto flex min-h-0 w-full max-w-7xl flex-1 flex-col">
       <ScrollArea className="min-h-0 flex-1 p-4">
-        <AppHeader initialTasks={tasks} />
+        <TodayHeader initialTasks={tasks} />
 
         <UnfinishedBanner />
 
