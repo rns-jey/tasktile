@@ -41,11 +41,8 @@ export default async function MainLayout({
               <AppSidebar />
 
               <SidebarInset className="flex h-dvh w-full flex-col overflow-hidden">
-                <ContentShell>
-                  {children}
-
-                  <MobileNav />
-                </ContentShell>
+                <ContentShell>{children}</ContentShell>
+                <MobileNav />
               </SidebarInset>
             </SidebarProvider>
           </ReactQueryProvider>
