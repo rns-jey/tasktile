@@ -8,6 +8,14 @@ export function getCategories(userId: string) {
   });
 }
 
+export function getCategoriesCount(userId: string) {
+  return db.category.count({
+    where: {
+      userId: userId,
+    },
+  });
+}
+
 export async function getCategoryWithCounts(userId: string) {
   const categories = await db.category.findMany({
     where: {

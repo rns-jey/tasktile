@@ -1,16 +1,19 @@
+import SignOutSection from "@/components/molecules/SignOutSection";
 import ThemeSettings from "@/components/organisms/ThemeSettings";
 import { Button } from "@/components/ui/Button";
-import { authClient } from "@/lib/auth/client";
+import currentProfile from "@/lib/profile";
+import { getCategoriesCount } from "@/lib/queries/categories";
 import { ChevronRight, LayoutGridIcon } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Fragment } from "react";
 
-export default function SettingsPage() {
-  const handleSignOut = async () => {
-    await authClient.signOut();
-    redirect("/sign-in");
-  };
+export default async function SettingsPage() {
+  const currentUser = await currentProfile();
+
+  if (!currentUser) redirect("/sign-in");
+
+  const categories = await getCategoriesCount(currentUser.userID);
 
   return (
     <Fragment>
@@ -40,7 +43,7 @@ export default function SettingsPage() {
 
           <div className="flex items-center gap-1">
             <span className="leading-none [text-box:trim-both_cap_alphabetic]">
-              104
+              {categories}
             </span>
             <ChevronRight />
           </div>
@@ -49,20 +52,7 @@ export default function SettingsPage() {
 
       <ThemeSettings />
 
-      <div>
-        <p className="text-label text-muted-2 mx-2 mt-6 mb-2 font-medium tracking-[.08em] uppercase">
-          App
-        </p>
-
-        <Button
-          variant={"ghost"}
-          type="button"
-          className="flex h-11 w-full justify-start bg-white text-base"
-          onClick={handleSignOut}
-        >
-          Sign out
-        </Button>
-      </div>
+      <SignOutSection />
     </Fragment>
   );
 }
