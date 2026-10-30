@@ -32,20 +32,20 @@ export default function CategoryButtons({
     );
 
   return (
-    <div className="mt-5.5 rounded-lg border bg-white px-4">
+    <div className="mt-5.5 flex flex-col rounded-lg border bg-white px-4">
       <AnimatePresence initial={false}>
         {categories.map((c) => (
-          <motion.button
+          <motion.div
             key={c.id}
             layout
             initial={{ x: -100, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: 100, opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className="border-line flex h-15 w-full cursor-pointer items-center justify-between border-b text-left last:border-0"
+            className="border-line cursor-pointer border-b last:border-0"
           >
             <CategoryCard category={c} />
-          </motion.button>
+          </motion.div>
         ))}
       </AnimatePresence>
     </div>

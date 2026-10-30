@@ -7,7 +7,6 @@ import { Fragment, useState } from "react";
 import { Controller, UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
 
-import { useCategories } from "@/hooks/useCategories";
 import { CategColor, categColors } from "@/lib/colors";
 import { Category } from "@/lib/generated/prisma/client";
 import { CategoryFormValues } from "@/lib/schemas/categories";
@@ -41,10 +40,11 @@ export default function CategoryForm({
   setOpen,
   onDelete,
 }: CategoryFormProps) {
-  const [selected, setselected] = useState<CategColor>(categColors[0]);
-  const isEditing = Boolean(category);
+  const [selected, setSelected] = useState<CategColor>(
+    () => categColors.find((c) => c === category?.color) ?? categColors[0],
+  );
 
-  const { data: categories } = useCategories();
+  const isEditing = Boolean(category);
 
   const name = form.watch("name");
 
@@ -87,19 +87,26 @@ export default function CategoryForm({
       );
       return response.data;
     },
-    onError: () => toast.error("Couldn't save task"),
+    onError: (error) => {
+      if (axios.isAxiosError(error) && error.response?.status === 409) {
+        form.setError("name", {
+          message: "You already have a category with that name",
+        });
+      } else {
+        toast.error("Couldn't create category");
+      }
+    },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["tasks"] }); // Wait for refetch to complete
+      await queryClient.invalidateQueries({ queryKey: ["categories"] }); // Wait for refetch to complete
       setOpen(false);
     },
   });
 
   function onSubmit(values: CategoryFormValues) {
-    if (isEditing) {
-      updateCategory.mutate({ ...values, color: selected });
-    } else {
-      updateCategory.mutate({ ...values, color: selected });
-    }
+    const payload = { ...values, color: selected };
+
+    if (isEditing) updateCategory.mutate(payload);
+    else addCategory.mutate(payload);
   }
 
   const formPending = addCategory.isPending || updateCategory.isPending;
@@ -171,12 +178,13 @@ export default function CategoryForm({
                     key={color}
                     type="button"
                     aria-pressed={selected === color}
+                    disabled={formPending}
                     className={cn(
                       selected === color && "ring-2 ring-black ring-offset-2",
                       "flex h-14 w-14 cursor-pointer items-center justify-center rounded-md",
                     )}
                     style={{ backgroundColor: color }}
-                    onClick={() => !formPending && setselected(color)}
+                    onClick={() => setSelected(color)}
                   >
                     {selected === color && <Check className="text-white" />}
                   </Button>
@@ -185,24 +193,6 @@ export default function CategoryForm({
             </div>
           </FieldGroup>
         </form>
-
-        {isEditing && (
-          <>
-            <Separator className="my-2" />
-
-            <DrawerClose asChild>
-              <Button
-                className="h-11 w-full cursor-pointer"
-                variant="destructive"
-                type="button"
-                onClick={onDelete}
-                disabled={formPending}
-              >
-                Delete task
-              </Button>
-            </DrawerClose>
-          </>
-        )}
       </div>
 
       <DrawerFooter>
@@ -243,6 +233,24 @@ export default function CategoryForm({
             </div>
           </div>
         </div>
+
+        {isEditing && (
+          <>
+            <Separator className="my-2" />
+
+            <DrawerClose asChild>
+              <Button
+                className="h-11 w-full cursor-pointer"
+                variant="destructive"
+                type="button"
+                onClick={onDelete}
+                disabled={formPending}
+              >
+                Delete category
+              </Button>
+            </DrawerClose>
+          </>
+        )}
       </DrawerFooter>
     </Fragment>
   );
