@@ -1,7 +1,8 @@
+import CategoryButtons from "@/components/organisms/CategoryButtons";
 import { Button } from "@/components/ui/Button";
 import currentProfile from "@/lib/profile";
 import { getCategoryWithCounts } from "@/lib/queries/categories";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import { redirect } from "next/navigation";
 import { Fragment } from "react";
 
@@ -11,8 +12,6 @@ export default async function CategoriesPage() {
   if (!currentUser) redirect("/sign-in");
 
   const categories = await getCategoryWithCounts(currentUser.userID);
-
-  console.log(categories);
 
   return (
     <Fragment>
@@ -30,35 +29,7 @@ export default async function CategoriesPage() {
         </p>
       </header>
 
-      <div className="mt-5.5 rounded-lg border bg-white px-4">
-        {categories.sort().map((category) => (
-          <button
-            key={category.id}
-            className="border-line flex h-15 w-full cursor-pointer items-center justify-between border-b text-left last:border-0"
-          >
-            <div className="flex items-center gap-3.5">
-              <span
-                className="size-7 shrink-0 rounded-[7px]"
-                style={{ backgroundColor: category.color }}
-              />
-
-              <div className="flex flex-col">
-                <span className="text-task flex-1 font-medium">
-                  {category.name}
-                </span>
-
-                {category.openCount !== 0 && (
-                  <span className="text-muted-2 text-xs">
-                    {category.openCount} open
-                  </span>
-                )}
-              </div>
-            </div>
-
-            <ChevronRight className="text-subtle w-5 text-xl" />
-          </button>
-        ))}
-      </div>
+      <CategoryButtons initialCategories={categories} />
 
       <Button
         type="button"
