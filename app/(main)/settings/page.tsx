@@ -1,23 +1,12 @@
-"use client";
-
+import ThemeSettings from "@/components/organisms/ThemeSettings";
 import { Button } from "@/components/ui/Button";
 import { authClient } from "@/lib/auth/client";
-import { cn } from "@/lib/utils";
 import { ChevronRight, LayoutGridIcon } from "lucide-react";
-import { useTheme } from "next-themes";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment } from "react";
 
 export default function SettingsPage() {
-  const themes = ["system", "light", "dark"] as const;
-  const { theme, setTheme } = useTheme();
-
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-
-  const active = mounted ? theme : undefined;
-
   const handleSignOut = async () => {
     await authClient.signOut();
     redirect("/sign-in");
@@ -58,29 +47,7 @@ export default function SettingsPage() {
         </Button>
       </div>
 
-      <div>
-        <p className="text-label text-muted-2 mx-2 mt-6 mb-2 font-medium tracking-[.08em] uppercase">
-          Appearance
-        </p>
-
-        <div className="bg-paper-2 flex w-full rounded-lg p-0.5">
-          {themes.map((t) => (
-            <Button
-              key={t}
-              variant={"ghost"}
-              type="button"
-              className={cn(
-                "h-10 flex-1 capitalize",
-                active === t && "bg-white",
-              )}
-              aria-pressed={active === t}
-              onClick={() => setTheme(t)}
-            >
-              {t}
-            </Button>
-          ))}
-        </div>
-      </div>
+      <ThemeSettings />
 
       <div>
         <p className="text-label text-muted-2 mx-2 mt-6 mb-2 font-medium tracking-[.08em] uppercase">
