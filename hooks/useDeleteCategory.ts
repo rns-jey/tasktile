@@ -22,10 +22,10 @@ export function useDeleteCategory() {
     });
 
     const neighbours = snapshots
-      .filter(([, list]) => list?.some((c) => c.id === c.id))
+      .filter(([, list]) => list?.some((c) => c.id === category.id))
       .map(([key, list = []]) => ({
         key,
-        nextId: list[list.findIndex((c) => c.id === c.id) + 1]?.id,
+        nextId: list[list.findIndex((c) => c.id === category.id) + 1]?.id,
       }));
 
     pendingDeletes.add(category.id);
