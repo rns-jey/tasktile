@@ -1,22 +1,16 @@
-import { NextResponse } from "next/server";
-
-import { db } from "@/lib/db";
 import currentProfile from "@/lib/profile";
+import { getCategories, getCategoryWithCounts } from "@/lib/queries/categories";
 
+// app/api/categories/route.ts
 export async function GET(req: Request) {
-  try {
-    const profile = await currentProfile();
+  const currentUser = await currentProfile();
+  if (!currentUser) return new Response("Unauthorized", { status: 401 });
 
-    if (!profile) return new NextResponse("Unauthorized", { status: 401 });
+  const withCounts = new URL(req.url).searchParams.get("counts") === "true";
 
-    const categories = await db.category.findMany({
-      where: { userId: profile.userID },
-      orderBy: [{ createdAt: "desc" }],
-    });
+  const categories = withCounts
+    ? await getCategoryWithCounts(currentUser.userID)
+    : await getCategories(currentUser.userID);
 
-    return NextResponse.json(categories);
-  } catch (error) {
-    console.log(error);
-    return new NextResponse("Internal Server Error", { status: 500 });
-  }
+  return Response.json(categories);
 }
