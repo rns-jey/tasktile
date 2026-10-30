@@ -1,5 +1,5 @@
 import CategoryButtons from "@/components/organisms/CategoryButtons";
-import { Button } from "@/components/ui/Button";
+import NewCategoryDrawer from "@/components/organisms/NewCategoryDrawer";
 import currentProfile from "@/lib/profile";
 import { getCategoryWithCounts } from "@/lib/queries/categories";
 import { ChevronLeft } from "lucide-react";
@@ -31,16 +31,7 @@ export default async function CategoriesPage() {
 
       <CategoryButtons initialCategories={categories} />
 
-      <Button
-        type="button"
-        variant={"outline"}
-        className="mt-2.5 flex h-14 w-full cursor-pointer items-center justify-start gap-3.5 px-4"
-      >
-        <span className="ring-stroke text-muted grid size-7 place-items-center rounded-[7px] text-xl ring-[1.5px] ring-inset">
-          +
-        </span>
-        <span className="text-task font-medium">New category</span>
-      </Button>
+      <NewCategoryDrawer />
 
       <p className="text-meta text-muted-2 px-5 pt-4 leading-[1.45]">
         Swipe left on a category to delete it…
