@@ -2,6 +2,7 @@ import { Category } from "@/lib/generated/prisma/client";
 import { CategoryWithCounts } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { isPendingDelete } from "./useDeleteCategory";
 
 export function useCategories() {
   return useQuery<Category[]>({
@@ -24,6 +25,7 @@ export function useCategoriesWithCount(
       return response.data;
     },
     initialData: initialCategories,
+    select: (categories) => categories.filter((c) => !isPendingDelete(c.id)),
     staleTime: 60 * 1000,
   });
 }
