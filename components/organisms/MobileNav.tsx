@@ -44,7 +44,7 @@ function NavLink({ href, label, icon: Icon }: NavItem) {
 
 export default function MobileNav() {
   return (
-    <nav className="bg-paper-2 shrink-0 border-t pt-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] md:hidden">
+    <nav className="bg-paper-2 mt-4 shrink-0 border-t pt-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] md:hidden">
       <ul className="grid grid-cols-5 px-4">
         {navItems.slice(0, 2).map((item) => (
           <NavLink key={item.href} {...item} />

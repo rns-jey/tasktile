@@ -39,6 +39,7 @@ export default function SettingsPage() {
         <Button
           className="flex h-11 w-full items-center justify-between bg-white text-base"
           variant={"outline"}
+          nativeButton={false}
           render={<Link href="/settings/categories" />}
         >
           <div className="flex items-center gap-1">
