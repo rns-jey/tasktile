@@ -65,6 +65,10 @@ export default function TaskForm({
       await queryClient.invalidateQueries({ queryKey: ["tasks"] }); // Wait for refetch to complete
       form.reset();
       setOpen(false);
+
+      toast.success("Task created", {
+        position: "top-center",
+      });
     },
   });
 
@@ -77,6 +81,9 @@ export default function TaskForm({
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["tasks"] }); // Wait for refetch to complete
       setOpen(false);
+      toast.success("Task updated", {
+        position: "top-center",
+      });
     },
   });
 
