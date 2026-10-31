@@ -70,7 +70,7 @@ export default function TaskListSection({
     //   </div>
     // </div>
     <Tabs defaultValue="open">
-      <TabsList>
+      <TabsList className="w-full">
         <TabsTrigger value="open">
           <span>Open</span>
           <span>{activeTasks.length}</span>
