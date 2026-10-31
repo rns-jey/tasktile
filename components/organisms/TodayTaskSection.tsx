@@ -44,26 +44,30 @@ export default function TodayTaskSection({
     <div className="flex flex-col">
       <TaskList tasks={activeTasks} />
 
-      <Card className="bg-paper-2 mx-2 my-4">
-        <CardContent className="flex items-center justify-between">
-          <span className="font-medium tracking-[.08em] uppercase">
-            DONE TODAY · {completedTasks.length}
-          </span>
+      {completedTasks.length !== 0 && (
+        <>
+          <Card className="bg-paper-2 mx-2 my-4">
+            <CardContent className="flex items-center justify-between">
+              <span className="font-medium tracking-[.08em] uppercase">
+                DONE TODAY · {completedTasks.length}
+              </span>
 
-          <Button
-            variant={"ghost"}
-            type="button"
-            onClick={() => setVisible(!visible)}
-            className="text-accent text-[15px] font-semibold"
-          >
-            {visible ? "Hide" : "Show"}
-          </Button>
-        </CardContent>
-      </Card>
+              <Button
+                variant={"ghost"}
+                type="button"
+                onClick={() => setVisible(!visible)}
+                className="text-accent text-[15px] font-semibold"
+              >
+                {visible ? "Hide" : "Show"}
+              </Button>
+            </CardContent>
+          </Card>
 
-      <div hidden={!visible}>
-        <TaskList tasks={completedTasks} variant="compact" />
-      </div>
+          <div hidden={!visible}>
+            <TaskList tasks={completedTasks} variant="compact" />
+          </div>
+        </>
+      )}
     </div>
   );
 }
