@@ -13,7 +13,7 @@ export default async function SettingsPage() {
 
   if (!currentUser) redirect("/sign-in");
 
-  const categories = await getCategoriesCount(currentUser.userID);
+  const categoryCount = await getCategoriesCount(currentUser.userID);
 
   return (
     <Fragment>
@@ -43,7 +43,7 @@ export default async function SettingsPage() {
 
           <div className="flex items-center gap-1">
             <span className="leading-none [text-box:trim-both_cap_alphabetic]">
-              {categories}
+              {categoryCount}
             </span>
             <ChevronRight />
           </div>
