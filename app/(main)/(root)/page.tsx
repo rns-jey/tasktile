@@ -4,7 +4,6 @@ import currentProfile from "@/lib/profile";
 import { getTodayTasks } from "@/lib/queries/task";
 import { getToday } from "@/lib/today";
 
-import UnfinishedBanner from "@/components/molecules/UnfinishedBanner";
 import TodayHeader from "@/components/organisms/TodayHeader";
 import TodayTaskSection from "@/components/organisms/TodayTaskSection";
 import { Fragment } from "react";
@@ -20,7 +19,7 @@ export default async function Home() {
     <Fragment>
       <TodayHeader initialTasks={tasks} />
 
-      <UnfinishedBanner />
+      {/* <UnfinishedBanner /> */}
 
       <TodayTaskSection initialTasks={tasks} />
     </Fragment>

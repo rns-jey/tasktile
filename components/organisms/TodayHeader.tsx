@@ -24,14 +24,16 @@ export default function TodayHeader({
       <div>
         <h1 className="flex flex-col">
           <span className="text-meta text-muted-2 font-medium tracking-[.08em] uppercase">
-            {format(today, "eeee").toUpperCase()}
+            {format(today, "eeee")}
           </span>
           <span className="font-display text-display-lg">
             {format(today, "LLLL d")}
           </span>
         </h1>
-        <p className="text-body text-muted">
-          {completedTasks ? completedTasks.length : 0} done today ·
+        <p className="text-body text-muted flex gap-1">
+          {completedTasks ? completedTasks.length : 0}
+          <span>done today</span>
+          <span>·</span>
           {activeTasks ? activeTasks.length : 0} open
         </p>
       </div>
