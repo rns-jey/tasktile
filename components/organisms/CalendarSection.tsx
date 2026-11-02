@@ -158,13 +158,15 @@ export default function CalendarSection({ stats }: { stats: DayStat[] }) {
               )}
             />
             <div>
-              <p>
+              <p className="text-meta text-muted font-medium">
                 {format(
                   parse(selected, "yyyy-MM-dd", new Date()),
                   "EEE d MMMM",
                 )}
               </p>
-              <p>{selectedDay?.completed} completed</p>
+              <p className="font-display text-[26px]">
+                {selectedDay?.completed} completed
+              </p>
             </div>
           </div>
           <Button variant="ghost">View</Button>

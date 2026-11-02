@@ -15,7 +15,7 @@ export default async function Analytics() {
 
   return (
     <Fragment>
-      <header className="flex gap-10 pb-4">
+      <header className="flex gap-5 pb-4">
         <h1 className="flex flex-col">
           <p className="font-display text-display-lg">6</p>
           <p className="text-body text-muted flex gap-1">day streak</p>
