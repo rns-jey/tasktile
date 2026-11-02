@@ -29,3 +29,17 @@ export function getTasks(userId: string) {
     orderBy: [{ createdAt: "desc" }],
   });
 }
+
+export function getTaskCount(userId: string) {
+  return db.task.groupBy({
+    by: ["completedOn"],
+    where: {
+      userId: userId,
+      completed: true,
+    },
+    _count: {
+      completed: true,
+    },
+    orderBy: [{ completedOn: "desc" }],
+  });
+}

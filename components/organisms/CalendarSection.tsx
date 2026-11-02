@@ -1,5 +1,6 @@
 "use client";
 
+import { heatClass } from "@/lib/colors";
 import { cn } from "@/lib/utils";
 import {
   addMonths,
@@ -8,7 +9,6 @@ import {
   endOfMonth,
   endOfWeek,
   format,
-  isSameDay,
   isSameMonth,
   parse,
   startOfMonth,
@@ -21,13 +21,39 @@ import { useTodayKey } from "../providers/TodayProvider";
 import { Button } from "../ui/Button";
 import { Card, CardContent } from "../ui/Card";
 
-interface DayData {
+type DayData = {
   date: Date;
   key: string;
   isCurrentMonth: boolean;
-}
+  completed: number;
+};
 
-export default function CalendarSection() {
+type DayStat = {
+  _count: { completed: number };
+  completedOn: Date | string | null;
+};
+
+const legends = [
+  { color: "bg-[#ebe5de]", count: "0" },
+  { color: "bg-[#f3cbb5]", count: "1-3" },
+  { color: "bg-[#eb9a75]", count: "4-6" },
+  { color: "bg-[#cf6139]", count: "7-9" },
+  { color: "bg-[#963118]", count: "10+" },
+];
+
+export default function CalendarSection({ stats }: { stats: DayStat[] }) {
+  const countsByDay = useMemo(() => {
+    const map = new Map<string, number>();
+    for (const s of stats) {
+      if (!s.completedOn) continue;
+      map.set(
+        new Date(s.completedOn).toISOString().slice(0, 10),
+        s._count.completed,
+      );
+    }
+    return map;
+  }, [stats]);
+
   const weekDays = ["M", "T", "W", "TH", "F", "S", "S"];
 
   const todayKey = useTodayKey();
@@ -53,10 +79,13 @@ export default function CalendarSection() {
           date,
           key,
           isCurrentMonth: isSameMonth(date, currentMonth),
+          completed: countsByDay.get(key) ?? 0,
         };
       }),
     [currentMonth],
   );
+
+  const selectedDay = days.find((d) => d.key === selected);
 
   return (
     <div className="space-y-2 px-2">
@@ -104,10 +133,13 @@ export default function CalendarSection() {
               disabled={differenceInCalendarDays(day.date, today) > 0}
               className={cn(
                 !isSameMonth(day.date, currentMonth) && "text-muted",
-                isSameDay(day.date, today) && "ring-2",
-                isSameDay(day.date, selected) && "ring-2 ring-offset-2",
-                "flex h-full w-full items-start justify-start pt-1 text-xs",
+                day.key === todayKey && "ring-2",
+                day.key === selected && "ring-2 ring-offset-2",
+                "flex h-full w-full items-start justify-start pt-1 text-xs ring-black",
+                differenceInCalendarDays(today, day.date) > 0 &&
+                  heatClass(day.completed),
               )}
+
               onClick={() => setSelected(day.key)}
             >
               {day.date.getDate()}
@@ -119,7 +151,12 @@ export default function CalendarSection() {
       <Card>
         <CardContent className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="size-10 shrink-0 rounded-[7px] bg-red-500" />
+            <div
+              className={cn(
+                heatClass(selectedDay?.completed ?? 0),
+                "size-10 shrink-0 rounded-[7px]",
+              )}
+            />
             <div>
               <p>
                 {format(
@@ -127,12 +164,24 @@ export default function CalendarSection() {
                   "EEE d MMMM",
                 )}
               </p>
-              <p>3 completed</p>
+              <p>{selectedDay?.completed} completed</p>
             </div>
           </div>
           <Button variant="ghost">View</Button>
         </CardContent>
       </Card>
+
+      <div className="flex gap-2">
+        <span>Tasks done</span>
+        {legends.map((legend) => (
+          <div key={legend.color} className="flex flex-col items-center">
+            <div
+              className={cn("size-6 shrink-0 rounded-[5px]", legend.color)}
+            />
+            <p className="text-xs">{legend.count}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
