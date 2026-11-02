@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  LayoutGridIcon,
-  ListIcon,
-  SettingsIcon,
-  SquareIcon,
-} from "lucide-react";
+import { LayoutGridIcon, ListIcon, SettingsIcon, Sun } from "lucide-react";
 import NextLink from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -13,7 +8,7 @@ import { cn } from "@/lib/utils";
 import NewTaskDrawer from "./NewTaskDrawer";
 
 const navItems = [
-  { href: "/", label: "Today", icon: SquareIcon },
+  { href: "/", label: "Today", icon: Sun },
   { href: "/tasks", label: "Tasks", icon: ListIcon },
   { href: "/analytics", label: "Analytics", icon: LayoutGridIcon },
   { href: "/settings", label: "Settings", icon: SettingsIcon },
@@ -31,8 +26,8 @@ function NavLink({ href, label, icon: Icon }: NavItem) {
         href={href}
         aria-current={active ? "page" : undefined}
         className={cn(
-          "flex flex-col items-center gap-1",
-          active ? "text-task" : "text-muted",
+          "my-1 flex flex-col items-center gap-1 rounded-2xl p-1",
+          active ? "text-task bg-muted/20" : "text-muted",
         )}
       >
         <Icon size={24} />
@@ -44,18 +39,20 @@ function NavLink({ href, label, icon: Icon }: NavItem) {
 
 export default function MobileNav() {
   return (
-    <nav className="bg-paper-2 mt-4 shrink-0 border-t pt-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] md:hidden">
-      <ul className="grid grid-cols-5 px-4">
-        {navItems.slice(0, 2).map((item) => (
-          <NavLink key={item.href} {...item} />
-        ))}
-        <li className="-mt-8 flex items-center justify-center">
-          <NewTaskDrawer />
-        </li>
-        {navItems.slice(2).map((item) => (
-          <NavLink key={item.href} {...item} />
-        ))}
-      </ul>
-    </nav>
+    <div className="z-50 px-2 pb-[max(1rem,env(safe-area-inset-bottom))]">
+      <nav className="bg-paper-2 shrink-0 rounded-2xl border-t p-1 md:hidden">
+        <ul className="grid grid-cols-5 gap-2">
+          {navItems.slice(0, 2).map((item) => (
+            <NavLink key={item.href} {...item} />
+          ))}
+          <li className="-mt-6 flex items-center justify-center">
+            <NewTaskDrawer />
+          </li>
+          {navItems.slice(2).map((item) => (
+            <NavLink key={item.href} {...item} />
+          ))}
+        </ul>
+      </nav>
+    </div>
   );
 }
