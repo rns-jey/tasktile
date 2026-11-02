@@ -27,6 +27,6 @@ export const config = {
   matcher: [
     // Protected routes requiring authentication
     // "/account/:path*",
-    "/",
+    "/((?!api|_next/static|_next/image|favicon.ico).*)",
   ],
 };
