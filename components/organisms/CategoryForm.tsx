@@ -238,17 +238,19 @@ export default function CategoryForm({
           <>
             <Separator className="my-2" />
 
-            <DrawerClose asChild>
-              <Button
-                className="h-11 w-full cursor-pointer"
-                variant="destructive"
-                type="button"
-                onClick={onDelete}
-                disabled={formPending}
-              >
-                Delete category
-              </Button>
-            </DrawerClose>
+            <DrawerClose
+              render={
+                <Button
+                  className="h-11 w-full cursor-pointer"
+                  variant="destructive"
+                  type="button"
+                  onClick={onDelete}
+                  disabled={formPending}
+                >
+                  Delete category
+                </Button>
+              }
+            />
           </>
         )}
       </DrawerFooter>

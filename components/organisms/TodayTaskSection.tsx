@@ -24,7 +24,6 @@ export default function TodayTaskSection({
   if (!tasks)
     return (
       <div className="my-4 flex flex-col gap-4">
-        {/* Active Tasks */}
         <div className="flex flex-col gap-3">
           <Skeleton className="h-5 w-16" />
 

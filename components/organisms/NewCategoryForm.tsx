@@ -109,9 +109,7 @@ export default function NewCategoryForm({
       <div className="flex items-center gap-2 px-4">
         <form
           id="form-add-category"
-          onSubmit={form.handleSubmit(onSubmit, (errors) =>
-            console.log("Validation errors:", errors),
-          )}
+          onSubmit={form.handleSubmit(onSubmit)}
           className="w-full"
         >
           <FieldGroup>

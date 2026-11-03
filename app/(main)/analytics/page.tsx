@@ -12,8 +12,6 @@ export default async function Analytics() {
 
   const stats = await getTaskCount(currentUser.userID);
 
-  console.log("Task count : ", stats);
-
   return (
     <Fragment>
       <AnalyticsHeader stats={stats} />
