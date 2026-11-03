@@ -34,11 +34,13 @@ export default function NewTaskDrawer() {
         if (!next) setNewCateg(false);
       }}
     >
-      <DrawerTrigger asChild>
-        <Button className="h-16 w-16 rounded-2xl">
-          <PlusIcon />
-        </Button>
-      </DrawerTrigger>
+      <DrawerTrigger
+        render={
+          <Button className="h-16 w-16 rounded-2xl">
+            <PlusIcon />
+          </Button>
+        }
+      />
       <DrawerContent className="pb-4">
         <div hidden={newCateg}>
           <TaskForm

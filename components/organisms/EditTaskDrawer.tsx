@@ -56,45 +56,51 @@ export default function EditTaskDrawer({ task, variant }: EditTaskDrawerProps) {
         }
         setOpen(next);
       }}
-      onAnimationEnd={(isOpen) => {
+      onOpenChangeComplete={(isOpen) => {
         if (!isOpen && pendingDelete.current) {
           pendingDelete.current = false;
           removeTask(task);
         }
       }}
     >
-      <DrawerTrigger asChild>
-        <button type="button" className="flex w-full cursor-pointer text-left">
-          <div
-            className={cn(
-              compact
-                ? "w-full flex-row items-center justify-between"
-                : "flex-col gap-0.5",
-              "flex min-w-0",
-            )}
+      <DrawerTrigger
+        render={
+          <button
+            type="button"
+            className="flex w-full cursor-pointer text-left"
           >
-            <span
+            <div
               className={cn(
-                task.completed && "text-muted line-through",
-                "text-task w-full truncate font-medium",
+                compact
+                  ? "w-full flex-row items-center justify-between"
+                  : "flex-col gap-0.5",
+                "flex min-w-0",
               )}
             >
-              {task.name}
-            </span>
+              <span
+                className={cn(
+                  task.completed && "text-muted line-through",
+                  "text-task w-full truncate font-medium",
+                )}
+              >
+                {task.name}
+              </span>
 
-            {compact ? (
-              task.category && (
-                <div
-                  className="h-3 min-w-3 rounded-xs"
-                  style={{ backgroundColor: task.category.color }}
-                />
-              )
-            ) : (
-              <TaskMeta task={task} />
-            )}
-          </div>
-        </button>
-      </DrawerTrigger>
+              {compact ? (
+                task.category && (
+                  <div
+                    className="h-3 min-w-3 rounded-xs"
+                    style={{ backgroundColor: task.category.color }}
+                  />
+                )
+              ) : (
+                <TaskMeta task={task} />
+              )}
+            </div>
+          </button>
+        }
+      />
+
       <DrawerContent className="pb-4" aria-describedby={undefined}>
         <div hidden={newCateg}>
           <TaskForm

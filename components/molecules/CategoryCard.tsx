@@ -47,35 +47,38 @@ export default function CategoryCard({
         }
         setOpen(next);
       }}
-      onAnimationEnd={(isOpen) => {
+      onOpenChangeComplete={(isOpen) => {
         if (!isOpen && pendingDelete.current) {
           pendingDelete.current = false;
           removeCategory(category);
         }
       }}
     >
-      <DrawerTrigger asChild>
-        <button className="flex h-15 w-full cursor-pointer items-center justify-between text-left">
-          <div className="flex items-center gap-3.5">
-            <span
-              className="size-7 shrink-0 rounded-[7px]"
-              style={{ backgroundColor: category.color }}
-            />
+      <DrawerTrigger
+        render={
+          <button className="flex h-15 w-full cursor-pointer items-center justify-between text-left">
+            <div className="flex items-center gap-3.5">
+              <span
+                className="size-7 shrink-0 rounded-[7px]"
+                style={{ backgroundColor: category.color }}
+              />
 
-            <div className="flex flex-col">
-              <span className="text-task font-medium">{category.name}</span>
+              <div className="flex flex-col">
+                <span className="text-task font-medium">{category.name}</span>
 
-              {category.openCount > 0 && (
-                <span className="text-muted-2 text-xs">
-                  {category.openCount} open
-                </span>
-              )}
+                {category.openCount > 0 && (
+                  <span className="text-muted-2 text-xs">
+                    {category.openCount} open
+                  </span>
+                )}
+              </div>
             </div>
-          </div>
 
-          <ChevronRight className="size-5" />
-        </button>
-      </DrawerTrigger>
+            <ChevronRight className="size-5" />
+          </button>
+        }
+      />
+
       <DrawerContent className="pb-4">
         <CategoryForm
           category={category}
