@@ -6,7 +6,7 @@ import { SquareIcon } from "lucide-react";
 import { Fragment } from "react";
 import { Controller, UseFormReturn } from "react-hook-form";
 
-import { useCategories } from "@/hooks/useCategories";
+import { useRecentCategories } from "@/hooks/useCategories";
 import { localDay } from "@/lib/date";
 import { TaskFormValues } from "@/lib/schemas/task";
 import { TaskWithCategory } from "@/types";
@@ -45,7 +45,7 @@ export default function TaskForm({
 }: TaskFormProps) {
   const isEditing = Boolean(task);
 
-  const { data: categories } = useCategories();
+  const { data: recentCategories } = useRecentCategories();
 
   const description = form.watch("description") ?? "";
 
@@ -207,8 +207,8 @@ export default function TaskForm({
                       className="contents"
                       disabled={formPending}
                     >
-                      {categories &&
-                        categories.map((category) => (
+                      {recentCategories &&
+                        recentCategories.map((category) => (
                           <ToggleGroupItem
                             key={category.id}
                             value={category.id}

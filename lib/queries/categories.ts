@@ -8,6 +8,25 @@ export function getCategories(userId: string) {
   });
 }
 
+export function getRecentCategories(userId: string) {
+  const tasks = db.task.findMany({
+    where: {
+      userId,
+      categoryId: { not: null },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+    distinct: ["categoryId"],
+    select: {
+      category: true,
+    },
+    take: 3,
+  });
+
+  return tasks.then((tasks) => tasks.map((t) => t.category!));
+}
+
 export function getCategoriesCount(userId: string) {
   return db.category.count({
     where: {
