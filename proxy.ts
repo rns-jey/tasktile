@@ -25,8 +25,6 @@ export default auth.middleware({
 
 export const config = {
   matcher: [
-    // Protected routes requiring authentication
-    // "/account/:path*",
-    "/((?!api|_next/static|_next/image|favicon.ico).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|manifest.webmanifest|sign-in|sign-up|.*\\.(?:png|svg|ico|jpg|webp)$).*)",
   ],
 };
