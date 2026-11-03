@@ -21,3 +21,8 @@ export type CalendarDay = {
     completed: number;
   };
 };
+
+export type DayStat = {
+  _count: { completed: number };
+  completedOn: Date | string | null;
+};

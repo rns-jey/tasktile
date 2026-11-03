@@ -2,6 +2,7 @@
 
 import { heatClass } from "@/lib/colors";
 import { cn } from "@/lib/utils";
+import { DayStat } from "@/types";
 import {
   addMonths,
   differenceInCalendarDays,
@@ -26,11 +27,6 @@ type DayData = {
   key: string;
   isCurrentMonth: boolean;
   completed: number;
-};
-
-type DayStat = {
-  _count: { completed: number };
-  completedOn: Date | string | null;
 };
 
 const legends = [
@@ -136,10 +132,9 @@ export default function CalendarSection({ stats }: { stats: DayStat[] }) {
                 day.key === todayKey && "ring-2",
                 day.key === selected && "ring-2 ring-offset-2",
                 "flex h-full w-full items-start justify-start pt-1 text-xs ring-black",
-                differenceInCalendarDays(today, day.date) > 0 &&
+                differenceInCalendarDays(today, day.date) >= 0 &&
                   heatClass(day.completed),
               )}
-
               onClick={() => setSelected(day.key)}
             >
               {day.date.getDate()}

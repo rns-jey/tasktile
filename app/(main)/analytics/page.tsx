@@ -1,3 +1,4 @@
+import AnalyticsHeader from "@/components/organisms/AnalyticsHeader";
 import CalendarSection from "@/components/organisms/CalendarSection";
 import currentProfile from "@/lib/profile";
 import { getTaskCount } from "@/lib/queries/task";
@@ -15,17 +16,7 @@ export default async function Analytics() {
 
   return (
     <Fragment>
-      <header className="flex gap-5 pb-4">
-        <h1 className="flex flex-col">
-          <p className="font-display text-display-lg">6</p>
-          <p className="text-body text-muted flex gap-1">day streak</p>
-        </h1>
-
-        <h1 className="flex flex-col">
-          <p className="font-display text-display-lg text-muted">11</p>
-          <p className="text-body text-muted flex gap-1">best</p>
-        </h1>
-      </header>
+      <AnalyticsHeader stats={stats} />
 
       <CalendarSection stats={stats} />
     </Fragment>
