@@ -1,8 +1,10 @@
 "use client";
 
+import { getTasksForDayAction } from "@/lib/actions/tasks";
 import { heatClass } from "@/lib/colors";
 import { cn } from "@/lib/utils";
 import { DayStat } from "@/types";
+import { useQuery } from "@tanstack/react-query";
 import {
   addMonths,
   differenceInCalendarDays,
@@ -16,11 +18,19 @@ import {
   startOfWeek,
   subMonths,
 } from "date-fns";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Check, ChevronLeft, ChevronRight } from "lucide-react";
 import { useMemo, useState } from "react";
+import TaskMeta from "../molecules/TaskMeta";
 import { useTodayKey } from "../providers/TodayProvider";
 import { Button } from "../ui/Button";
 import { Card, CardContent } from "../ui/Card";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "../ui/Drawer";
 
 type DayData = {
   date: Date;
@@ -38,6 +48,8 @@ const legends = [
 ];
 
 export default function CalendarSection({ stats }: { stats: DayStat[] }) {
+  const [showTasks, setShowTasks] = useState<boolean>(false);
+
   const countsByDay = useMemo(() => {
     const map = new Map<string, number>();
     for (const s of stats) {
@@ -96,7 +108,14 @@ export default function CalendarSection({ stats }: { stats: DayStat[] }) {
     return { monthTotal, activeDays };
   }, [days]);
 
-  const selectedDay = days.find((d) => d.key === selected);
+  const selectedCount = countsByDay.get(selected) ?? 0;
+
+  const { data: tasks, isLoading } = useQuery({
+    queryKey: ["tasks", "day", selected],
+    queryFn: () => getTasksForDayAction(selected),
+    staleTime: 5 * 60 * 1000,
+    enabled: showTasks, // only runs once View is pressed
+  });
 
   return (
     <div className="space-y-2 px-2">
@@ -166,7 +185,7 @@ export default function CalendarSection({ stats }: { stats: DayStat[] }) {
           <div className="flex items-center gap-2">
             <div
               className={cn(
-                heatClass(selectedDay?.completed ?? 0),
+                heatClass(selectedCount),
                 "size-10 shrink-0 rounded-[7px]",
               )}
             />
@@ -178,11 +197,55 @@ export default function CalendarSection({ stats }: { stats: DayStat[] }) {
                 )}
               </p>
               <p className="font-display text-[26px]">
-                {selectedDay?.completed} completed
+                {selectedCount} completed
               </p>
             </div>
           </div>
-          <Button variant="ghost">View</Button>
+          <Drawer open={showTasks} onOpenChange={setShowTasks}>
+            <DrawerTrigger
+              render={
+                <Button variant="ghost" type="button">
+                  View
+                </Button>
+              }
+            />
+            <DrawerContent className="flex max-h-[85dvh] flex-col">
+              <DrawerHeader>
+                <DrawerTitle>
+                  {format(
+                    parse(selected, "yyyy-MM-dd", new Date()),
+                    "MMMM dd, yyyy",
+                  )}
+                </DrawerTitle>
+              </DrawerHeader>
+              {isLoading ? (
+                <p>Loading…</p>
+              ) : tasks && tasks.length > 0 ? (
+                <div className="flex min-h-0 flex-1 flex-col px-4">
+                  <p>Completed · {tasks.length}</p>
+
+                  <div className="min-h-0 flex-1 overflow-y-auto">
+                    {tasks?.map((t) => (
+                      <article
+                        key={t.id}
+                        className="border-line flex h-16 items-center gap-2 border-b px-2 hover:bg-white"
+                      >
+                        <Check />
+                        <div className="min-w-0 flex-col gap-0.5">
+                          <p className="text-task w-full truncate font-medium">
+                            {t.name}
+                          </p>
+                          <TaskMeta task={t} />
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div>Nothing was completed on this day.</div>
+              )}
+            </DrawerContent>
+          </Drawer>
         </CardContent>
       </Card>
 

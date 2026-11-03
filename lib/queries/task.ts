@@ -43,3 +43,13 @@ export function getTaskCount(userId: string) {
     orderBy: [{ completedOn: "desc" }],
   });
 }
+
+export function getTasksForDay(userId: string, dayKey: string) {
+  const day = new Date(dayKey + "T00:00:00.000Z");
+
+  return db.task.findMany({
+    where: { userId, completed: true, completedOn: day },
+    orderBy: { completedAt: "desc" },
+    include: { category: true },
+  });
+}
