@@ -31,6 +31,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "../ui/Drawer";
+import { Skeleton } from "../ui/Skeleton";
 
 type DayData = {
   date: Date;
@@ -39,12 +40,14 @@ type DayData = {
   completed: number;
 };
 
+const weekDays = ["M", "T", "W", "T", "F", "S", "S"];
+
 const legends = [
-  { color: "bg-[#ebe5de]", count: "0" },
-  { color: "bg-[#f3cbb5]", count: "1-3" },
-  { color: "bg-[#eb9a75]", count: "4-6" },
-  { color: "bg-[#cf6139]", count: "7-9" },
-  { color: "bg-[#963118]", count: "10+" },
+  { min: 0, label: "0" },
+  { min: 1, label: "1-3" },
+  { min: 4, label: "4-6" },
+  { min: 7, label: "7-9" },
+  { min: 10, label: "10+" },
 ];
 
 export default function CalendarSection({ stats }: { stats: DayStat[] }) {
@@ -61,8 +64,6 @@ export default function CalendarSection({ stats }: { stats: DayStat[] }) {
     }
     return map;
   }, [stats]);
-
-  const weekDays = ["M", "T", "W", "TH", "F", "S", "S"];
 
   const todayKey = useTodayKey();
 
@@ -114,7 +115,7 @@ export default function CalendarSection({ stats }: { stats: DayStat[] }) {
     queryKey: ["tasks", "day", selected],
     queryFn: () => getTasksForDayAction(selected),
     staleTime: 5 * 60 * 1000,
-    enabled: showTasks, // only runs once View is pressed
+    enabled: showTasks && selectedCount > 0, // only runs once View is pressed
   });
 
   return (
@@ -201,7 +202,7 @@ export default function CalendarSection({ stats }: { stats: DayStat[] }) {
               </p>
             </div>
           </div>
-          <Drawer open={showTasks} onOpenChange={setShowTasks}>
+          <Drawer open={showTasks} onOpenChange={setShowTasks} showSwipeHandle>
             <DrawerTrigger
               render={
                 <Button variant="ghost" type="button">
@@ -209,40 +210,61 @@ export default function CalendarSection({ stats }: { stats: DayStat[] }) {
                 </Button>
               }
             />
-            <DrawerContent className="flex max-h-[85dvh] flex-col">
+            <DrawerContent>
               <DrawerHeader>
                 <DrawerTitle>
                   {format(
                     parse(selected, "yyyy-MM-dd", new Date()),
-                    "MMMM dd, yyyy",
+                    "EEE d MMMM",
                   )}
                 </DrawerTitle>
               </DrawerHeader>
-              {isLoading ? (
-                <p>Loading…</p>
-              ) : tasks && tasks.length > 0 ? (
-                <div className="flex min-h-0 flex-1 flex-col px-4">
-                  <p>Completed · {tasks.length}</p>
+              {selectedCount === 0 ? (
+                <div className="flex min-h-0 flex-1 flex-col gap-2 p-4">
+                  Nothing was completed on this day.
+                </div>
+              ) : isLoading ? (
+                <div className="flex min-h-0 flex-1 flex-col gap-2 p-4">
+                  <p>Completed · {selectedCount}</p>
 
-                  <div className="min-h-0 flex-1 overflow-y-auto">
-                    {tasks?.map((t) => (
+                  <div className="mb-2 min-h-0 flex-1 overflow-y-auto">
+                    {Array.from({ length: selectedCount }).map((_, i) => (
                       <article
-                        key={t.id}
-                        className="border-line flex h-16 items-center gap-2 border-b px-2 hover:bg-white"
+                        key={i}
+                        className="border-line flex h-16 items-center gap-2 border-b px-2"
                       >
-                        <Check />
-                        <div className="min-w-0 flex-col gap-0.5">
-                          <p className="text-task w-full truncate font-medium">
-                            {t.name}
-                          </p>
-                          <TaskMeta task={t} />
-                        </div>
+                        <Skeleton className="size-4" />
+
+                        <Skeleton className="size-6" />
+
+                        <Skeleton className="h-6 w-28" />
                       </article>
                     ))}
                   </div>
                 </div>
               ) : (
-                <div>Nothing was completed on this day.</div>
+                tasks && (
+                  <div className="flex min-h-0 flex-1 flex-col gap-2 p-4">
+                    <p>Completed · {tasks.length}</p>
+
+                    <div className="mb-2 min-h-0 flex-1 overflow-y-auto">
+                      {tasks.map((t) => (
+                        <article
+                          key={t.id}
+                          className="border-line flex h-16 items-center gap-2 border-b px-2 hover:bg-white"
+                        >
+                          <Check />
+                          <div className="flex min-w-0 flex-col gap-0.5">
+                            <p className="text-task w-full truncate font-medium">
+                              {t.name}
+                            </p>
+                            <TaskMeta task={t} />
+                          </div>
+                        </article>
+                      ))}
+                    </div>
+                  </div>
+                )
               )}
             </DrawerContent>
           </Drawer>
@@ -252,11 +274,14 @@ export default function CalendarSection({ stats }: { stats: DayStat[] }) {
       <div className="flex gap-2">
         <span>Tasks done</span>
         {legends.map((legend) => (
-          <div key={legend.color} className="flex flex-col items-center">
+          <div key={legend.label} className="flex flex-col items-center">
             <div
-              className={cn("size-6 shrink-0 rounded-[5px]", legend.color)}
+              className={cn(
+                "size-6 shrink-0 rounded-[5px]",
+                heatClass(legend.min),
+              )}
             />
-            <p className="text-xs">{legend.count}</p>
+            <p className="text-xs">{legend.label}</p>
           </div>
         ))}
       </div>
