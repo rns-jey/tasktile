@@ -67,36 +67,32 @@ export default function EditTaskDrawer({ task, variant }: EditTaskDrawerProps) {
         render={
           <button
             type="button"
-            className="flex w-full cursor-pointer text-left"
+            className={cn(
+              compact
+                ? "w-full flex-row items-center justify-between"
+                : "flex-col gap-0.5",
+              "flex min-w-0",
+            )}
           >
-            <div
+            <span
               className={cn(
-                compact
-                  ? "w-full flex-row items-center justify-between"
-                  : "flex-col gap-0.5",
-                "flex min-w-0",
+                task.completed && "text-muted line-through",
+                "text-task w-full truncate font-medium",
               )}
             >
-              <span
-                className={cn(
-                  task.completed && "text-muted line-through",
-                  "text-task w-full truncate font-medium",
-                )}
-              >
-                {task.name}
-              </span>
+              {task.name}
+            </span>
 
-              {compact ? (
-                task.category && (
-                  <div
-                    className="h-3 min-w-3 rounded-xs"
-                    style={{ backgroundColor: task.category.color }}
-                  />
-                )
-              ) : (
-                <TaskMeta task={task} />
-              )}
-            </div>
+            {compact ? (
+              task.category && (
+                <div
+                  className="h-3 min-w-3 rounded-xs"
+                  style={{ backgroundColor: task.category.color }}
+                />
+              )
+            ) : (
+              <TaskMeta task={task} />
+            )}
           </button>
         }
       />
