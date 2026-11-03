@@ -78,8 +78,23 @@ export default function CalendarSection({ stats }: { stats: DayStat[] }) {
           completed: countsByDay.get(key) ?? 0,
         };
       }),
-    [currentMonth],
+    [currentMonth, countsByDay],
   );
+
+  const { monthTotal, activeDays } = useMemo(() => {
+    let monthTotal = 0;
+    let activeDays = 0;
+
+    for (const day of days) {
+      if (!day.isCurrentMonth) continue;
+
+      monthTotal += day.completed;
+
+      if (day.completed > 0) activeDays++;
+    }
+
+    return { monthTotal, activeDays };
+  }, [days]);
 
   const selectedDay = days.find((d) => d.key === selected);
 
@@ -88,7 +103,10 @@ export default function CalendarSection({ stats }: { stats: DayStat[] }) {
       <div className="mx-auto flex items-center justify-between">
         <div>
           <h2>{format(currentMonth, "MMMM")}</h2>
-          <p>{format(currentMonth, "yyyy")} · 49 done across 13 days</p>
+          <p>
+            {format(currentMonth, "yyyy")} · {monthTotal} done across{" "}
+            {activeDays} days
+          </p>
         </div>
 
         <div className="flex items-center gap-1">
