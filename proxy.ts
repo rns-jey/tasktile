@@ -25,6 +25,6 @@ export default auth.middleware({
 
 export const config = {
   matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico|manifest.webmanifest|sign-in|sign-up|.*\\.(?:png|svg|ico|jpg|webp)$).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|manifest.webmanifest|sign-in|sign-up|forgot-password|reset-password|.*\\.(?:png|svg|ico|jpg|webp)$).*)",
   ],
 };
