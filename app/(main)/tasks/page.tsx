@@ -4,7 +4,11 @@ import currentProfile from "@/lib/profile";
 import { getTasks } from "@/lib/queries/task";
 
 import TaskListSection from "@/components/organisms/TaskListSection";
-import { QueryClient } from "@tanstack/react-query";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
 
 export default async function TasksPage() {
   const currentUser = await currentProfile();
@@ -19,5 +23,9 @@ export default async function TasksPage() {
     staleTime: 1000 * 60, // 1 minute
   });
 
-  return <TaskListSection />;
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <TaskListSection />
+    </HydrationBoundary>
+  );
 }

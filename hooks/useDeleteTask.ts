@@ -55,7 +55,7 @@ export function useDeleteTask() {
       } finally {
         pendingDeletes.delete(task.id);
         queryClient.invalidateQueries({ queryKey: ["tasks"] });
-        queryClient.invalidateQueries({ queryKey: ["contributions"] });
+        queryClient.invalidateQueries({ queryKey: ["stats"] });
       }
     };
 

@@ -54,7 +54,7 @@ export default function ToggleTask({ task }: { task: TaskWithCategory }) {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
-      queryClient.invalidateQueries({ queryKey: ["contributions"] });
+      queryClient.invalidateQueries({ queryKey: ["stats"] });
     },
   });
 

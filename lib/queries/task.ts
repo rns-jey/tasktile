@@ -30,20 +30,6 @@ export function getTasks(userId: string) {
   });
 }
 
-export function getTaskCount(userId: string) {
-  return db.task.groupBy({
-    by: ["completedOn"],
-    where: {
-      userId: userId,
-      completed: true,
-    },
-    _count: {
-      completed: true,
-    },
-    orderBy: [{ completedOn: "desc" }],
-  });
-}
-
 export function getTasksForDay(userId: string, dayKey: string) {
   const day = new Date(dayKey + "T00:00:00.000Z");
 

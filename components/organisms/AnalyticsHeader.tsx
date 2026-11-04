@@ -1,12 +1,15 @@
 "use client";
 
+import { useStats } from "@/hooks/useStats";
 import { computeStreaks } from "@/lib/stats";
-import { DayStat } from "@/types";
 import { useMemo } from "react";
 import { useTodayKey } from "../providers/TodayProvider";
 
-export default function AnalyticsHeader({ stats }: { stats: DayStat[] }) {
+export default function AnalyticsHeader() {
+  const { data: stats = [] } = useStats();
+
   const todayKey = useTodayKey();
+
   const { current, best } = useMemo(
     () => computeStreaks(stats, todayKey),
     [stats, todayKey],

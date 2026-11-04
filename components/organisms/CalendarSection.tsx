@@ -1,9 +1,9 @@
 "use client";
 
+import { useStats } from "@/hooks/useStats";
 import { getTasksForDayAction } from "@/lib/actions/tasks";
 import { heatClass } from "@/lib/colors";
 import { cn } from "@/lib/utils";
-import { DayStat } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import {
   addMonths,
@@ -50,8 +50,10 @@ const legends = [
   { min: 10, label: "10+" },
 ];
 
-export default function CalendarSection({ stats }: { stats: DayStat[] }) {
+export default function CalendarSection() {
   const [showTasks, setShowTasks] = useState<boolean>(false);
+
+  const { data: stats = [] } = useStats();
 
   const countsByDay = useMemo(() => {
     const map = new Map<string, number>();

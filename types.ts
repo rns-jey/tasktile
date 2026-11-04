@@ -7,13 +7,6 @@ export type CategoryWithCounts = Category & {
   closedCount: number;
 };
 
-export type RawContribution = {
-  completedAt: string;
-  _count: {
-    completed: number;
-  };
-};
-
 export type CalendarDay = {
   completedAt: Date;
   isCurrentMonth: boolean;
