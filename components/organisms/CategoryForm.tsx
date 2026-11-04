@@ -69,7 +69,7 @@ export default function CategoryForm({
       }
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["categories"] }); // Wait for refetch to complete
+      await queryClient.invalidateQueries({ queryKey: ["categories"] });
       form.reset();
       setOpen(false);
     },
@@ -97,7 +97,8 @@ export default function CategoryForm({
       }
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["categories"] }); // Wait for refetch to complete
+      await queryClient.invalidateQueries({ queryKey: ["categories"] });
+      await queryClient.invalidateQueries({ queryKey: ["tasks"] });
       setOpen(false);
     },
   });

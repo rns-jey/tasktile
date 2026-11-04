@@ -56,6 +56,7 @@ export function useDeleteCategory() {
       } finally {
         pendingDeletes.delete(category.id);
         queryClient.invalidateQueries({ queryKey: ["categories"] });
+        await queryClient.invalidateQueries({ queryKey: ["tasks"] });
       }
     };
 
