@@ -13,7 +13,6 @@ import { cn } from "@/lib/utils";
 import TaskMeta from "../molecules/TaskMeta";
 import { Drawer, DrawerContent, DrawerTrigger } from "../ui/Drawer";
 import CategoriesDrawer from "./CategoriesDrawer";
-import NewCategoryForm from "./NewCategoryForm";
 import TaskForm from "./TaskForm";
 
 type EditTaskDrawerProps = {
@@ -120,13 +119,6 @@ export default function EditTaskDrawer({ task, variant }: EditTaskDrawerProps) {
             onSelect={(id) => taskForm.setValue("categoryId", id)}
             selectedCategoryId={selectedCategoryId}
             setSelectingCategory={setSelectingCategory}
-          />
-        )}
-
-        {newCateg && (
-          <NewCategoryForm
-            setNewCateg={setNewCateg}
-            onCreated={(id) => taskForm.setValue("categoryId", id)}
           />
         )}
       </DrawerContent>

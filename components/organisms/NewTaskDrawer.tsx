@@ -10,7 +10,6 @@ import { taskFormSchema, TaskFormValues } from "@/lib/schemas/task";
 import { Button } from "../ui/Button";
 import { Drawer, DrawerContent, DrawerTrigger } from "../ui/Drawer";
 import CategoriesDrawer from "./CategoriesDrawer";
-import NewCategoryForm from "./NewCategoryForm";
 import TaskForm from "./TaskForm";
 
 export default function NewTaskDrawer() {
@@ -61,13 +60,6 @@ export default function NewTaskDrawer() {
             onSelect={(id) => taskForm.setValue("categoryId", id)}
             selectedCategoryId={selectedCategoryId}
             setSelectingCategory={setSelectingCategory}
-          />
-        )}
-
-        {newCateg && (
-          <NewCategoryForm
-            setNewCateg={setNewCateg}
-            onCreated={(id) => taskForm.setValue("categoryId", id)}
           />
         )}
       </DrawerContent>

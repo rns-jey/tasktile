@@ -83,7 +83,8 @@ export default function TaskForm({
     },
     onError: () => toast.error("Couldn't save task"),
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["tasks"] }); // Wait for refetch to complete
+      await queryClient.invalidateQueries({ queryKey: ["tasks"] });
+      await queryClient.invalidateQueries({ queryKey: ["categories"] });
       form.reset();
       setOpen(false);
 
@@ -100,7 +101,7 @@ export default function TaskForm({
     },
     onError: () => toast.error("Couldn't save task"),
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["tasks"] }); // Wait for refetch to complete
+      await queryClient.invalidateQueries({ queryKey: ["tasks"] });
       await queryClient.invalidateQueries({ queryKey: ["categories"] });
       setOpen(false);
       toast.success("Task updated", {
