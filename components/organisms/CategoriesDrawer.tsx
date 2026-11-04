@@ -1,6 +1,6 @@
 import { useCategories, useRecentCategories } from "@/hooks/useCategories";
 import { Check, Search } from "lucide-react";
-import { Fragment } from "react";
+import { Fragment, useMemo, useState } from "react";
 import { Button } from "../ui/Button";
 import { DrawerHeader, DrawerTitle } from "../ui/Drawer";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "../ui/InputGroup";
@@ -17,13 +17,22 @@ export default function CategoriesDrawer({
   onSelect,
   selectedCategoryId,
 }: CategoriesDrawerProps) {
-  const { data: categories } = useCategories();
-  const { data: recentCategories } = useRecentCategories();
+  const { data: categories = [] } = useCategories();
+  const { data: recentCategories = [] } = useRecentCategories();
 
-  const allCategories = categories?.filter(
-    (category) =>
-      !recentCategories?.some((recent) => recent.id === category.id),
+  const [query, setQuery] = useState("");
+
+  const allCategories = categories.filter(
+    (category) => !recentCategories.some((recent) => recent.id === category.id),
   );
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+
+    return q
+      ? categories.filter((category) => category.nameKey.includes(q))
+      : categories;
+  }, [categories, query]);
 
   return (
     <Fragment>
@@ -45,78 +54,123 @@ export default function CategoriesDrawer({
 
       <div className="flex flex-col gap-4 px-4">
         <InputGroup>
-          <InputGroupInput />
+          <InputGroupInput
+            placeholder="Search or create"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
           <InputGroupAddon>
             <Search />
           </InputGroupAddon>
         </InputGroup>
 
-        <div className="space-y-2">
-          <Label>Recent</Label>
-          <ul>
-            {recentCategories?.map((category) => (
-              <li key={category.id} className="border-b py-1.5">
-                <Button
-                  type="button"
-                  variant={"ghost"}
-                  className="flex w-full items-center justify-between px-2"
-                  onClick={() => {
-                    onSelect(category.id);
-                    setSelectingCategory(false);
-                  }}
-                >
-                  <div className="flex items-center gap-2">
-                    <div
-                      className="h-3 w-3 rounded-xs"
-                      style={{ backgroundColor: category.color }}
-                    />
-                    <span className="ml-2">{category.name}</span>
-                  </div>
-                  {selectedCategoryId === category.id && (
-                    <Check className="text-ink ml-auto h-4 w-4" />
-                  )}
-                </Button>
-              </li>
-            ))}
-          </ul>
-        </div>
+        {query.trim().length === 0 ? (
+          <>
+            <div className="space-y-2">
+              <Label>Recent</Label>
+              <ul>
+                {recentCategories?.map((category) => (
+                  <li key={category.id} className="border-b py-1.5">
+                    <Button
+                      type="button"
+                      variant={"ghost"}
+                      className="flex w-full items-center justify-between px-2"
+                      onClick={() => {
+                        onSelect(category.id);
+                        setSelectingCategory(false);
+                      }}
+                    >
+                      <div className="flex items-center gap-2">
+                        <div
+                          className="h-3 w-3 rounded-xs"
+                          style={{ backgroundColor: category.color }}
+                        />
+                        <span className="ml-2">{category.name}</span>
+                      </div>
+                      {selectedCategoryId === category.id && (
+                        <Check className="text-ink ml-auto h-4 w-4" />
+                      )}
+                    </Button>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-        <div className="space-y-2">
-          <Label>All</Label>
-          <ul className="max-h-60 overflow-y-auto">
-            {allCategories?.map((category) => (
-              <li
-                key={category.id}
-                className="flex items-center gap-2 border-b py-1.5"
-                onClick={() => {
-                  onSelect(category.id);
-                  setSelectingCategory(false);
-                }}
-              >
-                <Button
-                  type="button"
-                  variant={"ghost"}
-                  className="flex w-full items-center justify-between px-2"
+            <div className="space-y-2">
+              <Label>All</Label>
+              <ul className="max-h-60 overflow-y-auto">
+                {allCategories.map((category) => (
+                  <li
+                    key={category.id}
+                    className="flex items-center gap-2 border-b py-1.5"
+                    onClick={() => {
+                      onSelect(category.id);
+                      setSelectingCategory(false);
+                    }}
+                  >
+                    <Button
+                      type="button"
+                      variant={"ghost"}
+                      className="flex w-full items-center justify-between px-2"
+                      onClick={() => {
+                        onSelect(category.id);
+                        setSelectingCategory(false);
+                      }}
+                    >
+                      <div className="flex items-center gap-2">
+                        <div
+                          className="h-3 w-3 rounded-xs"
+                          style={{ backgroundColor: category.color }}
+                        />
+                        <span className="ml-2">{category.name}</span>
+                      </div>
+                      {selectedCategoryId === category.id && (
+                        <Check className="text-ink ml-auto h-4 w-4" />
+                      )}
+                    </Button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </>
+        ) : (
+          <div className="space-y-2">
+            <Label>{filtered.length} matches</Label>
+            <ul className="max-h-60 overflow-y-auto">
+              {filtered.map((category) => (
+                <li
+                  key={category.id}
+                  className="flex items-center gap-2 border-b py-1.5"
                   onClick={() => {
                     onSelect(category.id);
                     setSelectingCategory(false);
                   }}
                 >
-                  <div className="flex items-center gap-2">
-                    <div
-                      className="h-3 w-3 rounded-xs"
-                      style={{ backgroundColor: category.color }}
-                    />
-                    <span className="ml-2">{category.name}</span>
-                  </div>
-                  {selectedCategoryId === category.id && (
-                    <Check className="text-ink ml-auto h-4 w-4" />
-                  )}
-                </Button>
-              </li>
-            ))}
-          </ul>
-        </div>
+                  <Button
+                    type="button"
+                    variant={"ghost"}
+                    className="flex w-full items-center justify-between px-2"
+                    onClick={() => {
+                      onSelect(category.id);
+                      setSelectingCategory(false);
+                    }}
+                  >
+                    <div className="flex items-center gap-2">
+                      <div
+                        className="h-3 w-3 rounded-xs"
+                        style={{ backgroundColor: category.color }}
+                      />
+                      <span className="ml-2">{category.name}</span>
+                    </div>
+                    {selectedCategoryId === category.id && (
+                      <Check className="text-ink ml-auto h-4 w-4" />
+                    )}
+                  </Button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     </Fragment>
   );
