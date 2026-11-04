@@ -9,12 +9,14 @@ import { taskFormSchema, TaskFormValues } from "@/lib/schemas/task";
 
 import { Button } from "../ui/Button";
 import { Drawer, DrawerContent, DrawerTrigger } from "../ui/Drawer";
+import CategoriesDrawer from "./CategoriesDrawer";
 import NewCategoryForm from "./NewCategoryForm";
 import TaskForm from "./TaskForm";
 
 export default function NewTaskDrawer() {
   const [open, setOpen] = useState(false);
   const [newCateg, setNewCateg] = useState(false);
+  const [selectingCategory, setSelectingCategory] = useState(false);
 
   const taskForm = useForm<TaskFormValues>({
     resolver: zodResolver(taskFormSchema),
@@ -25,6 +27,8 @@ export default function NewTaskDrawer() {
       dueDate: null,
     },
   });
+
+  const selectedCategoryId = taskForm.watch("categoryId");
 
   return (
     <Drawer
@@ -42,14 +46,23 @@ export default function NewTaskDrawer() {
         }
       />
       <DrawerContent className="pb-4">
-        <div hidden={newCateg}>
+        <div hidden={newCateg || selectingCategory}>
           <TaskForm
             form={taskForm}
             formId="form-add-task"
             setOpen={setOpen}
             setNewCateg={setNewCateg}
+            setSelectingCategory={setSelectingCategory}
           />
         </div>
+
+        {selectingCategory && (
+          <CategoriesDrawer
+            onSelect={(id) => taskForm.setValue("categoryId", id)}
+            selectedCategoryId={selectedCategoryId}
+            setSelectingCategory={setSelectingCategory}
+          />
+        )}
 
         {newCateg && (
           <NewCategoryForm

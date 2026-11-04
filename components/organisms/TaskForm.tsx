@@ -2,11 +2,11 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { SquareIcon } from "lucide-react";
-import { Fragment } from "react";
+import { ChevronRight, SquareIcon } from "lucide-react";
+import { Fragment, useMemo } from "react";
 import { Controller, UseFormReturn } from "react-hook-form";
 
-import { useRecentCategories } from "@/hooks/useCategories";
+import { useCategories, useRecentCategories } from "@/hooks/useCategories";
 import { localDay } from "@/lib/date";
 import { TaskFormValues } from "@/lib/schemas/task";
 import { TaskWithCategory } from "@/types";
@@ -31,6 +31,7 @@ interface TaskFormProps {
   form: UseFormReturn<TaskFormValues>;
   formId: string;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectingCategory: React.Dispatch<React.SetStateAction<boolean>>;
   setNewCateg: React.Dispatch<React.SetStateAction<boolean>>;
   onDelete?: () => void;
 }
@@ -41,13 +42,33 @@ export default function TaskForm({
   formId,
   setOpen,
   setNewCateg,
+  setSelectingCategory,
   onDelete,
 }: TaskFormProps) {
   const isEditing = Boolean(task);
 
+  const { data: categories } = useCategories();
   const { data: recentCategories } = useRecentCategories();
 
   const description = form.watch("description") ?? "";
+  const selectedCategoryId = form.watch("categoryId");
+
+  const chips = useMemo(() => {
+    if (!recentCategories) return [];
+    if (
+      !selectedCategoryId ||
+      recentCategories.some((c) => c.id === selectedCategoryId)
+    )
+      return recentCategories;
+
+    const selectedCategory = categories?.find(
+      (c) => c.id === selectedCategoryId,
+    );
+
+    return selectedCategory
+      ? [selectedCategory, ...recentCategories]
+      : recentCategories;
+  }, [recentCategories, categories, selectedCategoryId]);
 
   const queryClient = useQueryClient();
 
@@ -80,6 +101,7 @@ export default function TaskForm({
     onError: () => toast.error("Couldn't save task"),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["tasks"] }); // Wait for refetch to complete
+      await queryClient.invalidateQueries({ queryKey: ["categories"] });
       setOpen(false);
       toast.success("Task updated", {
         position: "top-center",
@@ -99,7 +121,7 @@ export default function TaskForm({
 
   return (
     <Fragment>
-      <DrawerHeader className="flex flex-row items-center justify-between">
+      <DrawerHeader className="flex flex-row items-center justify-between py-4">
         <DrawerClose
           disabled={formPending}
           className="text-muted h-11 px-2 font-medium"
@@ -195,11 +217,21 @@ export default function TaskForm({
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <div className="text-label text-muted-2 mx-1 mt-3 mb-1.5 font-medium tracking-[.08em] uppercase">
-                    Category · optional
+                  <div className="flex items-center justify-between">
+                    <span className="text-label text-muted-2 font-medium tracking-[.08em] uppercase">
+                      Category · optional
+                    </span>
+                    <Button
+                      variant="link"
+                      type="button"
+                      className="h-11"
+                      onClick={() => setSelectingCategory(true)}
+                    >
+                      All {categories?.length} <ChevronRight />
+                    </Button>
                   </div>
 
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2 pb-4">
                     <ToggleGroup
                       variant={"outline"}
                       value={field.value ? [field.value] : []}
@@ -207,31 +239,20 @@ export default function TaskForm({
                       className="contents"
                       disabled={formPending}
                     >
-                      {recentCategories &&
-                        recentCategories.map((category) => (
-                          <ToggleGroupItem
-                            key={category.id}
-                            value={category.id}
-                            className="flex items-center gap-2"
-                          >
-                            <span
-                              className="h-2 w-2 rounded-xs"
-                              style={{ backgroundColor: category.color }}
-                            />
-                            {category.name}
-                          </ToggleGroupItem>
-                        ))}
+                      {chips.map((category) => (
+                        <ToggleGroupItem
+                          key={category.id}
+                          value={category.id}
+                          className="flex items-center gap-2"
+                        >
+                          <span
+                            className="h-2 w-2 rounded-xs"
+                            style={{ backgroundColor: category.color }}
+                          />
+                          {category.name}
+                        </ToggleGroupItem>
+                      ))}
                     </ToggleGroup>
-
-                    <Button
-                      variant={"outline"}
-                      type="button"
-                      disabled={formPending}
-                      onClick={() => setNewCateg(true)}
-                      className={"h-11 bg-transparent"}
-                    >
-                      + New
-                    </Button>
                   </div>
                 </Field>
               )}

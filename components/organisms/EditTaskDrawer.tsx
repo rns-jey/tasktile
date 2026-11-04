@@ -12,6 +12,7 @@ import { fromDbDay } from "@/lib/date";
 import { cn } from "@/lib/utils";
 import TaskMeta from "../molecules/TaskMeta";
 import { Drawer, DrawerContent, DrawerTrigger } from "../ui/Drawer";
+import CategoriesDrawer from "./CategoriesDrawer";
 import NewCategoryForm from "./NewCategoryForm";
 import TaskForm from "./TaskForm";
 
@@ -25,6 +26,8 @@ export default function EditTaskDrawer({ task, variant }: EditTaskDrawerProps) {
 
   const [open, setOpen] = useState(false);
   const [newCateg, setNewCateg] = useState(false);
+  const [selectingCategory, setSelectingCategory] = useState(false);
+
   const pendingDelete = useRef(false);
 
   const { name, description, categoryId, dueDate } = task;
@@ -38,6 +41,8 @@ export default function EditTaskDrawer({ task, variant }: EditTaskDrawerProps) {
       dueDate: dueDate ? fromDbDay(dueDate) : null,
     },
   });
+
+  const selectedCategoryId = taskForm.watch("categoryId");
 
   const handleDelete = () => {
     pendingDelete.current = true;
@@ -98,16 +103,25 @@ export default function EditTaskDrawer({ task, variant }: EditTaskDrawerProps) {
       />
 
       <DrawerContent className="pb-4" aria-describedby={undefined}>
-        <div hidden={newCateg}>
+        <div hidden={newCateg || selectingCategory}>
           <TaskForm
             task={task}
             form={taskForm}
             formId="form-edit-task"
             setOpen={setOpen}
             setNewCateg={setNewCateg}
+            setSelectingCategory={setSelectingCategory}
             onDelete={handleDelete}
           />
         </div>
+
+        {selectingCategory && (
+          <CategoriesDrawer
+            onSelect={(id) => taskForm.setValue("categoryId", id)}
+            selectedCategoryId={selectedCategoryId}
+            setSelectingCategory={setSelectingCategory}
+          />
+        )}
 
         {newCateg && (
           <NewCategoryForm

@@ -5,6 +5,9 @@ export function getCategories(userId: string) {
     where: {
       userId: userId,
     },
+    orderBy: {
+      name: "asc",
+    },
   });
 }
 
