@@ -11,9 +11,14 @@ import ReactQueryProvider from "@/components/providers/ReactQueryProvider";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import TimezoneSync from "@/components/providers/TimezoneSync";
 import { TodayProvider } from "@/components/providers/TodayProvider";
-import { UserProvider } from "@/components/providers/UserProvider";
 import ContentShell from "@/components/templates/ContentShell";
 import { SidebarInset, SidebarProvider } from "@/components/ui/Sidebar";
+import { getCategories, getRecentCategories } from "@/lib/queries/categories";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
 
 export default async function MainLayout({
   children,
@@ -26,6 +31,18 @@ export default async function MainLayout({
 
   const tz = (await cookies()).get("tz")?.value ?? "UTC";
 
+  const queryClient = new QueryClient();
+  await Promise.all([
+    queryClient.query({
+      queryKey: ["categories"],
+      queryFn: () => getCategories(currentUser.userID),
+    }),
+    queryClient.query({
+      queryKey: ["categories", "recent"],
+      queryFn: () => getRecentCategories(currentUser.userID),
+    }),
+  ]);
+
   return (
     <ThemeProvider
       attribute="class"
@@ -34,8 +51,8 @@ export default async function MainLayout({
       disableTransitionOnChange
     >
       <TodayProvider todayKey={dayInTz(tz)}>
-        <UserProvider user={currentUser}>
-          <ReactQueryProvider>
+        <ReactQueryProvider>
+          <HydrationBoundary state={dehydrate(queryClient)}>
             <TimezoneSync />
             <SidebarProvider>
               <AppSidebar />
@@ -45,8 +62,8 @@ export default async function MainLayout({
                 <MobileNav />
               </SidebarInset>
             </SidebarProvider>
-          </ReactQueryProvider>
-        </UserProvider>
+          </HydrationBoundary>
+        </ReactQueryProvider>
       </TodayProvider>
     </ThemeProvider>
   );
