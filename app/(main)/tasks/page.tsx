@@ -4,13 +4,20 @@ import currentProfile from "@/lib/profile";
 import { getTasks } from "@/lib/queries/task";
 
 import TaskListSection from "@/components/organisms/TaskListSection";
+import { QueryClient } from "@tanstack/react-query";
 
 export default async function TasksPage() {
   const currentUser = await currentProfile();
 
   if (!currentUser) redirect("/sign-in");
 
-  const tasks = await getTasks(currentUser.userID);
+  const queryClient = new QueryClient();
 
-  return <TaskListSection initialTasks={tasks} />;
+  await queryClient.query({
+    queryKey: ["tasks", "all"],
+    queryFn: () => getTasks(currentUser.userID),
+    staleTime: 1000 * 60, // 1 minute
+  });
+
+  return <TaskListSection />;
 }

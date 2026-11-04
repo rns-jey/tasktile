@@ -28,10 +28,10 @@ export default function TodayHeader() {
   const todayKey = useTodayKey();
   const today = fromDbDay(`${todayKey}T00:00:00Z`);
 
-  const { data: tasks } = useTodayTasks();
+  const { data: tasks = [] } = useTodayTasks();
 
-  const activeTasks = tasks?.filter((task) => !task.completed);
-  const completedTasks = tasks?.filter((task) => task.completed);
+  const activeTasks = tasks.filter((task) => !task.completed);
+  const completedTasks = tasks.filter((task) => task.completed);
 
   return (
     <Fragment>

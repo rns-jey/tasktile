@@ -17,14 +17,13 @@ export function useTodayTasks() {
   });
 }
 
-export function useTasks(initialTasks?: TaskWithCategory[]) {
+export function useTasks() {
   return useQuery<TaskWithCategory[]>({
     queryKey: ["tasks", "all"],
     queryFn: async () => {
       const response = await axios.get("/api/tasks");
       return response.data;
     },
-    initialData: initialTasks,
     select: (tasks) => tasks.filter((t) => !isPendingDelete(t.id)),
     staleTime: 60 * 1000,
   });

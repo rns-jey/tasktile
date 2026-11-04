@@ -1,7 +1,5 @@
 "use client";
 
-import { Skeleton } from "@/components/ui/Skeleton";
-
 import { useTodayTasks } from "@/hooks/useTasks";
 import { useState } from "react";
 import { Button } from "../ui/Button";
@@ -11,22 +9,7 @@ import TaskList from "./TaskList";
 export default function TodayTaskSection() {
   const [visible, setVisible] = useState<boolean>(false);
 
-  const { data: tasks } = useTodayTasks();
-
-  if (!tasks)
-    return (
-      <div className="my-4 flex flex-col gap-4">
-        <div className="flex flex-col gap-3">
-          <Skeleton className="h-5 w-16" />
-
-          <div className="flex flex-col gap-2">
-            <Skeleton className="h-14 w-full" />
-            <Skeleton className="h-14 w-full" />
-            <Skeleton className="h-14 w-full" />
-          </div>
-        </div>
-      </div>
-    );
+  const { data: tasks = [] } = useTodayTasks();
 
   const activeTasks = tasks.filter((task) => !task.completed);
   const completedTasks = tasks.filter((task) => task.completed);
