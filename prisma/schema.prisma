@@ -50,6 +50,8 @@ model Task {
 
   @@index([userId, scheduledOn])
   @@index([userId, completedOn])
+  @@index([userId, createdAt])
+  @@index([categoryId])
 }
 
 model Category {
