@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
-import { db } from "@/lib/db";
 import currentProfile from "@/lib/profile";
+import { getTasks } from "@/lib/queries/task";
 
 export async function GET(req: Request) {
   try {
@@ -9,11 +9,7 @@ export async function GET(req: Request) {
 
     if (!profile) return new NextResponse("Unauthorized", { status: 401 });
 
-    const tasks = await db.task.findMany({
-      where: { userId: profile.userID },
-      include: { category: true },
-      orderBy: [{ createdAt: "desc" }],
-    });
+    const tasks = await getTasks(profile.userID);
 
     return NextResponse.json(tasks);
   } catch (error) {
