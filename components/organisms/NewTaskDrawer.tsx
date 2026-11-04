@@ -35,7 +35,7 @@ export default function NewTaskDrawer() {
       open={open}
       onOpenChange={(next) => {
         setOpen(next);
-        if (!next) setNewCateg(false);
+        if (!next) setSelectingCategory(false);
       }}
     >
       <DrawerTrigger

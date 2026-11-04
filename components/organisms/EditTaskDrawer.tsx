@@ -57,7 +57,7 @@ export default function EditTaskDrawer({ task, variant }: EditTaskDrawerProps) {
         if (next) flushPendingDeletes();
         else {
           taskForm.reset();
-          setNewCateg(false);
+          setSelectingCategory(false);
         }
         setOpen(next);
       }}
