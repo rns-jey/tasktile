@@ -5,14 +5,13 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { isPendingDelete } from "./useDeleteTask";
 
-export function useTodayTasks(initialTasks?: TaskWithCategory[]) {
+export function useTodayTasks() {
   return useQuery<TaskWithCategory[]>({
     queryKey: ["tasks", "today"],
     queryFn: async () => {
       const response = await axios.get("/api/tasks/today");
       return response.data;
     },
-    initialData: initialTasks,
     select: (tasks) => tasks.filter((t) => !isPendingDelete(t.id)),
     staleTime: 60 * 1000,
   });

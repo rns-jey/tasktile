@@ -1,7 +1,5 @@
 "use client";
 
-import { TaskWithCategory } from "@/types";
-
 import { Skeleton } from "@/components/ui/Skeleton";
 
 import { useTodayTasks } from "@/hooks/useTasks";
@@ -10,16 +8,10 @@ import { Button } from "../ui/Button";
 import { Card, CardContent } from "../ui/Card";
 import TaskList from "./TaskList";
 
-interface TaskListSectionProps {
-  initialTasks: TaskWithCategory[];
-}
-
-export default function TodayTaskSection({
-  initialTasks,
-}: TaskListSectionProps) {
+export default function TodayTaskSection() {
   const [visible, setVisible] = useState<boolean>(false);
 
-  const { data: tasks } = useTodayTasks(initialTasks);
+  const { data: tasks } = useTodayTasks();
 
   if (!tasks)
     return (

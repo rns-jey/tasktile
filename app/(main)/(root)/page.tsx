@@ -6,22 +6,34 @@ import { getToday } from "@/lib/today";
 
 import TodayHeader from "@/components/organisms/TodayHeader";
 import TodayTaskSection from "@/components/organisms/TodayTaskSection";
-import { Fragment } from "react";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
 
 export default async function Home() {
   const currentUser = await currentProfile();
 
   if (!currentUser) redirect("/sign-in");
 
-  const tasks = await getTodayTasks(currentUser.userID, await getToday());
+  const today = await getToday();
+
+  const queryClient = new QueryClient();
+
+  await queryClient.query({
+    queryKey: ["tasks", "today"],
+    queryFn: () => getTodayTasks(currentUser.userID, today),
+    staleTime: 1000 * 60, // 1 minute
+  });
 
   return (
-    <Fragment>
-      <TodayHeader initialTasks={tasks} />
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <TodayHeader />
 
       {/* <UnfinishedBanner /> */}
 
-      <TodayTaskSection initialTasks={tasks} />
-    </Fragment>
+      <TodayTaskSection />
+    </HydrationBoundary>
   );
 }

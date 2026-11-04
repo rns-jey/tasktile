@@ -4,16 +4,11 @@ import { useTodayTasks } from "@/hooks/useTasks";
 import { heatClass } from "@/lib/colors";
 import { fromDbDay } from "@/lib/date";
 import { cn } from "@/lib/utils";
-import { TaskWithCategory } from "@/types";
 import { format } from "date-fns";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { useTodayKey } from "../providers/TodayProvider";
 
-export default function TodayHeader({
-  initialTasks,
-}: {
-  initialTasks: TaskWithCategory[];
-}) {
+export default function TodayHeader() {
   const headerRef = useRef<HTMLDivElement>(null);
   const [showBar, setShowBar] = useState(false);
 
@@ -33,7 +28,7 @@ export default function TodayHeader({
   const todayKey = useTodayKey();
   const today = fromDbDay(`${todayKey}T00:00:00Z`);
 
-  const { data: tasks } = useTodayTasks(initialTasks);
+  const { data: tasks } = useTodayTasks();
 
   const activeTasks = tasks?.filter((task) => !task.completed);
   const completedTasks = tasks?.filter((task) => task.completed);
