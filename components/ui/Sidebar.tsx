@@ -4,13 +4,19 @@ import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "cn";
+import { PanelLeftIcon } from "lucide-react";
 import * as React from "react";
 
-import { Button } from "./Button";
-import { Input } from "./Input";
-import { Separator } from "./Separator";
-import { Skeleton } from "./Skeleton";
-import { Tooltip, TooltipContent, TooltipTrigger } from "./Tooltip";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { Separator } from "@/components/ui/Separator";
+import { Skeleton } from "@/components/ui/Skeleton";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/Tooltip";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -25,6 +31,7 @@ type SidebarContextProps = {
   setOpen: (open: boolean) => void;
   openMobile: boolean;
   setOpenMobile: (open: boolean) => void;
+  isMobile: boolean;
   toggleSidebar: () => void;
 };
 
@@ -52,6 +59,7 @@ function SidebarProvider({
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
 }) {
+  const isMobile = useIsMobile();
   const [openMobile, setOpenMobile] = React.useState(false);
 
   // This is the internal state of the sidebar.
@@ -75,8 +83,8 @@ function SidebarProvider({
 
   // Helper to toggle the sidebar.
   const toggleSidebar = React.useCallback(() => {
-    return setOpen((open) => !open);
-  }, [setOpen]);
+    return isMobile ? setOpenMobile((open) => !open) : setOpen((open) => !open);
+  }, [isMobile, setOpen, setOpenMobile]);
 
   // Adds a keyboard shortcut to toggle the sidebar.
   React.useEffect(() => {
@@ -103,11 +111,12 @@ function SidebarProvider({
       state,
       open,
       setOpen,
+      isMobile,
       openMobile,
       setOpenMobile,
       toggleSidebar,
     }),
-    [state, open, setOpen, openMobile, setOpenMobile, toggleSidebar],
+    [state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar],
   );
 
   return (
@@ -146,7 +155,7 @@ function Sidebar({
   variant?: "sidebar" | "floating" | "inset";
   collapsible?: "offcanvas" | "icon" | "none";
 }) {
-  const { state } = useSidebar();
+  const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
 
   if (collapsible === "none") {
     return (
@@ -212,7 +221,6 @@ function Sidebar({
 function SidebarTrigger({
   className,
   onClick,
-  children,
   ...props
 }: React.ComponentProps<typeof Button>) {
   const { toggleSidebar } = useSidebar();
@@ -230,7 +238,8 @@ function SidebarTrigger({
       }}
       {...props}
     >
-      {children}
+      <PanelLeftIcon className="cn-rtl-flip" />
+      <span className="sr-only">Toggle Sidebar</span>
     </Button>
   );
 }
@@ -467,7 +476,7 @@ function SidebarMenuButton({
     isActive?: boolean;
     tooltip?: string | React.ComponentProps<typeof TooltipContent>;
   } & VariantProps<typeof sidebarMenuButtonVariants>) {
-  const { state } = useSidebar();
+  const { isMobile, state } = useSidebar();
   const comp = useRender({
     defaultTagName: "button",
     props: mergeProps<"button">(
@@ -501,7 +510,7 @@ function SidebarMenuButton({
       <TooltipContent
         side="right"
         align="center"
-        hidden={state !== "collapsed"}
+        hidden={state !== "collapsed" || isMobile}
         {...tooltip}
       />
     </Tooltip>

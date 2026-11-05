@@ -128,7 +128,7 @@ export default function CategoryForm({
           type="submit"
           form={formId}
           disabled={formPending}
-          className="bg-ink text-paper h-11 px-4 font-semibold"
+          className="bg-ink h-11 px-4 font-semibold"
         >
           {isEditing ? "Save" : "Add"}
         </Button>

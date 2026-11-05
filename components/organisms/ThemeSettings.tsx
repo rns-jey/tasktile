@@ -19,7 +19,7 @@ export default function ThemeSettings() {
         Appearance
       </p>
 
-      <div className="bg-paper-2 flex w-full rounded-lg p-0.5">
+      <div className="flex w-full rounded-lg p-0.5">
         {themes.map((t) => (
           <Button
             key={t}

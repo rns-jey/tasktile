@@ -20,7 +20,7 @@ export default function TodayTaskSection() {
 
       {completedTasks.length !== 0 && (
         <>
-          <Card className="bg-paper-2 mx-2 my-4">
+          <Card className="mx-2 my-4">
             <CardContent className="flex items-center justify-between">
               <span className="font-medium tracking-[.08em] uppercase">
                 DONE TODAY · {completedTasks.length}

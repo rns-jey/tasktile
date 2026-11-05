@@ -134,7 +134,7 @@ export default function TaskForm({
           type="submit"
           form={formId}
           disabled={formPending}
-          className="bg-ink text-paper h-11 px-4 font-semibold"
+          className="h-11 px-4 font-semibold"
         >
           {isEditing ? "Save" : "Add"}
         </Button>

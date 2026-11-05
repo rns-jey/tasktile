@@ -64,7 +64,7 @@ export default function AppSidebar({ ...props }: AppSidebarProps) {
                   <Diamond className="size-3" />
                 </div>
                 <span className="truncate font-medium">TaskTile</span>
-                <div className="hover:bg-muted hover:text-paper ml-auto cursor-pointer rounded-lg p-2">
+                <div className="hover:bg-muted ml-auto cursor-pointer rounded-lg p-2">
                   <PanelLeftIcon />
                 </div>
               </div>

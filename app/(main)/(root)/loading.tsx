@@ -26,7 +26,7 @@ export default function RootLoading() {
           <Skeleton className="h-5 w-28" />
         </div>
 
-        <div className="bg-paper-3 font-display flex size-17 items-center justify-center rounded-[15px] text-[28px]">
+        <div className="font-display flex size-17 items-center justify-center rounded-[15px] text-[28px]">
           <Skeleton className="size-10" />
         </div>
       </header>
