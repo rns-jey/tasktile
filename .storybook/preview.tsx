@@ -1,6 +1,29 @@
 import type { Preview } from "@storybook/nextjs-vite";
+import "../app/globals.css";
 
 const preview: Preview = {
+  decorators: [
+    (Story, { parameters }) => {
+      const { pageLayout } = parameters;
+
+      switch (pageLayout) {
+        case "page":
+          return (
+            <div className="page-layout">
+              <Story />
+            </div>
+          );
+        case "page-mobile":
+          return (
+            <div className="page-mobile-layout">
+              <Story />
+            </div>
+          );
+        default:
+          return <Story />;
+      }
+    },
+  ],
   parameters: {
     controls: {
       matchers: {
