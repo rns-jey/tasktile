@@ -67,9 +67,7 @@ export default function CategoryCard({
                 <span className="text-task font-medium">{category.name}</span>
 
                 {category.openCount > 0 && (
-                  <span className="text-muted-2 text-xs">
-                    {category.openCount} open
-                  </span>
+                  <span className="text-xs">{category.openCount} open</span>
                 )}
               </div>
             </div>

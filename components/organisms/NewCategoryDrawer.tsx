@@ -36,7 +36,7 @@ export default function NewCategoryDrawer() {
             variant={"outline"}
             className="mt-2.5 flex h-14 w-full cursor-pointer items-center justify-start gap-3.5 px-4"
           >
-            <span className="ring-stroke text-muted grid size-7 place-items-center rounded-[7px] text-xl ring-[1.5px] ring-inset">
+            <span className="ring-stroke grid size-7 place-items-center rounded-[7px] text-xl ring-[1.5px] ring-inset">
               +
             </span>
             <span className="text-task font-medium">New category</span>

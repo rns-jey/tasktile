@@ -12,7 +12,7 @@ export default function SignOutSection() {
 
   return (
     <div>
-      <p className="text-label text-muted-2 mx-2 mt-6 mb-2 font-medium tracking-[.08em] uppercase">
+      <p className="text-label mx-2 mt-6 mb-2 font-medium tracking-[.08em] uppercase">
         App
       </p>
 

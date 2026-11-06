@@ -115,10 +115,7 @@ export default function CategoryForm({
   return (
     <Fragment>
       <DrawerHeader className="flex flex-row items-center justify-between">
-        <DrawerClose
-          disabled={formPending}
-          className="text-muted h-11 px-2 font-medium"
-        >
+        <DrawerClose disabled={formPending} className="h-11 px-2 font-medium">
           Cancel
         </DrawerClose>
         <DrawerTitle>
@@ -222,7 +219,7 @@ export default function CategoryForm({
                   <span aria-hidden="true" className="text-muted-foreground/50">
                     ·
                   </span>
-                  <span className="text-meta text-muted-2">due tomorrow</span>
+                  <span className="text-meta">due tomorrow</span>
                   <span aria-hidden="true" className="text-muted-foreground/50">
                     ·
                   </span>

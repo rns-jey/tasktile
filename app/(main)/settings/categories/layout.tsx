@@ -11,7 +11,7 @@ export default function CategoriesLayout({
     <Fragment>
       <Link
         href={"/settings"}
-        className="text-muted inline-flex h-11 items-center gap-1 text-base font-medium"
+        className="inline-flex h-11 items-center gap-1 text-base font-medium"
       >
         <ChevronLeft /> Settings
       </Link>
@@ -20,7 +20,7 @@ export default function CategoriesLayout({
         <h1 className="font-display text-display-lg pt-1.5 tracking-[-.01em]">
           Categories
         </h1>
-        <p className="text-body text-muted">
+        <p className="text-body">
           Each category has its own colour. Tap one to rename it or change its
           colour.
         </p>

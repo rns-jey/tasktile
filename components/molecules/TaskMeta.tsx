@@ -28,15 +28,13 @@ export default function TaskMeta({ task }: { task: TaskWithCategory }) {
         className={cn(
           due.overdue
             ? "text-destructive bg-destructive/15 rounded px-1.5 font-semibold"
-            : "text-meta text-muted-2",
+            : "text-meta",
         )}
       >
         {due.label}
       </span>
     ),
-    closed && isCompleted && (
-      <span className="text-meta text-muted-2">{closed}</span>
-    ),
+    closed && isCompleted && <span className="text-meta">{closed}</span>,
     task.description && (
       <AlignLeftIcon className="w-4" aria-label="Has description" />
     ),

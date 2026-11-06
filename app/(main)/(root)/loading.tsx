@@ -15,7 +15,7 @@ export default function RootLoading() {
       <header className="flex justify-between pb-4">
         <div>
           <h1 className="flex flex-col">
-            <span className="text-meta text-muted-2 font-medium tracking-[.08em] uppercase">
+            <span className="text-meta font-medium tracking-[.08em] uppercase">
               {format(today, "eeee")}
             </span>
             <span className="font-display text-display-lg">

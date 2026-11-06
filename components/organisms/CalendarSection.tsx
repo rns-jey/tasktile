@@ -135,7 +135,6 @@ export default function CalendarSection() {
           <Button
             type="button"
             variant={"outline"}
-            size={"icon-xl"}
             onClick={() => setCurrentMonth((m) => subMonths(m, 1))}
           >
             <ChevronLeft className="size-6" />
@@ -143,7 +142,6 @@ export default function CalendarSection() {
           <Button
             type="button"
             variant={"outline"}
-            size={"icon-xl"}
             onClick={() => setCurrentMonth((m) => addMonths(m, 1))}
             disabled={isSameMonth(today, currentMonth)}
           >
@@ -168,7 +166,7 @@ export default function CalendarSection() {
               size="lg"
               disabled={differenceInCalendarDays(day.date, today) > 0}
               className={cn(
-                !isSameMonth(day.date, currentMonth) && "text-muted",
+                !isSameMonth(day.date, currentMonth) && "",
                 day.key === todayKey && "ring-2",
                 day.key === selected && "ring-2 ring-offset-2",
                 "flex h-full w-full items-start justify-start pt-1 text-xs ring-black",
@@ -193,7 +191,7 @@ export default function CalendarSection() {
               )}
             />
             <div>
-              <p className="text-meta text-muted font-medium">
+              <p className="text-meta font-medium">
                 {format(
                   parse(selected, "yyyy-MM-dd", new Date()),
                   "EEE d MMMM",

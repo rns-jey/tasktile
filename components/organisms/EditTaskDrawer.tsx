@@ -80,7 +80,7 @@ export default function EditTaskDrawer({ task, variant }: EditTaskDrawerProps) {
           >
             <span
               className={cn(
-                task.completed && "text-muted line-through",
+                task.completed && "line-through",
                 "text-task w-full truncate text-left font-medium",
               )}
             >

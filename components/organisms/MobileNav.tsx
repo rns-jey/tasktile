@@ -27,7 +27,7 @@ function NavLink({ href, label, icon: Icon }: NavItem) {
         aria-current={active ? "page" : undefined}
         className={cn(
           "my-1 flex flex-col items-center gap-1 rounded-2xl p-1",
-          active ? "text-task bg-muted/20" : "text-muted",
+          active ? "text-task" : "",
         )}
       >
         <Icon size={24} />

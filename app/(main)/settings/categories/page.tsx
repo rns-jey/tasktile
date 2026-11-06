@@ -18,7 +18,7 @@ export default async function CategoriesPage() {
 
       <NewCategoryDrawer />
 
-      <p className="text-meta text-muted-2 px-5 pt-4 leading-[1.45]">
+      <p className="text-meta px-5 pt-4 leading-[1.45]">
         Swipe left on a category to delete it…
       </p>
     </Fragment>

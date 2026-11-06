@@ -44,7 +44,7 @@ export default function CategoriesDrawer({
         <Button
           variant={"ghost"}
           type="button"
-          className="text-muted ml-auto h-11 w-fit px-2 text-right font-medium"
+          className="ml-auto h-11 w-fit px-2 text-right font-medium"
           onClick={() => {
             onSelect(null);
             setSelectingCategory(false);

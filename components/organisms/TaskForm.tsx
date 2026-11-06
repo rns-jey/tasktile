@@ -219,7 +219,7 @@ export default function TaskForm({
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <div className="flex items-center justify-between">
-                    <span className="text-label text-muted-2 font-medium tracking-[.08em] uppercase">
+                    <span className="text-label font-medium tracking-[.08em] uppercase">
                       Category · optional
                     </span>
                     <Button
