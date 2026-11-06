@@ -19,7 +19,7 @@ export default function SignOutSection() {
       <Button
         variant={"ghost"}
         type="button"
-        className="flex h-11 w-full justify-start bg-white text-base"
+        className="flex h-11 w-full justify-start text-base"
         onClick={handleSignOut}
       >
         Sign out

@@ -14,9 +14,9 @@ export const categColors = [
 export type CategColor = (typeof categColors)[number];
 
 export function heatClass(count: number) {
-  if (count >= 10) return "bg-[#963118] text-white";
-  if (count >= 7) return "bg-[#cf6139] text-white";
-  if (count >= 4) return "bg-[#eb9a75]";
-  if (count >= 1) return "bg-[#f3cbb5]";
-  return "bg-[#ebe5de]";
+  if (count >= 10) return "bg-tile-4 text-white";
+  if (count >= 7) return "bg-tile-3 text-white";
+  if (count >= 4) return "bg-tile-2";
+  if (count >= 1) return "bg-tile-1";
+  return "bg-tile-0";
 }

@@ -30,7 +30,7 @@ export default function TodayTaskSection() {
                 variant={"ghost"}
                 type="button"
                 onClick={() => setVisible(!visible)}
-                className="text-accent text-[15px] font-semibold"
+                className="text-accent-foreground text-[15px] font-semibold"
               >
                 {visible ? "Hide" : "Show"}
               </Button>

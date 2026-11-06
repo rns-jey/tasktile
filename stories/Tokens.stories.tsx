@@ -13,9 +13,9 @@ const colours = [
     hex: "#FBF8F1",
   },
   {
-    name: "jade",
-    case: "bg-jade | text-jade",
-    className: "bg-jade",
+    name: "salmon",
+    case: "bg-salmon | text-salmon",
+    className: "bg-salmon",
     hex: "#091121",
   },
   {
@@ -144,15 +144,15 @@ const categoryColours = [
     hex: "#3080bc",
   },
   {
-    name: "cat-teal",
-    case: "bg-cat-teal | text-cat-teal",
-    className: "bg-cat-teal",
+    name: "cat-sky",
+    case: "bg-cat-sky | text-cat-sky",
+    className: "bg-cat-sky",
     hex: "#14938d",
   },
   {
-    name: "cat-green",
-    case: "bg-cat-green | text-cat-green",
-    className: "bg-cat-green",
+    name: "cat-teal",
+    case: "bg-cat-teal | text-cat-teal",
+    className: "bg-cat-teal",
     hex: "#429c5a",
   },
   {

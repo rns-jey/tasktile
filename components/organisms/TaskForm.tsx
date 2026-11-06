@@ -125,7 +125,7 @@ export default function TaskForm({
       <DrawerHeader className="flex flex-row items-center justify-between py-4">
         <DrawerClose
           disabled={formPending}
-          className="text-muted h-11 px-2 font-medium"
+          className="text-muted-foreground h-11 px-2 font-medium"
         >
           Cancel
         </DrawerClose>
