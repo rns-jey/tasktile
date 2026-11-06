@@ -18,12 +18,12 @@ export default function AnalyticsHeader() {
   return (
     <header className="flex gap-5 pb-4">
       <h1 className="flex flex-col">
-        <p className="font-display text-display-lg">{current}</p>
+        <p className="font-heading">{current}</p>
         <p className="text-body flex gap-1">day streak</p>
       </h1>
 
       <h1 className="flex flex-col">
-        <p className="font-display text-display-lg">{best}</p>
+        <p className="font-heading">{best}</p>
         <p className="text-body flex gap-1">best</p>
       </h1>
     </header>

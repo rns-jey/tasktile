@@ -1,28 +1,9 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 
 import { cn } from "@/lib/utils";
 import { Toaster } from "sonner";
-
-const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-const instrumentSerif = Instrument_Serif({
-  subsets: ["latin"],
-  weight: "400", // required: it's not a variable font, and 400 is the only weight
-  variable: "--font-instrument-serif",
-  display: "swap",
-});
+import { fontVariables } from "./fonts";
 
 export const metadata: Metadata = {
   title: "TaskTile - Your To-Do List App",
@@ -39,11 +20,9 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={cn("overscroll-none", "font-sans", geist.variable)}
+      className={cn("overscroll-none", `${fontVariables} antialiased`)}
     >
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className="min-h-full p-4">
         {children}
         <Toaster />
       </body>

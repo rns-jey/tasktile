@@ -197,7 +197,7 @@ export default function CalendarSection() {
                   "EEE d MMMM",
                 )}
               </p>
-              <p className="font-display text-[26px]">
+              <p className="font-heading text-[26px]">
                 {selectedCount} completed
               </p>
             </div>

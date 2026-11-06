@@ -11,7 +11,7 @@ export default function Loading() {
     <Fragment>
       <header className="flex flex-col justify-between gap-4 pb-4">
         <h1 className="flex flex-col">
-          <span className="font-display text-display-lg">Settings</span>
+          <span className="font-heading">Settings</span>
         </h1>
       </header>
 

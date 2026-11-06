@@ -44,7 +44,7 @@ export default function TodayHeader() {
         <div className="flex items-center gap-2">
           <div
             className={cn(
-              "font-display flex size-11 items-center justify-center rounded-[15px] text-[28px]",
+              "font-heading flex size-11 items-center justify-center rounded-[15px] text-[28px]",
               heatClass(completedTasks ? completedTasks.length : 0),
             )}
           >
@@ -67,9 +67,7 @@ export default function TodayHeader() {
             <span className="text-meta font-medium tracking-[.08em] uppercase">
               {format(today, "eeee")}
             </span>
-            <span className="font-display text-display-lg">
-              {format(today, "LLLL d")}
-            </span>
+            <span className="font-heading">{format(today, "LLLL d")}</span>
           </h1>
           <p className="text-body flex gap-1">
             {completedTasks ? completedTasks.length : 0}
@@ -81,7 +79,7 @@ export default function TodayHeader() {
 
         <div
           className={cn(
-            "font-display flex size-17 items-center justify-center rounded-[15px] text-[28px]",
+            "font-heading flex size-17 items-center justify-center rounded-[15px] text-[28px]",
             heatClass(completedTasks ? completedTasks.length : 0),
           )}
         >

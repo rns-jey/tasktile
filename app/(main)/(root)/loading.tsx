@@ -18,15 +18,13 @@ export default function RootLoading() {
             <span className="text-meta font-medium tracking-[.08em] uppercase">
               {format(today, "eeee")}
             </span>
-            <span className="font-display text-display-lg">
-              {format(today, "LLLL d")}
-            </span>
+            <span className="font-heading">{format(today, "LLLL d")}</span>
           </h1>
 
           <Skeleton className="h-5 w-28" />
         </div>
 
-        <div className="font-display flex size-17 items-center justify-center rounded-[15px] text-[28px]">
+        <div className="font-heading flex size-17 items-center justify-center rounded-[15px] text-[28px]">
           <Skeleton className="size-10" />
         </div>
       </header>
