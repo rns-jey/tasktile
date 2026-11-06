@@ -11,7 +11,7 @@ import ReactQueryProvider from "@/components/providers/ReactQueryProvider";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import TimezoneSync from "@/components/providers/TimezoneSync";
 import { TodayProvider } from "@/components/providers/TodayProvider";
-import ContentShell from "@/components/templates/ContentShell";
+import { ScrollArea } from "@/components/ui/ScrollArea";
 import { SidebarInset, SidebarProvider } from "@/components/ui/Sidebar";
 import { getCategories, getRecentCategories } from "@/lib/queries/categories";
 import {
@@ -57,8 +57,10 @@ export default async function MainLayout({
             <SidebarProvider>
               <AppSidebar />
 
-              <SidebarInset className="flex h-dvh w-full flex-col overflow-hidden">
-                <ContentShell>{children}</ContentShell>
+              <SidebarInset className="flex h-dvh">
+                <ScrollArea className="min-h-0 flex-1 p-4">
+                  {children}
+                </ScrollArea>
                 <MobileNav />
               </SidebarInset>
             </SidebarProvider>

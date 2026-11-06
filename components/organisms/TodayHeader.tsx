@@ -15,7 +15,7 @@ export default function TodayHeader() {
   useEffect(() => {
     const el = headerRef.current;
     if (!el) return;
-
+    console.log(el);
     const overserver = new IntersectionObserver(([entry]) =>
       setShowBar(!entry.isIntersecting),
     );
@@ -44,7 +44,7 @@ export default function TodayHeader() {
         <div className="flex items-center gap-2">
           <div
             className={cn(
-              "font-heading flex size-11 items-center justify-center rounded-[15px] text-[28px]",
+              "font-heading flex size-11 items-center justify-center rounded-[15px] text-2xl text-[28px]",
               heatClass(completedTasks ? completedTasks.length : 0),
             )}
           >
@@ -64,12 +64,14 @@ export default function TodayHeader() {
       <header className="flex justify-between" ref={headerRef}>
         <div>
           <h1 className="flex flex-col">
-            <span className="text-meta font-medium tracking-[.08em] uppercase">
+            <span className="text-xs leading-6 font-medium tracking-[.08em] uppercase">
               {format(today, "eeee")}
             </span>
-            <span className="font-heading">{format(today, "LLLL d")}</span>
+            <span className="font-heading text-4xl leading-none">
+              {format(today, "LLLL d")}
+            </span>
           </h1>
-          <p className="text-body flex gap-1">
+          <p className="flex gap-1">
             {completedTasks ? completedTasks.length : 0}
             <span>done today</span>
             <span>·</span>

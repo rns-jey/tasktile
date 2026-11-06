@@ -39,8 +39,8 @@ function NavLink({ href, label, icon: Icon }: NavItem) {
 
 export default function MobileNav() {
   return (
-    <div className="z-50 px-2 pb-[max(1rem,env(safe-area-inset-bottom))]">
-      <nav className="shrink-0 rounded-2xl border-t p-1 md:hidden">
+    <div className="z-50 pb-[max(1rem,env(safe-area-inset-bottom))]">
+      <nav className="shrink-0 border-t p-1 md:hidden">
         <ul className="grid grid-cols-5 gap-2">
           {navItems.slice(0, 2).map((item) => (
             <NavLink key={item.href} {...item} />

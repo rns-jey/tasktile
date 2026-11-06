@@ -22,7 +22,7 @@ export default function RootLayout({
       suppressHydrationWarning
       className={cn("overscroll-none", `${fontVariables} antialiased`)}
     >
-      <body className="min-h-full p-4">
+      <body>
         {children}
         <Toaster />
       </body>
