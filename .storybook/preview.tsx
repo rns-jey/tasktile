@@ -1,3 +1,4 @@
+import { fontVariables } from "@/app/fonts";
 import type { Preview } from "@storybook/nextjs-vite";
 import "../app/globals.css";
 
@@ -20,7 +21,11 @@ const preview: Preview = {
             </div>
           );
         default:
-          return <Story />;
+          return (
+            <div className={fontVariables}>
+              <Story />
+            </div>
+          );
       }
     },
   ],
