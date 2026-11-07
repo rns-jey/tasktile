@@ -3,7 +3,7 @@ import axios from "axios";
 
 import { localDay, localTz } from "@/lib/date";
 import { TaskWithCategory } from "@/types";
-import { Checkbox } from "../ui/Checkbox";
+import { Checkbox } from "../atoms/Checkbox";
 
 export default function ToggleTask({ task }: { task: TaskWithCategory }) {
   const queryClient = useQueryClient();
@@ -62,7 +62,6 @@ export default function ToggleTask({ task }: { task: TaskWithCategory }) {
     <Checkbox
       checked={task.completed}
       onCheckedChange={() => toggleTask.mutate(task)}
-      className="rounded-check ring-stroke size-6 cursor-pointer ring-[1.75px] ring-inset"
     />
   );
 }

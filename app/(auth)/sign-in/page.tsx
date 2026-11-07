@@ -21,7 +21,7 @@ import {
   InputGroupInput,
 } from "@/components/ui/InputGroup";
 
-import { Checkbox } from "@/components/ui/Checkbox";
+import { Checkbox } from "@/components/atoms/Checkbox";
 import { Label } from "@/components/ui/Label";
 
 import { Card, CardContent, CardHeader } from "@/components/ui/Card";
@@ -153,9 +153,9 @@ export default function SignInPage() {
             </Button>
 
             <div className="flex w-full items-center gap-2">
-              <div className="h-[1px] w-full bg-gradient-to-r from-transparent to-neutral-300 dark:via-neutral-700" />
+              <div className="h-px w-full bg-linear-to-r from-transparent to-neutral-300 dark:via-neutral-700" />
               or
-              <div className="h-[1px] w-full bg-gradient-to-r from-neutral-300 to-transparent dark:via-neutral-700" />
+              <div className="h-px w-full bg-linear-to-r from-neutral-300 to-transparent dark:via-neutral-700" />
             </div>
 
             {/* For future implementation */}

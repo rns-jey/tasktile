@@ -12,8 +12,8 @@ import { Category } from "@/lib/generated/prisma/client";
 import { CategoryFormValues } from "@/lib/schemas/categories";
 import { cn } from "@/lib/utils";
 
+import { Checkbox } from "../atoms/Checkbox";
 import { Button } from "../ui/Button";
-import { Checkbox } from "../ui/Checkbox";
 import {
   DrawerClose,
   DrawerFooter,
@@ -199,7 +199,7 @@ export default function CategoryForm({
         <div className="rounded-lg border p-2">
           <div className="border-line flex h-16 items-center gap-3.5 border-b bg-white px-2">
             <span className="text-subtle w-4.5 font-mono text-xs">00</span>
-            <Checkbox className="rounded-check ring-stroke size-6 cursor-pointer ring-[1.75px] ring-inset" />
+            <Checkbox />
             <div className="flex w-full cursor-pointer">
               <div className="flex min-w-0 grow-0 flex-col gap-0.5">
                 <span className="text-task w-full truncate font-medium">
