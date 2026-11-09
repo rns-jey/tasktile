@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { fn } from "storybook/test";
+import { expect, fn } from "storybook/test";
 
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/atoms/Button";
 import { Label } from "@/components/ui/Label";
-import { Smartphone } from "lucide-react";
+import { PlusIcon, Smartphone } from "lucide-react";
 
 const variants = [
   "default",
@@ -15,6 +15,17 @@ const variants = [
 ] as const;
 const sizes = ["xs", "sm", "default", "lg"] as const;
 const iconSizes = ["icon-xs", "icon-sm", "icon", "icon-lg"] as const;
+const radialSizes = [
+  "rounded-sm",
+  "rounded-md",
+  "rounded-lg",
+  "rounded-xl",
+  "rounded-2xl",
+  "rounded-3xl",
+  "rounded-4xl",
+  "rounded-5xl",
+  "rounded-full",
+];
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
@@ -54,6 +65,26 @@ const meta = {
 
 export default meta;
 type Story = StoryObj<typeof meta>;
+
+export const MobileSize: Story = {
+  name: "Mobile: tap size and text size",
+  args: { children: "Add task" },
+  globals: { viewport: { value: "mobile1" } },
+  play: async ({ canvas, step }) => {
+    const button = canvas.getByRole("button", { name: "Add task" });
+
+    await step(
+      "Button is 44px tall, big enough to tap on a phone",
+      async () => {
+        await expect(button.getBoundingClientRect().height).toBe(44);
+      },
+    );
+
+    await step("Button text is 16px, readable without zooming", async () => {
+      await expect(getComputedStyle(button).fontSize).toBe("16px");
+    });
+  },
+};
 
 // More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
 export const Default: Story = {
@@ -104,6 +135,18 @@ export const States: Story = {
       <Button>Normal</Button>
       <Button disabled>Disabled</Button>
       <Button aria-invalid>Invalid</Button>
+    </div>
+  ),
+};
+
+export const Radial: Story = {
+  render: () => (
+    <div className="grid grid-cols-3 gap-3">
+      {radialSizes.map((size) => (
+        <Button className={`${size} size-11`}>
+          <PlusIcon />
+        </Button>
+      ))}
     </div>
   ),
 };
