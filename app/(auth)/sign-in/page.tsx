@@ -8,7 +8,7 @@ import { z } from "zod";
 
 import { EyeOffIcon, LockIcon, MailIcon } from "lucide-react";
 
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/atoms/Button";
 import {
   Field,
   FieldError,
@@ -147,7 +147,7 @@ export default function SignInPage() {
               type="submit"
               form="form-signin"
               disabled={isPending}
-              className="h-11 w-full text-base"
+              className="w-full"
             >
               {isPending ? "Signing in..." : "Sign In"}
             </Button>
@@ -160,10 +160,10 @@ export default function SignInPage() {
 
             {/* For future implementation */}
             <div className="flex w-full gap-2">
-              <Button type="button" className="h-11 flex-1 text-base">
+              <Button type="button" className="flex-1">
                 Github
               </Button>
-              <Button type="button" className="h-11 flex-1 text-base">
+              <Button type="button" className="flex-1">
                 Google
               </Button>
             </div>

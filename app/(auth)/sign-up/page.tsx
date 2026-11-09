@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/atoms/Button";
 import { Field, FieldError, FieldGroup } from "@/components/ui/Field";
 import {
   InputGroup,
@@ -192,7 +192,7 @@ export default function SignUpPage() {
             type="submit"
             form="form-signup"
             disabled={isPending}
-            className="h-11 w-full text-base"
+            className="w-full"
           >
             Sign Up
           </Button>
@@ -204,10 +204,10 @@ export default function SignUpPage() {
 
           {/* For future implementation */}
           <div className="flex w-full gap-2">
-            <Button type="button" className="h-11 flex-1 text-base">
+            <Button type="button" className="flex-1">
               Github
             </Button>
-            <Button type="button" className="h-11 flex-1 text-base">
+            <Button type="button" className="flex-1">
               Google
             </Button>
           </div>

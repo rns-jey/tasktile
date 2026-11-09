@@ -8,7 +8,7 @@ import {
   categoryFormSchema,
   CategoryFormValues,
 } from "@/lib/schemas/categories";
-import { Button } from "../ui/Button";
+import { Button } from "../atoms/Button";
 import { Drawer, DrawerContent, DrawerTrigger } from "../ui/Drawer";
 import CategoryForm from "./CategoryForm";
 
@@ -34,7 +34,8 @@ export default function NewCategoryDrawer() {
           <Button
             type="button"
             variant={"outline"}
-            className="mt-2.5 flex h-14 w-full cursor-pointer items-center justify-start gap-3.5 px-4"
+            size="lg"
+            className="mt-2 flex w-full items-center justify-start gap-3.5 px-4"
           >
             <span className="ring-stroke grid size-7 place-items-center rounded-[7px] text-xl ring-[1.5px] ring-inset">
               +

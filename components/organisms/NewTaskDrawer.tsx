@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 
 import { taskFormSchema, TaskFormValues } from "@/lib/schemas/task";
 
-import { Button } from "../ui/Button";
+import { Button } from "../atoms/Button";
 import { Drawer, DrawerContent, DrawerTrigger } from "../ui/Drawer";
 import CategoriesDrawer from "./CategoriesDrawer";
 import TaskForm from "./TaskForm";
@@ -39,7 +39,7 @@ export default function NewTaskDrawer() {
     >
       <DrawerTrigger
         render={
-          <Button className="h-16 w-16 rounded-2xl">
+          <Button className="size-16 rounded-2xl">
             <PlusIcon />
           </Button>
         }

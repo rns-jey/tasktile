@@ -12,8 +12,8 @@ import { TaskFormValues } from "@/lib/schemas/task";
 import { TaskWithCategory } from "@/types";
 
 import { toast } from "sonner";
+import { Button } from "../atoms/Button";
 import DatePicker from "../molecules/DatePicker";
-import { Button } from "../ui/Button";
 import { DrawerClose, DrawerHeader, DrawerTitle } from "../ui/Drawer";
 import { Field, FieldError, FieldGroup } from "../ui/Field";
 import {
@@ -131,10 +131,10 @@ export default function TaskForm({
         </DrawerClose>
         <DrawerTitle>{isEditing ? "Edit Task" : "Add Task"}</DrawerTitle>
         <Button
+          className="px-4"
           type="submit"
           form={formId}
           disabled={formPending}
-          className="h-11 px-4 font-semibold"
         >
           {isEditing ? "Save" : "Add"}
         </Button>

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/atoms/Button";
 import { Card } from "@/components/ui/Card";
 import { Field, FieldError, FieldGroup } from "@/components/ui/Field";
 import {
@@ -111,7 +111,7 @@ export default function ForgotPassword() {
                 type="submit"
                 form="form-forgot-password"
                 disabled={isPending}
-                className="h-11 w-full text-base"
+                className="w-full"
               >
                 {isPending ? "Sending..." : "Send"}
               </Button>

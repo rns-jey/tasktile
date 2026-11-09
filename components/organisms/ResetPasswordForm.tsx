@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
-import { Button } from "../ui/Button";
+import { Button } from "../atoms/Button";
 import { Field, FieldError, FieldGroup } from "../ui/Field";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "../ui/InputGroup";
 
@@ -130,7 +130,7 @@ export default function ResetPasswordForm({ token }: { token: string }) {
             type="submit"
             form="form-forgot-password"
             disabled={isPending}
-            className="h-11 w-full text-base"
+            className="w-full"
           >
             {isPending ? "Signing in..." : "Sign In"}
             Change Password

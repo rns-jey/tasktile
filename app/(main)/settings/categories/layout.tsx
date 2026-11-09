@@ -11,7 +11,7 @@ export default function CategoriesLayout({
     <Fragment>
       <Link
         href={"/settings"}
-        className="inline-flex h-11 items-center gap-1 text-base font-medium"
+        className="inline-flex items-center gap-1 font-medium"
       >
         <ChevronLeft /> Settings
       </Link>

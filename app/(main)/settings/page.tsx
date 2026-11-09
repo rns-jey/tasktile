@@ -1,6 +1,6 @@
+import { Button } from "@/components/atoms/Button";
 import SignOutSection from "@/components/molecules/SignOutSection";
 import ThemeSettings from "@/components/organisms/ThemeSettings";
-import { Button } from "@/components/ui/Button";
 import currentProfile from "@/lib/profile";
 import { getCategoriesCount } from "@/lib/queries/categories";
 import { ChevronRight, LayoutGridIcon } from "lucide-react";
@@ -29,7 +29,7 @@ export default async function SettingsPage() {
         </p>
 
         <Button
-          className="flex h-11 w-full items-center justify-between bg-white text-base"
+          className="flex w-full items-center justify-between bg-white"
           variant={"outline"}
           nativeButton={false}
           render={<Link href="/settings/categories" />}

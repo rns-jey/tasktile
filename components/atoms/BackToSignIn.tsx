@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Button } from "../ui/Button";
+import { Button } from "./Button";
 
 export default function BackToSignIn() {
   const router = useRouter();

@@ -1,5 +1,5 @@
 import { FilesIcon } from "lucide-react";
-import { Button } from "../ui/Button";
+import { Button } from "../atoms/Button";
 
 export default function UnfinishedBanner() {
   return (

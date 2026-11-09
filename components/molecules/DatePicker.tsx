@@ -1,7 +1,7 @@
 import { addDays, format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useState } from "react";
-import { Button } from "../ui/Button";
+import { Button } from "../atoms/Button";
 import { Calendar } from "../ui/Calendar";
 import {
   DropdownMenu,
@@ -36,18 +36,20 @@ export default function DatePicker({
 
   return (
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant={"outline"}
-          type="button"
-          className="flex justify-start"
-          size={size}
-          disabled={disabled}
-        >
-          <CalendarIcon />
-          {value ? format(value, "PP") : <span>Pick a date (optional)</span>}
-        </Button>
-      </DropdownMenuTrigger>
+      <DropdownMenuTrigger
+        render={
+          <Button
+            variant={"outline"}
+            type="button"
+            className="flex justify-start"
+            size={size}
+            disabled={disabled}
+          >
+            <CalendarIcon />
+            {value ? format(value, "PP") : <span>Pick a date (optional)</span>}
+          </Button>
+        }
+      />
       <DropdownMenuContent
         align="center"
         className="flex w-auto flex-col items-center justify-center gap-1"

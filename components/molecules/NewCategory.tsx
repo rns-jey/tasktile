@@ -7,7 +7,7 @@ import { CategoryFormValues } from "@/lib/schemas/categories";
 
 import { categColors } from "@/lib/colors";
 import { toast } from "sonner";
-import { Button } from "../ui/Button";
+import { Button } from "../atoms/Button";
 
 type NewCategoryProps = {
   query: string;
@@ -59,7 +59,7 @@ export default function NewCategory({ query, onSelect }: NewCategoryProps) {
     <Button
       variant="outline"
       type="button"
-      className="flex h-11 w-full items-center justify-start text-base"
+      className="flex w-full items-center justify-start"
       onClick={() => {
         onSubmit({ name: query });
       }}

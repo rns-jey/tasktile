@@ -2,7 +2,7 @@
 
 import { useTodayTasks } from "@/hooks/useTasks";
 import { useState } from "react";
-import { Button } from "../ui/Button";
+import { Button } from "../atoms/Button";
 import { Card, CardContent } from "../ui/Card";
 import TaskList from "./TaskList";
 
@@ -30,7 +30,7 @@ export default function TodayTaskSection() {
                 variant={"ghost"}
                 type="button"
                 onClick={() => setVisible(!visible)}
-                className="text-accent-foreground text-[15px] font-semibold"
+                className="text-accent-foreground font-semibold"
               >
                 {visible ? "Hide" : "Show"}
               </Button>

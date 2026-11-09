@@ -13,7 +13,7 @@ import {
   type DayButton,
   type Locale,
 } from "react-day-picker";
-import { Button, buttonVariants } from "./Button";
+import { Button, buttonVariants } from "../atoms/Button";
 
 function Calendar({
   className,

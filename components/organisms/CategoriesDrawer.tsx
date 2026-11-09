@@ -1,8 +1,8 @@
 import { useCategories, useRecentCategories } from "@/hooks/useCategories";
 import { Check, Search } from "lucide-react";
 import { Fragment, useMemo, useState } from "react";
+import { Button } from "../atoms/Button";
 import NewCategory from "../molecules/NewCategory";
-import { Button } from "../ui/Button";
 import { DrawerHeader, DrawerTitle } from "../ui/Drawer";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "../ui/InputGroup";
 import { Label } from "../ui/Label";
@@ -44,7 +44,7 @@ export default function CategoriesDrawer({
         <Button
           variant={"ghost"}
           type="button"
-          className="ml-auto h-11 w-fit px-2 text-right font-medium"
+          className="ml-auto px-4"
           onClick={() => {
             onSelect(null);
             setSelectingCategory(false);
@@ -76,7 +76,7 @@ export default function CategoriesDrawer({
                     <Button
                       type="button"
                       variant={"ghost"}
-                      className="flex w-full items-center justify-between px-2"
+                      className="flex w-full items-center justify-between px-4"
                       onClick={() => {
                         onSelect(category.id);
                         setSelectingCategory(false);
@@ -84,13 +84,13 @@ export default function CategoriesDrawer({
                     >
                       <div className="flex items-center gap-2">
                         <div
-                          className="h-3 w-3 rounded-xs"
+                          className="size-3 rounded-xs"
                           style={{ backgroundColor: category.color }}
                         />
                         <span className="ml-2">{category.name}</span>
                       </div>
                       {selectedCategoryId === category.id && (
-                        <Check className="text-ink ml-auto h-4 w-4" />
+                        <Check className="text-ink ml-auto size-4" />
                       )}
                     </Button>
                   </li>
@@ -109,7 +109,7 @@ export default function CategoriesDrawer({
                     <Button
                       type="button"
                       variant={"ghost"}
-                      className="flex w-full items-center justify-between px-2"
+                      className="flex w-full items-center justify-between px-4"
                       onClick={() => {
                         onSelect(category.id);
                         setSelectingCategory(false);
@@ -117,13 +117,13 @@ export default function CategoriesDrawer({
                     >
                       <div className="flex items-center gap-2">
                         <div
-                          className="h-3 w-3 rounded-xs"
+                          className="size-3 rounded-xs"
                           style={{ backgroundColor: category.color }}
                         />
                         <span className="ml-2">{category.name}</span>
                       </div>
                       {selectedCategoryId === category.id && (
-                        <Check className="text-ink ml-auto h-4 w-4" />
+                        <Check className="text-ink ml-auto size-4" />
                       )}
                     </Button>
                   </li>
@@ -161,7 +161,7 @@ export default function CategoriesDrawer({
                     <Button
                       type="button"
                       variant={"ghost"}
-                      className="flex w-full items-center justify-between px-2"
+                      className="flex w-full items-center justify-between px-4"
                       onClick={() => {
                         onSelect(category.id);
                         setSelectingCategory(false);
@@ -169,13 +169,13 @@ export default function CategoriesDrawer({
                     >
                       <div className="flex items-center gap-2">
                         <div
-                          className="h-3 w-3 rounded-xs"
+                          className="size-3 rounded-xs"
                           style={{ backgroundColor: category.color }}
                         />
                         <span className="ml-2">{category.name}</span>
                       </div>
                       {selectedCategoryId === category.id && (
-                        <Check className="text-ink ml-auto h-4 w-4" />
+                        <Check className="text-ink ml-auto size-4" />
                       )}
                     </Button>
                   </li>

@@ -2,7 +2,7 @@
 
 import { authClient } from "@/lib/auth/client";
 import { redirect } from "next/navigation";
-import { Button } from "../ui/Button";
+import { Button } from "../atoms/Button";
 
 export default function SignOutSection() {
   const handleSignOut = async () => {
@@ -19,7 +19,7 @@ export default function SignOutSection() {
       <Button
         variant={"ghost"}
         type="button"
-        className="flex h-11 w-full justify-start text-base"
+        className="flex w-full justify-start"
         onClick={handleSignOut}
       >
         Sign out

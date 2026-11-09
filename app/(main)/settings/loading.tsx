@@ -1,6 +1,6 @@
+import { Button } from "@/components/atoms/Button";
 import SignOutSection from "@/components/molecules/SignOutSection";
 import ThemeSettings from "@/components/organisms/ThemeSettings";
-import { Button } from "@/components/ui/Button";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { ChevronRight, LayoutGridIcon } from "lucide-react";
 import Link from "next/link";
@@ -21,7 +21,7 @@ export default function Loading() {
         </p>
 
         <Button
-          className="flex h-11 w-full items-center justify-between bg-white text-base"
+          className="flex w-full items-center justify-between bg-white"
           variant={"outline"}
           nativeButton={false}
           disabled

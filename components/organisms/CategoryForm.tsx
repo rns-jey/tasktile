@@ -12,8 +12,8 @@ import { Category } from "@/lib/generated/prisma/client";
 import { CategoryFormValues } from "@/lib/schemas/categories";
 import { cn } from "@/lib/utils";
 
+import { Button } from "../atoms/Button";
 import { Checkbox } from "../atoms/Checkbox";
-import { Button } from "../ui/Button";
 import {
   DrawerClose,
   DrawerFooter,
@@ -125,7 +125,7 @@ export default function CategoryForm({
           type="submit"
           form={formId}
           disabled={formPending}
-          className="bg-ink h-11 px-4 font-semibold"
+          className="px-4"
         >
           {isEditing ? "Save" : "Add"}
         </Button>
@@ -177,9 +177,10 @@ export default function CategoryForm({
                     type="button"
                     aria-pressed={selected === color}
                     disabled={formPending}
+
                     className={cn(
                       selected === color && "ring-2 ring-black ring-offset-2",
-                      "flex h-14 w-14 cursor-pointer items-center justify-center rounded-md",
+                      "flex size-14 items-center justify-center",
                     )}
                     style={{ backgroundColor: color }}
                     onClick={() => setSelected(color)}
