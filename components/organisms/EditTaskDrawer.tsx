@@ -9,7 +9,6 @@ import { taskFormSchema, TaskFormValues } from "@/lib/schemas/task";
 import { TaskWithCategory } from "@/types";
 
 import { fromDbDay } from "@/lib/date";
-import { cn } from "@/lib/utils";
 import TaskMeta from "../molecules/TaskMeta";
 import { Drawer, DrawerContent, DrawerTrigger } from "../ui/Drawer";
 import CategoriesDrawer from "./CategoriesDrawer";
@@ -71,32 +70,13 @@ export default function EditTaskDrawer({ task, variant }: EditTaskDrawerProps) {
         render={
           <button
             type="button"
-            className={cn(
-              compact
-                ? "w-full flex-row items-center justify-between"
-                : "flex-col gap-0.5",
-              "flex min-w-0",
-            )}
+            className="peer-data-checked:text-muted-foreground w-full min-w-0 cursor-[inherit] text-left peer-data-checked:line-through"
           >
-            <span
-              className={cn(
-                task.completed && "line-through",
-                "text-task w-full truncate text-left font-medium",
-              )}
-            >
-              {task.name}
-            </span>
-
-            {compact ? (
-              task.category && (
-                <div
-                  className="h-3 min-w-3 rounded-xs"
-                  style={{ backgroundColor: task.category.color }}
-                />
-              )
-            ) : (
-              <TaskMeta task={task} />
+            <p className="truncate font-medium">{task.name}</p>
+            {task.description && (
+              <p className="text-ink/90 truncate text-sm">{task.description}</p>
             )}
+            <TaskMeta task={task} />
           </button>
         }
       />
