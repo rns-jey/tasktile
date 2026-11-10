@@ -15,10 +15,12 @@ export default function RootLoading() {
       <header className="flex justify-between pb-4">
         <div>
           <h1 className="flex flex-col">
-            <span className="text-meta font-medium tracking-[.08em] uppercase">
+            <span className="text-xs leading-6 font-medium tracking-[.08em] uppercase">
               {format(today, "eeee")}
             </span>
-            <span className="font-heading">{format(today, "LLLL d")}</span>
+            <span className="font-heading text-4xl leading-none">
+              {format(today, "LLLL d")}
+            </span>
           </h1>
 
           <Skeleton className="h-5 w-28" />

@@ -25,7 +25,10 @@ export default function ThemeSettings() {
             key={t}
             variant={"ghost"}
             type="button"
-            className={cn("flex-1 capitalize", active === t && "bg-white")}
+            className={cn(
+              "flex-1 capitalize",
+              active === t && "bg-paper-3 text-ink",
+            )}
             aria-pressed={active === t}
             onClick={() => setTheme(t)}
           >

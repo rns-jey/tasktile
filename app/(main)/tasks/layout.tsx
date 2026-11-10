@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 
-export default function CategoriesLayout({
+export default function TasksLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -9,7 +9,7 @@ export default function CategoriesLayout({
     <Fragment>
       <header className="flex flex-col justify-between gap-4 pb-4">
         <h1 className="flex flex-col">
-          <span className="font-heading">Tasks</span>
+          <span className="font-heading text-4xl">Tasks</span>
         </h1>
       </header>
 

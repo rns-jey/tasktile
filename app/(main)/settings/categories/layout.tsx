@@ -17,7 +17,9 @@ export default function CategoriesLayout({
       </Link>
 
       <header className="flex flex-col justify-between gap-2 pb-4">
-        <h1 className="font-heading pt-1.5 tracking-[-.01em]">Categories</h1>
+        <h1 className="font-heading pt-1.5 text-4xl tracking-[-.01em]">
+          Categories
+        </h1>
         <p className="text-body">
           Each category has its own colour. Tap one to rename it or change its
           colour.
