@@ -38,12 +38,16 @@ export const metadata: Metadata = {
     "Manage your tasks efficiently with TaskTile, a simple and intuitive to-do list app.",
   appleWebApp: {
     capable: true,
+
     title: "TaskTile",
     statusBarStyle: "default",
     startupImage: SPLASH_SCREENS.map(([w, h, r]) => ({
       url: `/splash/apple-splash-${w * r}-${h * r}.jpg`,
       media: `(device-width: ${w}px) and (device-height: ${h}px) and (-webkit-device-pixel-ratio: ${r}) and (orientation: portrait)`,
     })),
+  },
+  other: {
+    "apple-mobile-web-app-capable": "yes",
   },
 };
 
