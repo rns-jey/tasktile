@@ -81,7 +81,7 @@
 
 :root {
   --paper: oklch(0.976 0.0082 91.48);
-  --paper-2: oklch(0.9372 0.0112 89.73);
+  --paper-2: oklch(0.945 0.012 91.48);
   --paper-3: oklch(0.8954 0.0117 84.58);
   --jade: oklch(0.7003 0.1306 159.97);
   --jade-deep: oklch(0.5492 0.1192 160.3);
@@ -103,10 +103,10 @@
   --popover-foreground: var(--ink);
 
   --muted: var(--paper-2);
-  --muted-foreground: oklch(0.501 0.0299 261.06);
+  --muted-foreground: oklch(0.5 0.015 91.48);
 
-  --accent: var(--paper-3);
-  --accent-foreground: var(--ink);
+  --accent: oklch(0.95 0.03 159.97);
+  --accent-foreground: oklch(0.32 0.06 159.97);
 
   --destructive: oklch(0.5013 0.1783 28.7);
 

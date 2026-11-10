@@ -37,7 +37,7 @@ export default function TodayHeader() {
     <Fragment>
       <div
         className={cn(
-          "fixed inset-x-0 top-0 z-50 flex items-center justify-between border-b px-4 py-2",
+          "bg-paper-2 fixed inset-x-0 top-0 z-50 flex items-center justify-between border-b px-4 py-2",
           showBar ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0",
         )}
       >
