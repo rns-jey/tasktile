@@ -12,7 +12,7 @@ type TaskListProps = {
 export default function TaskList({ tasks, variant = "full" }: TaskListProps) {
   return (
     <AnimatePresence initial={false}>
-      {tasks.map((task) => (
+      {tasks.map((task, i) => (
         <motion.div
           key={task.id}
           layout
@@ -21,7 +21,7 @@ export default function TaskList({ tasks, variant = "full" }: TaskListProps) {
           exit={{ x: 100, opacity: 0, height: 0 }}
           transition={{ duration: 0.3 }}
         >
-          <TaskCard task={task} variant={variant} />
+          <TaskCard priority={i} task={task} variant={variant} />
         </motion.div>
       ))}
     </AnimatePresence>
