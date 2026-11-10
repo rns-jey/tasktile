@@ -5,9 +5,9 @@ import React from "react";
 import { dayInTz } from "@/lib/date";
 import currentProfile from "@/lib/profile";
 
-import { Button } from "@/components/atoms/Button";
 import AppSidebar from "@/components/organisms/AppSidebar";
 import MobileNav from "@/components/organisms/MobileNav";
+import NewTaskDrawer from "@/components/organisms/NewTaskDrawer";
 import ReactQueryProvider from "@/components/providers/ReactQueryProvider";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import TimezoneSync from "@/components/providers/TimezoneSync";
@@ -20,7 +20,6 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
-import { Plus } from "lucide-react";
 
 export default async function MainLayout({
   children,
@@ -64,12 +63,7 @@ export default async function MainLayout({
                   <div className="p-4 pb-32">{children}</div>
                 </ScrollArea>
 
-                <Button
-                  type="button"
-                  className="absolute right-4 bottom-[calc(5.5rem+env(safe-area-inset-bottom))] z-40 m-4 size-11 rounded-full md:bottom-4"
-                >
-                  <Plus />
-                </Button>
+                <NewTaskDrawer />
 
                 <MobileNav />
               </SidebarInset>
