@@ -2,8 +2,6 @@
 
 import { useTodayTasks } from "@/hooks/useTasks";
 import { useState } from "react";
-import { Button } from "../atoms/Button";
-import { Card, CardContent } from "../ui/Card";
 import TaskList from "./TaskList";
 
 export default function TodayTaskSection() {
@@ -14,11 +12,13 @@ export default function TodayTaskSection() {
   const activeTasks = tasks.filter((task) => !task.completed);
   const completedTasks = tasks.filter((task) => task.completed);
 
+  const orderedTasks = [...activeTasks, ...completedTasks];
+
   return (
     <div className="flex flex-col">
-      <TaskList tasks={activeTasks} />
+      <TaskList tasks={orderedTasks} />
 
-      {completedTasks.length !== 0 && (
+      {/* {completedTasks.length !== 0 && (
         <>
           <Card className="mx-2 my-4">
             <CardContent className="flex items-center justify-between">
@@ -41,7 +41,7 @@ export default function TodayTaskSection() {
             <TaskList tasks={completedTasks} variant="compact" />
           </div>
         </>
-      )}
+      )} */}
     </div>
   );
 }

@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
   experimental: {
     staleTimes: { dynamic: 30 }, // reuse a visited page for 30s
   },
+  devIndicators: false,
 };
 
 export default nextConfig;

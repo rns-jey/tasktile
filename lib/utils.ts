@@ -19,24 +19,24 @@ export function formatDueDate(value: Date | string, todayKey: string) {
 
   if (days === 0)
     return {
-      label: "due today",
+      label: "Today",
       overdue: false,
     };
 
   if (days === 1)
     return {
-      label: "due tomorrow",
+      label: "Tomorrow",
       overdue: false,
     };
 
   if (days > 1 && days < 7)
     return {
-      label: `due ${format(date, "EEE")}`,
+      label: `${format(date, "EEEE")}`,
       overdue: false,
     };
 
   return {
-    label: `due ${format(date, "MMM d")}`,
+    label: `${format(date, "MMM d")}`,
     overdue: false,
   };
 }
