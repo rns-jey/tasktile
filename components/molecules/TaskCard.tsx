@@ -1,6 +1,9 @@
+"use client";
 import { cva, type VariantProps } from "class-variance-authority";
 
+import { cn } from "@/lib/utils";
 import { TaskWithCategory } from "@/types";
+import { useSortable } from "@dnd-kit/sortable";
 import { GripVertical } from "lucide-react";
 import { Button } from "../atoms/Button";
 import { Checkbox } from "../atoms/Checkbox";
@@ -22,8 +25,33 @@ type TaskCardProps = {
 } & VariantProps<typeof taskCardVariants>;
 
 export default function TaskCard({ priority, task, variant }: TaskCardProps) {
+  const {
+    setNodeRef,
+    transform,
+    transition,
+    attributes,
+    listeners,
+    isDragging,
+  } = useSortable({ id: task.id });
+
   return (
-    <article className="border-line flex min-h-16 items-center justify-between gap-2 border-b py-2">
+    <article
+      ref={setNodeRef}
+      style={{
+        transform: transform
+          ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
+          : undefined,
+        transition,
+      }}
+      {...attributes}
+      {...listeners}
+      onClick={() => {}}
+      aria-labelledby={`task-${task.id}`}
+      className={cn(
+        "border-line flex min-h-16 touch-manipulation items-center justify-between gap-2 border-b py-2 select-none",
+        isDragging && "bg-background relative z-10 shadow-lg",
+      )}
+    >
       <Checkbox />
 
       <div className="w-full min-w-0">
