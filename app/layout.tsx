@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 import { cn } from "@/lib/utils";
@@ -49,6 +49,11 @@ export const metadata: Metadata = {
   other: {
     "apple-mobile-web-app-capable": "yes",
   },
+};
+
+export const viewport: Viewport = {
+  viewportFit: "cover",
+  themeColor: "#f7f4ec",
 };
 
 export default function RootLayout({

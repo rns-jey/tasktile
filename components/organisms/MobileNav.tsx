@@ -1,11 +1,12 @@
 "use client";
 
+import { motion } from "motion/react";
+
 import { LayoutGridIcon, ListIcon, SettingsIcon, Sun } from "lucide-react";
 import NextLink from "next/link";
 import { usePathname } from "next/navigation";
 
 import { cn } from "@/lib/utils";
-import NewTaskDrawer from "./NewTaskDrawer";
 
 const navItems = [
   { href: "/", label: "Today", icon: Sun },
@@ -21,17 +22,29 @@ function NavLink({ href, label, icon: Icon }: NavItem) {
   const active = pathname === href;
 
   return (
-    <li>
+    <li className="relative isolate">
+      {active && (
+        <motion.span
+          layoutId="nav-pill"
+          className="bg-jade/15 absolute inset-0 -z-10 rounded-full shadow-[inset_0_1px_0_rgba(255,255,255,0.8)] ring-1 ring-black/5 backdrop-blur-md"
+          transition={{
+            type: "spring",
+            stiffness: 500,
+            damping: 32,
+            mass: 0.8,
+          }}
+        />
+      )}
       <NextLink
         href={href}
         aria-current={active ? "page" : undefined}
         className={cn(
-          "my-1 flex flex-col items-center gap-1 rounded-2xl p-1",
-          active ? "text-task" : "",
+          "relative flex flex-col items-center gap-1 rounded-full px-1 py-1.5 transition-colors",
+          active ? "text-jade" : "text-ink/60",
         )}
       >
-        <Icon size={24} />
-        <span className="text-xs">{label}</span>
+        <Icon size={22} />
+        <span className="text-[11px]">{label}</span>
       </NextLink>
     </li>
   );
@@ -39,16 +52,10 @@ function NavLink({ href, label, icon: Icon }: NavItem) {
 
 export default function MobileNav() {
   return (
-    <div className="z-50 pb-[max(1rem,env(safe-area-inset-bottom))]">
-      <nav className="shrink-0 border-t p-1 md:hidden">
-        <ul className="grid grid-cols-5 gap-2">
-          {navItems.slice(0, 2).map((item) => (
-            <NavLink key={item.href} {...item} />
-          ))}
-          <li className="-mt-6 flex items-center justify-center">
-            <NewTaskDrawer />
-          </li>
-          {navItems.slice(2).map((item) => (
+    <div className="absolute inset-x-0 bottom-0 z-50">
+      <nav className="bg-background/60 mx-4 mb-[max(0.5rem,env(safe-area-inset-bottom))] rounded-full border border-white/40 p-1 shadow-lg backdrop-blur-xl backdrop-saturate-150 md:hidden">
+        <ul className="grid grid-cols-4">
+          {navItems.map((item) => (
             <NavLink key={item.href} {...item} />
           ))}
         </ul>
