@@ -46,8 +46,9 @@ export default function TaskCard({ task }: TaskCardProps) {
       onClick={() => {}}
       aria-labelledby={`task-${task.id}`}
       className={cn(
-        "border-line flex min-h-16 cursor-pointer touch-manipulation items-center justify-between gap-2 border-b py-2 select-none",
-        isDragging && "bg-background relative z-10 cursor-grabbing shadow-lg",
+        "border-line flex min-h-16 cursor-pointer touch-manipulation items-center justify-between gap-2 border-b px-2 py-2 select-none",
+        isDragging &&
+          "bg-background shadow-jade relative z-10 cursor-grabbing rounded-xl shadow-lg",
       )}
     >
       <ToggleTask task={task} />
