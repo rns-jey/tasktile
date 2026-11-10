@@ -62,6 +62,7 @@ export default function ToggleTask({ task }: { task: TaskWithCategory }) {
     <Checkbox
       checked={task.completed}
       onCheckedChange={() => toggleTask.mutate(task)}
+      onClick={(e) => e.stopPropagation()}
     />
   );
 }

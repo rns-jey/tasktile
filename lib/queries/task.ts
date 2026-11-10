@@ -16,7 +16,7 @@ export function getTodayTasks(userId: string, today: Date) {
       ],
     },
     include: { category: true },
-    orderBy: [{ createdAt: "desc" }],
+    orderBy: [{ createdAt: "asc" }],
   });
 }
 
