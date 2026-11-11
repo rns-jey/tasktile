@@ -16,7 +16,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { AnimatePresence, motion } from "motion/react";
-import { useId, useMemo, useState } from "react";
+import { Fragment, useEffect, useId, useMemo, useRef, useState } from "react";
 import TaskCard from "../molecules/TaskCard";
 
 type TaskListProps = {
@@ -27,6 +27,19 @@ type TaskListProps = {
 export default function TaskList({ tasks, variant = "full" }: TaskListProps) {
   const [order, setOrder] = useState(() => tasks.map((t) => t.id));
   const [animateLayout, setAnimateLayout] = useState(true);
+
+  const count = tasks.length;
+  const prevCount = useRef(count);
+
+  useEffect(() => {
+    if (count > prevCount.current) {
+      document
+        .getElementById("open-end")
+        ?.scrollIntoView({ behavior: "smooth", block: "end" });
+    }
+
+    prevCount.current = count;
+  }, [count]);
 
   const dndId = useId();
 
@@ -50,6 +63,7 @@ export default function TaskList({ tasks, variant = "full" }: TaskListProps) {
       );
 
     const all = [...sorted, ...added];
+
     const open = all.filter((t) => !t.completed);
     const closed = all
       .filter((t) => t.completed)
@@ -61,6 +75,8 @@ export default function TaskList({ tasks, variant = "full" }: TaskListProps) {
 
     return [...open, ...closed];
   }, [tasks, order]);
+
+  const lastOpenIndex = items.findLastIndex((t) => !t.completed);
 
   function handleDragEnd({ active, over }: DragEndEvent) {
     if (!over || active.id === over.id) return;
@@ -86,17 +102,25 @@ export default function TaskList({ tasks, variant = "full" }: TaskListProps) {
         strategy={verticalListSortingStrategy}
       >
         <AnimatePresence initial={false}>
+          {lastOpenIndex === -1 && (
+            <div id="open-end" className="scroll-mb-32" />
+          )}
+
           {items.map((task, i) => (
-            <motion.div
-              key={task.id}
-              layout={animateLayout}
-              initial={{ x: -100, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: 100, opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <TaskCard priority={i} task={task} variant={variant} />
-            </motion.div>
+            <Fragment key={task.id}>
+              <motion.div
+                layout={animateLayout}
+                initial={{ x: -100, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                exit={{ x: 100, opacity: 0, height: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <TaskCard priority={i} task={task} variant={variant} />
+              </motion.div>
+              {i === lastOpenIndex && (
+                <div id="open-end" className="scroll-mb-32" />
+              )}
+            </Fragment>
           ))}
         </AnimatePresence>
       </SortableContext>

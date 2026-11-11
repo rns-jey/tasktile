@@ -10,7 +10,7 @@ import { taskFormSchema, TaskFormValues } from "@/lib/schemas/task";
 import { Button } from "../atoms/Button";
 import { Drawer, DrawerContent, DrawerTrigger } from "../ui/Drawer";
 import CategoriesDrawer from "./CategoriesDrawer";
-import TaskForm from "./TaskForm";
+import NewTaskForm from "./NewTaskForm";
 
 export default function NewTaskDrawer() {
   const [open, setOpen] = useState(false);
@@ -29,6 +29,13 @@ export default function NewTaskDrawer() {
 
   const selectedCategoryId = taskForm.watch("categoryId");
 
+  const scrollToOpenEnd = () =>
+    requestAnimationFrame(() =>
+      document
+        .getElementById("open-end")
+        ?.scrollIntoView({ behavior: "smooth", block: "end" }),
+    );
+
   return (
     <Drawer
       open={open}
@@ -42,6 +49,7 @@ export default function NewTaskDrawer() {
           <Button
             type="button"
             className="border-foreground absolute right-4 bottom-[calc(5.5rem+env(safe-area-inset-bottom))] z-40 m-4 size-14 rounded-xl border shadow-[3px_3px_0_var(--ink)] md:bottom-4"
+            onClick={scrollToOpenEnd}
           >
             <Plus className="size-7" />
           </Button>
@@ -49,13 +57,14 @@ export default function NewTaskDrawer() {
       />
       <DrawerContent className="pb-4">
         <div hidden={newCateg || selectingCategory}>
-          <TaskForm
+          {/* <TaskForm
             form={taskForm}
             formId="form-add-task"
             setOpen={setOpen}
             setNewCateg={setNewCateg}
             setSelectingCategory={setSelectingCategory}
-          />
+          /> */}
+          <NewTaskForm />
         </div>
 
         {selectingCategory && (
