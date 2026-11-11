@@ -41,7 +41,7 @@ export default function NewTaskDrawer() {
         render={
           <Button
             type="button"
-            className="absolute right-4 bottom-[calc(5.5rem+env(safe-area-inset-bottom))] z-40 m-4 size-14 rounded-full md:bottom-4"
+            className="border-foreground absolute right-4 bottom-[calc(5.5rem+env(safe-area-inset-bottom))] z-40 m-4 size-14 rounded-xl border shadow-[3px_3px_0_var(--ink)] md:bottom-4"
           >
             <Plus className="size-7" />
           </Button>
