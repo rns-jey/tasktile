@@ -96,6 +96,7 @@ export default function NewTaskForm() {
             type="submit"
             className="size-10 rounded-full"
             disabled={taskName || addTask.isPending}
+            onPointerDown={(e) => e.preventDefault()}
           >
             <ArrowUp />
           </Button>

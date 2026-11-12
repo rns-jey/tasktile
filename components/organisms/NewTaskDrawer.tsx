@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 
 import { taskFormSchema, TaskFormValues } from "@/lib/schemas/task";
 
+import { cn } from "@/lib/utils";
 import { Button } from "../atoms/Button";
 import { Drawer, DrawerContent, DrawerTrigger } from "../ui/Drawer";
 import CategoriesDrawer from "./CategoriesDrawer";
@@ -48,7 +49,10 @@ export default function NewTaskDrawer() {
         render={
           <Button
             type="button"
-            className="border-foreground absolute right-4 bottom-[calc(5.5rem+env(safe-area-inset-bottom))] z-40 m-4 size-14 rounded-xl border shadow-[3px_3px_0_var(--ink)] md:bottom-4"
+            className={cn(
+              "border-foreground absolute right-4 bottom-[calc(5.5rem+env(safe-area-inset-bottom))] z-40 m-4 size-14 rounded-xl border shadow-[3px_3px_0_var(--ink)] md:bottom-4",
+              open && "hidden",
+            )}
             onClick={scrollToOpenEnd}
           >
             <Plus className="size-7" />
