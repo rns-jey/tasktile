@@ -5,7 +5,7 @@ import { localDay } from "@/lib/date";
 import { TaskWithCategory } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { ArrowUp } from "lucide-react";
+import { ArrowUp, Calendar, FolderKanbanIcon, Plus } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Button } from "../atoms/Button";
@@ -51,7 +51,7 @@ export default function NewTaskForm() {
   return (
     <form
       id="newTaskForm"
-      className="p-2"
+      className="px-2.5 py-2"
       onSubmit={taskForm.handleSubmit(onSubmit)}
     >
       <FieldGroup>
@@ -61,7 +61,7 @@ export default function NewTaskForm() {
           disabled={addTask.isPending}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <InputGroup className="mb-7 border-none has-[[data-slot=input-group-control]:focus-visible]:ring-0">
+              <InputGroup className="border-none has-[[data-slot=input-group-control]:focus-visible]:ring-0">
                 <InputGroupInput
                   {...field}
                   id="newTaskForm-name"
@@ -73,13 +73,33 @@ export default function NewTaskForm() {
           )}
         />
 
-        <Button
-          type="submit"
-          className="absolute right-0 bottom-0 m-2 size-10 rounded-full"
-          disabled={taskName || addTask.isPending}
-        >
-          <ArrowUp />
-        </Button>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-1.5">
+            <Button
+              type="button"
+              variant="secondary"
+              className="size-10 rounded-full"
+            >
+              <Plus />
+            </Button>
+
+            <Button type="button" variant="secondary" className="h-10">
+              <FolderKanbanIcon /> Project
+            </Button>
+
+            <Button type="button" variant="secondary" className="h-10">
+              <Calendar /> Due date
+            </Button>
+          </div>
+
+          <Button
+            type="submit"
+            className="size-10 rounded-full"
+            disabled={taskName || addTask.isPending}
+          >
+            <ArrowUp />
+          </Button>
+        </div>
       </FieldGroup>
     </form>
   );
