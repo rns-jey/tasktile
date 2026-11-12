@@ -58,13 +58,13 @@ export default function NewTaskForm() {
         <Controller
           name="name"
           control={taskForm.control}
-          disabled={addTask.isPending}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
               <InputGroup className="border-none has-[[data-slot=input-group-control]:focus-visible]:ring-0">
                 <InputGroupInput
                   {...field}
                   id="newTaskForm-name"
+                  readOnly={addTask.isPending}
                   aria-invalid={fieldState.invalid}
                   placeholder="e.g., Daily stand-up meeting at 930"
                 />
