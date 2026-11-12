@@ -31,15 +31,15 @@ model Task {
   name String
   description String @default("")
   completed Boolean @default(false)
+
   dueDate DateTime? @db.Date
+  dueOn DateTime? @db.Date
 
   userId String
   user Profile @relation(fields: [userId], references: [userID])
 
   categoryId String?
   category Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
-
-  scheduledOn DateTime? @db.Date
 
   completedAt DateTime?
   completedOn DateTime? @db.Date
@@ -48,7 +48,7 @@ model Task {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([userId, scheduledOn])
+  @@index([userId, dueOn])
   @@index([userId, completedOn])
   @@index([userId, createdAt])
   @@index([categoryId])

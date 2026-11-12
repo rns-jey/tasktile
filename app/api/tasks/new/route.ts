@@ -9,7 +9,7 @@ const bodySchema = z.object({
   description: z.string(),
   categoryId: z.string().nullable(),
   dueDate: z.coerce.date().nullish(),
-  scheduledOn: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  dueOn: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
 });
 
 export async function POST(req: Request) {
@@ -22,13 +22,13 @@ export async function POST(req: Request) {
     if (!parsed.success)
       return new NextResponse("Invalid body", { status: 400 });
 
-    const { scheduledOn, ...rest } = parsed.data;
+    const { dueOn, ...rest } = parsed.data;
 
     const task = await db.task.create({
       data: {
         ...rest,
         userId: profile.userID,
-        scheduledOn: new Date(`${scheduledOn}T00:00:00Z`),
+        dueOn: new Date(`${dueOn}T00:00:00Z`),
       },
       include: { category: true },
     });

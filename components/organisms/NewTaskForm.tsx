@@ -51,7 +51,7 @@ export default function NewTaskForm() {
   const addTask = useMutation<
     TaskWithCategory,
     Error,
-    TaskFormValues & { scheduledOn: string },
+    TaskFormValues & { dueOn: string },
     { previous?: TaskWithCategory[] }
   >({
     mutationFn: async (newTask) => {
@@ -70,7 +70,7 @@ export default function NewTaskForm() {
   });
 
   function onSubmit(values: TaskFormValues) {
-    addTask.mutate({ ...values, scheduledOn: localDay() });
+    addTask.mutate({ ...values, dueOn: localDay() });
   }
 
   const taskName = !taskForm.watch("name").trim().length;

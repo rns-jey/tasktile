@@ -75,7 +75,7 @@ export default function TaskForm({
   const addTask = useMutation<
     TaskWithCategory,
     Error,
-    TaskFormValues & { scheduledOn: string }
+    TaskFormValues & { dueOn: string }
   >({
     mutationFn: async (newTask) => {
       const response = await axios.post("/api/tasks/new", newTask);
@@ -114,7 +114,7 @@ export default function TaskForm({
     if (isEditing) {
       updateTask.mutate(values);
     } else {
-      addTask.mutate({ ...values, scheduledOn: localDay() });
+      addTask.mutate({ ...values, dueOn: localDay() });
     }
   }
 

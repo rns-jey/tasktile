@@ -6,11 +6,11 @@ export function getTodayTasks(userId: string, today: Date) {
       userId: userId,
       OR: [
         // everything scheduled today (done or not)
-        { scheduledOn: today },
+        { dueOn: today },
         // unfinished leftovers whose deadline is still ahead
         {
           completed: false,
-          scheduledOn: { lt: today },
+          dueOn: { lt: today },
         },
         { completedOn: today },
       ],
