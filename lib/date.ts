@@ -16,3 +16,7 @@ export function fromDbDay(value: Date | string) {
   const d = new Date(value);
   return new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
 }
+
+// DB day (UTC midnight) -> "yyyy-MM-dd", or null
+export const toDay = (d: Date | string | null) =>
+  d ? new Date(d).toISOString().slice(0, 10) : null;

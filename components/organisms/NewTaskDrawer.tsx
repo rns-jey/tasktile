@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 
 import { taskFormSchema, TaskFormValues } from "@/lib/schemas/task";
 
+import { localDay } from "@/lib/date";
 import { cn } from "@/lib/utils";
 import { Button } from "../atoms/Button";
 import { Drawer, DrawerContent, DrawerTrigger } from "../ui/Drawer";
@@ -24,7 +25,7 @@ export default function NewTaskDrawer() {
       name: "",
       description: "",
       categoryId: null,
-      dueDate: null,
+      dueOn: localDay(),
     },
   });
 

@@ -32,7 +32,6 @@ model Task {
   description String @default("")
   completed Boolean @default(false)
 
-  dueDate DateTime? @db.Date
   dueOn DateTime? @db.Date
 
   userId String

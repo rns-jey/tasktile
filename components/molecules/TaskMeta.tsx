@@ -1,4 +1,4 @@
-import { cn, formatClosedDate, formatDueDate } from "@/lib/utils";
+import { cn, formatClosedDate, formatDueOn } from "@/lib/utils";
 import { TaskWithCategory } from "@/types";
 import { Calendar, Tag } from "lucide-react";
 import { Fragment } from "react";
@@ -7,7 +7,7 @@ import { useTodayKey } from "../providers/TodayProvider";
 export default function TaskMeta({ task }: { task: TaskWithCategory }) {
   const todayKey = useTodayKey();
 
-  const due = task.dueDate ? formatDueDate(task.dueDate, todayKey) : null;
+  const due = task.dueOn ? formatDueOn(task.dueOn, todayKey) : null;
   const closed = task.completedOn
     ? formatClosedDate(task.completedOn, todayKey)
     : null;

@@ -8,7 +8,7 @@ import { flushPendingDeletes, useDeleteTask } from "@/hooks/useDeleteTask";
 import { taskFormSchema, TaskFormValues } from "@/lib/schemas/task";
 import { TaskWithCategory } from "@/types";
 
-import { fromDbDay } from "@/lib/date";
+import { toDay } from "@/lib/date";
 import TaskMeta from "../molecules/TaskMeta";
 import { Drawer, DrawerContent, DrawerTrigger } from "../ui/Drawer";
 import CategoriesDrawer from "./CategoriesDrawer";
@@ -28,15 +28,15 @@ export default function EditTaskDrawer({ task, variant }: EditTaskDrawerProps) {
 
   const pendingDelete = useRef(false);
 
-  const { name, description, categoryId, dueDate } = task;
+  const { name, description, categoryId, dueOn } = task;
 
   const taskForm = useForm<TaskFormValues>({
     resolver: zodResolver(taskFormSchema),
     values: {
-      name: name,
-      description: description,
-      categoryId: categoryId,
-      dueDate: dueDate ? fromDbDay(dueDate) : null,
+      name,
+      description,
+      categoryId,
+      dueOn: toDay(dueOn),
     },
   });
 

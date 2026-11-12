@@ -3,7 +3,7 @@ import { fromDbDay } from "./date";
 
 export { cn } from "cn";
 
-export function formatDueDate(value: Date | string, todayKey: string) {
+export function formatDueOn(value: Date | string, todayKey: string) {
   const date = fromDbDay(value);
   const today = fromDbDay(`${todayKey}T00:00:00Z`);
   const days = differenceInCalendarDays(date, today);

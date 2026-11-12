@@ -1,4 +1,4 @@
-import { addDays, format } from "date-fns";
+import { addDays, format, startOfDay } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useState } from "react";
 import { Button } from "../atoms/Button";
@@ -58,6 +58,7 @@ export default function DatePicker({
           mode="single"
           selected={value ?? undefined}
           onSelect={(d) => onChange(d ?? null)}
+          disabled={{ before: startOfDay(new Date()) }}
         />
         <div className="flex justify-between gap-1">
           <Button

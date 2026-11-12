@@ -3,22 +3,18 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import {
-  AlignLeftIcon,
-  ArrowUp,
-  Calendar,
-  FolderKanbanIcon,
-  Plus,
-} from "lucide-react";
+import { format, parseISO } from "date-fns";
+import { AlignLeftIcon, ArrowUp, FolderKanbanIcon, Plus } from "lucide-react";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 import { localDay } from "@/lib/date";
 import { taskFormSchema, TaskFormValues } from "@/lib/schemas/task";
 import { TaskWithCategory } from "@/types";
 
-import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "../atoms/Button";
+import DatePicker from "../molecules/DatePicker";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -42,25 +38,26 @@ export default function NewTaskForm() {
       name: "",
       description: "",
       categoryId: null,
-      dueDate: null,
+      dueOn: localDay(),
     },
   });
 
   const queryClient = useQueryClient();
 
-  const addTask = useMutation<
-    TaskWithCategory,
-    Error,
-    TaskFormValues & { dueOn: string },
-    { previous?: TaskWithCategory[] }
-  >({
+  const addTask = useMutation<TaskWithCategory, Error, TaskFormValues>({
     mutationFn: async (newTask) => {
       const response = await axios.post("/api/tasks/new", newTask);
       return response.data;
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["tasks"] });
-      taskForm.reset();
+      taskForm.reset({
+        name: "",
+        description: "",
+        categoryId: null,
+        dueOn: localDay(),
+      });
+      taskForm.setFocus("name");
       setDescribed(false);
       toast.success("Task created", {
         position: "top-center",
@@ -70,7 +67,7 @@ export default function NewTaskForm() {
   });
 
   function onSubmit(values: TaskFormValues) {
-    addTask.mutate({ ...values, dueOn: localDay() });
+    addTask.mutate(values);
   }
 
   const taskName = !taskForm.watch("name").trim().length;
@@ -150,9 +147,21 @@ export default function NewTaskForm() {
             <FolderKanbanIcon /> Project
           </Button>
 
-          <Button type="button" variant="secondary" className="h-10">
-            <Calendar /> Due date
-          </Button>
+          <Controller
+            name="dueOn"
+            control={taskForm.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <DatePicker
+                  value={field.value ? parseISO(field.value) : null}
+                  onChange={(d) =>
+                    field.onChange(d ? format(d, "yyyy-MM-dd") : null)
+                  }
+                  disabled={addTask.isPending}
+                />
+              </Field>
+            )}
+          />
         </div>
 
         <Button

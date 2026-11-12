@@ -1,10 +1,10 @@
 import { z } from "zod";
 
 export const taskFormSchema = z.object({
-  name: z.string().min(3, "Task name is required"),
+  name: z.string().trim().min(1, "Task name is required"),
   description: z.string(),
   categoryId: z.string().nullable(),
-  dueDate: z.date().nullable(),
+  dueOn: z.iso.date().nullable(),
 });
 
 export type TaskFormValues = z.infer<typeof taskFormSchema>;

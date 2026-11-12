@@ -1,16 +1,8 @@
 import { NextResponse } from "next/server";
-import { z } from "zod";
 
 import { db } from "@/lib/db";
 import currentProfile from "@/lib/profile";
-
-const bodySchema = z.object({
-  name: z.string().min(3),
-  description: z.string(),
-  categoryId: z.string().nullable(),
-  dueDate: z.coerce.date().nullish(),
-  dueOn: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-});
+import { taskFormSchema } from "@/lib/schemas/task";
 
 export async function POST(req: Request) {
   try {
@@ -18,7 +10,7 @@ export async function POST(req: Request) {
 
     if (!profile) return new NextResponse("Unauthorized", { status: 401 });
 
-    const parsed = bodySchema.safeParse(await req.json());
+    const parsed = taskFormSchema.safeParse(await req.json());
     if (!parsed.success)
       return new NextResponse("Invalid body", { status: 400 });
 
@@ -28,7 +20,7 @@ export async function POST(req: Request) {
       data: {
         ...rest,
         userId: profile.userID,
-        dueOn: new Date(`${dueOn}T00:00:00Z`),
+        dueOn: dueOn ? new Date(`${dueOn}T00:00:00Z`) : null,
       },
       include: { category: true },
     });

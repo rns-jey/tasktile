@@ -7,10 +7,10 @@ import { Fragment, useMemo } from "react";
 import { Controller, UseFormReturn } from "react-hook-form";
 
 import { useCategories, useRecentCategories } from "@/hooks/useCategories";
-import { localDay } from "@/lib/date";
 import { TaskFormValues } from "@/lib/schemas/task";
 import { TaskWithCategory } from "@/types";
 
+import { format, parseISO } from "date-fns";
 import { toast } from "sonner";
 import { Button } from "../atoms/Button";
 import DatePicker from "../molecules/DatePicker";
@@ -72,11 +72,7 @@ export default function TaskForm({
 
   const queryClient = useQueryClient();
 
-  const addTask = useMutation<
-    TaskWithCategory,
-    Error,
-    TaskFormValues & { dueOn: string }
-  >({
+  const addTask = useMutation<TaskWithCategory, Error, TaskFormValues>({
     mutationFn: async (newTask) => {
       const response = await axios.post("/api/tasks/new", newTask);
       return response.data;
@@ -114,7 +110,7 @@ export default function TaskForm({
     if (isEditing) {
       updateTask.mutate(values);
     } else {
-      addTask.mutate({ ...values, dueOn: localDay() });
+      addTask.mutate(values);
     }
   }
 
@@ -200,13 +196,15 @@ export default function TaskForm({
             />
 
             <Controller
-              name="dueDate"
+              name="dueOn"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <DatePicker
-                    value={field.value ?? null}
-                    onChange={field.onChange}
+                    value={field.value ? parseISO(field.value) : null}
+                    onChange={(d) =>
+                      field.onChange(d ? format(d, "yyyy-MM-dd") : null)
+                    }
                     disabled={formPending}
                   />
                 </Field>
