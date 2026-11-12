@@ -7,11 +7,37 @@ import { useTodayKey } from "../providers/TodayProvider";
 export default function TaskMeta({ task }: { task: TaskWithCategory }) {
   const todayKey = useTodayKey();
 
-  const due = task.dueOn ? formatDueOn(task.dueOn, todayKey) : null;
-  const closed = task.completedOn
-    ? formatClosedDate(task.completedOn, todayKey)
-    : null;
-  const isCompleted = task.completed;
+  let dateText: string | null = null;
+  let overdue = false;
+
+  if (task.completed && task.completedOn) {
+    dateText = formatClosedDate(task.completedOn, todayKey);
+  } else if (!task.completed && task.dueOn) {
+    const due = formatDueOn(task.dueOn, todayKey);
+    dateText = due.label;
+    overdue = due.overdue;
+  }
+
+  const items = [
+    task.category && (
+      <span
+        className="inline-flex items-center gap-1"
+        style={{ color: task.category.color }}
+      >
+        <Tag className="size-3" /> {task.category.name}
+      </span>
+    ),
+    dateText && (
+      <span
+        className={cn(
+          overdue ? "text-destructive" : "text-ink/90",
+          "inline-flex items-center gap-1",
+        )}
+      >
+        <Calendar className="size-3" /> {dateText}
+      </span>
+    ),
+  ].filter(Boolean);
 
   // const items = [
   //   task.category && (
@@ -40,27 +66,6 @@ export default function TaskMeta({ task }: { task: TaskWithCategory }) {
   //     <AlignLeftIcon className="w-4" aria-label="Has description" />
   //   ),
   // ].filter(Boolean);
-
-  const items = [
-    task.category && (
-      <span
-        className="inline-flex items-center gap-1"
-        style={{ color: task.category.color }}
-      >
-        <Tag className="size-3" /> {task.category?.name}
-      </span>
-    ),
-    due && (
-      <span
-        className={cn(
-          due.overdue ? "text-destructive" : "text-ink/90",
-          "inline-flex items-center gap-1",
-        )}
-      >
-        <Calendar className="size-3" /> {due.label}
-      </span>
-    ),
-  ].filter(Boolean);
 
   return (
     <p className="text-sm">

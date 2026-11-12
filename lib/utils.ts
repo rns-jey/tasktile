@@ -46,14 +46,14 @@ export function formatClosedDate(value: Date | string, todayKey: string) {
   const today = fromDbDay(`${todayKey}T00:00:00Z`);
   const daysAgo = differenceInCalendarDays(today, date);
 
-  if (daysAgo === 0) return "Closed today";
+  if (daysAgo === 0) return "Done today";
 
-  if (daysAgo === 1) return "Closed yesterday";
+  if (daysAgo === 1) return "Done yesterday";
 
-  if (daysAgo < 7) return `Closed ${format(date, "EEE")}`;
+  if (daysAgo < 7) return `Done ${format(date, "EEE")}`;
 
   if (date.getFullYear() === today.getFullYear())
-    return `Closed ${format(date, "d MMM")}`;
+    return `Done ${format(date, "d MMM")}`;
 
-  return `Closed ${format(date, "d MMM yyyy")}`;
+  return `Done ${format(date, "d MMM yyyy")}`;
 }

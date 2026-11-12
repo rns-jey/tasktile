@@ -7,11 +7,6 @@ export function getTodayTasks(userId: string, today: Date) {
       OR: [
         // everything due today (done or not)
         { dueOn: today },
-        // unfinished leftovers whose deadline is still ahead
-        {
-          completed: false,
-          dueOn: { lt: today },
-        },
         { completedOn: today },
       ],
     },
