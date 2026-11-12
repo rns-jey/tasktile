@@ -1,18 +1,41 @@
-import { taskFormSchema, TaskFormValues } from "@/lib/schemas/task";
-import { zodResolver } from "@hookform/resolvers/zod";
+"use client";
 
-import { localDay } from "@/lib/date";
-import { TaskWithCategory } from "@/types";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { ArrowUp, Calendar, FolderKanbanIcon, Plus } from "lucide-react";
+import {
+  AlignLeftIcon,
+  ArrowUp,
+  Calendar,
+  FolderKanbanIcon,
+  Plus,
+} from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
+
+import { localDay } from "@/lib/date";
+import { taskFormSchema, TaskFormValues } from "@/lib/schemas/task";
+import { TaskWithCategory } from "@/types";
+
+import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "../atoms/Button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/DropdownMenu";
 import { Field, FieldGroup } from "../ui/Field";
-import { InputGroup, InputGroupInput } from "../ui/InputGroup";
+import {
+  InputGroup,
+  InputGroupInput,
+  InputGroupTextarea,
+} from "../ui/InputGroup";
 
 export default function NewTaskForm() {
+  const [described, setDescribed] = useState(false);
+
   const taskForm = useForm<TaskFormValues>({
     resolver: zodResolver(taskFormSchema),
     defaultValues: {
@@ -38,6 +61,10 @@ export default function NewTaskForm() {
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["tasks"] });
       taskForm.reset();
+      setDescribed(false);
+      toast.success("Task created", {
+        position: "top-center",
+      });
     },
     onError: () => toast.error("Couldn't save task"),
   });
@@ -51,10 +78,10 @@ export default function NewTaskForm() {
   return (
     <form
       id="newTaskForm"
-      className="px-2.5 py-2"
+      className="space-y-5 px-2.5 py-2"
       onSubmit={taskForm.handleSubmit(onSubmit)}
     >
-      <FieldGroup>
+      <FieldGroup className="gap-0">
         <Controller
           name="name"
           control={taskForm.control}
@@ -67,41 +94,76 @@ export default function NewTaskForm() {
                   readOnly={addTask.isPending}
                   aria-invalid={fieldState.invalid}
                   placeholder="e.g., Daily stand-up meeting at 930"
+                  className="font-medium"
                 />
               </InputGroup>
             </Field>
           )}
         />
 
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1.5">
-            <Button
-              type="button"
-              variant="secondary"
-              className="size-10 rounded-full"
+        {described && (
+          <Controller
+            name="description"
+            control={taskForm.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <InputGroup className="border-none has-[[data-slot=input-group-control]:focus-visible]:ring-0">
+                  <InputGroupTextarea
+                    {...field}
+                    id="newTaskForm-description"
+                    readOnly={addTask.isPending}
+                    aria-invalid={fieldState.invalid}
+                    placeholder="Description (optional)"
+                    className="text-sm"
+                  />
+                </InputGroup>
+              </Field>
+            )}
+          />
+        )}
+      </FieldGroup>
+
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-1.5">
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={
+                <Button
+                  type="button"
+                  variant="secondary"
+                  className="size-10 rounded-full"
+                />
+              }
             >
               <Plus />
-            </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuGroup>
+                <DropdownMenuItem onClick={() => setDescribed(!described)}>
+                  <AlignLeftIcon /> Description
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
 
-            <Button type="button" variant="secondary" className="h-10">
-              <FolderKanbanIcon /> Project
-            </Button>
+          <Button type="button" variant="secondary" className="h-10">
+            <FolderKanbanIcon /> Project
+          </Button>
 
-            <Button type="button" variant="secondary" className="h-10">
-              <Calendar /> Due date
-            </Button>
-          </div>
-
-          <Button
-            type="submit"
-            className="size-10 rounded-full"
-            disabled={taskName || addTask.isPending}
-            onPointerDown={(e) => e.preventDefault()}
-          >
-            <ArrowUp />
+          <Button type="button" variant="secondary" className="h-10">
+            <Calendar /> Due date
           </Button>
         </div>
-      </FieldGroup>
+
+        <Button
+          type="submit"
+          className="size-10 rounded-full"
+          disabled={taskName || addTask.isPending}
+          onPointerDown={(e) => e.preventDefault()}
+        >
+          <ArrowUp />
+        </Button>
+      </div>
     </form>
   );
 }

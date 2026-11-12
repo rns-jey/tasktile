@@ -6,7 +6,7 @@ import currentProfile from "@/lib/profile";
 
 const bodySchema = z.object({
   name: z.string().min(3),
-  description: z.string().max(120),
+  description: z.string(),
   categoryId: z.string().nullable(),
   dueDate: z.coerce.date().nullish(),
   scheduledOn: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),

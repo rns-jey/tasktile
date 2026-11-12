@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const taskFormSchema = z.object({
   name: z.string().min(3, "Task name is required"),
-  description: z.string().max(120),
+  description: z.string(),
   categoryId: z.string().nullable(),
   dueDate: z.date().nullable(),
 });

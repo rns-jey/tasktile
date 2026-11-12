@@ -103,7 +103,7 @@ export default function TaskList({ tasks, variant = "full" }: TaskListProps) {
       >
         <AnimatePresence initial={false}>
           {lastOpenIndex === -1 && (
-            <div id="open-end" className="scroll-mb-32" />
+            <div id="open-end" className="scroll-mb-34" />
           )}
 
           {items.map((task, i) => (
@@ -118,7 +118,7 @@ export default function TaskList({ tasks, variant = "full" }: TaskListProps) {
                 <TaskCard priority={i} task={task} variant={variant} />
               </motion.div>
               {i === lastOpenIndex && (
-                <div id="open-end" className="scroll-mb-32" />
+                <div id="open-end" className="scroll-mb-34" />
               )}
             </Fragment>
           ))}
