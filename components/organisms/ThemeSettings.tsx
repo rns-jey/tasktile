@@ -19,15 +19,15 @@ export default function ThemeSettings() {
         Appearance
       </p>
 
-      <div className="flex w-full gap-2 rounded-lg p-0.5">
+      <div className="bg-muted flex w-full gap-2 rounded-lg py-1">
         {themes.map((t) => (
           <Button
             key={t}
             variant={"ghost"}
             type="button"
             className={cn(
-              "flex-1 capitalize",
-              active === t && "bg-paper-3 text-ink",
+              "hover:bg-paper-3 flex-1 capitalize",
+              active === t && "text-ink bg-white",
             )}
             aria-pressed={active === t}
             onClick={() => setTheme(t)}
