@@ -28,3 +28,15 @@ export function useTasks() {
     staleTime: 60 * 1000,
   });
 }
+
+export function useUpcoming() {
+  return useQuery<TaskWithCategory[]>({
+    queryKey: ["tasks", "upcoming"],
+    queryFn: async () => {
+      const response = await axios.get("/api/tasks/upcoming");
+      return response.data;
+    },
+    select: (tasks) => tasks.filter((t) => !isPendingDelete(t.id)),
+    staleTime: 60 * 1000,
+  });
+}
