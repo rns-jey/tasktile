@@ -20,7 +20,6 @@ export function useRecentCategories() {
     queryKey: ["categories", "recent"],
     queryFn: async () => {
       const response = await axios.get("/api/categories/recent");
-      console.log("recentCategories", response.data);
       return response.data;
     },
     staleTime: Infinity, // never refetch unless you manually invalidate

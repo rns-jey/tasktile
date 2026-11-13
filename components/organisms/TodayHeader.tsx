@@ -15,7 +15,6 @@ export default function TodayHeader() {
   useEffect(() => {
     const el = headerRef.current;
     if (!el) return;
-    console.log(el);
     const overserver = new IntersectionObserver(([entry]) =>
       setShowBar(!entry.isIntersecting),
     );
