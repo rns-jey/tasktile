@@ -2,7 +2,13 @@
 
 import { motion } from "motion/react";
 
-import { LayoutGridIcon, ListIcon, SettingsIcon, Sun } from "lucide-react";
+import {
+  Calendar,
+  LayoutGridIcon,
+  ListIcon,
+  SettingsIcon,
+  Sun,
+} from "lucide-react";
 import NextLink from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -10,6 +16,7 @@ import { cn } from "@/lib/utils";
 
 const navItems = [
   { href: "/", label: "Today", icon: Sun },
+  { href: "/upcoming", label: "Upcoming", icon: Calendar },
   { href: "/tasks", label: "Tasks", icon: ListIcon },
   { href: "/analytics", label: "Analytics", icon: LayoutGridIcon },
   { href: "/settings", label: "Settings", icon: SettingsIcon },
@@ -54,7 +61,7 @@ export default function MobileNav() {
   return (
     <div className="absolute inset-x-0 bottom-0 z-50">
       <nav className="bg-background/60 mx-4 mb-[max(0.5rem,env(safe-area-inset-bottom))] rounded-full border border-white/40 p-1 shadow-lg backdrop-blur-xl backdrop-saturate-150 md:hidden">
-        <ul className="grid grid-cols-4">
+        <ul className="grid grid-cols-5">
           {navItems.map((item) => (
             <NavLink key={item.href} {...item} />
           ))}
