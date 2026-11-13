@@ -40,3 +40,22 @@ export function getTasksForDay(userId: string, dayKey: string) {
     include: { category: true },
   });
 }
+
+export function getOnDue(userId: string, today: Date) {
+  return db.task.findMany({
+    where: {
+      userId: userId,
+      OR: [
+        {
+          dueOn: {
+            gt: today,
+          },
+        },
+      ],
+    },
+    include: {
+      category: true,
+    },
+    orderBy: [{ dueOn: "asc" }],
+  });
+}
