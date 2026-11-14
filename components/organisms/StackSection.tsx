@@ -3,6 +3,7 @@
 import { useStacks } from "@/hooks/useStacks";
 import { cn } from "@/lib/utils";
 import { ChevronRight, Layers } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 import { Button } from "../atoms/Button";
 import NewStackDrawer from "./NewStackDrawer";
@@ -36,8 +37,9 @@ export default function StackSection() {
         )}
       >
         {stacks.map((stack) => (
-          <div
+          <Link
             key={stack.id}
+            href={`/stacks/${stack.id}`}
             className="flex h-11 items-center justify-between border-b py-2"
           >
             <span className="inline-flex gap-4">
@@ -46,7 +48,7 @@ export default function StackSection() {
             <span className="text-muted-foreground tabular-nums">
               {stack._count.tasks}
             </span>
-          </div>
+          </Link>
         ))}
       </div>
     </div>
