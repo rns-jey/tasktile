@@ -12,6 +12,8 @@ import { localDay } from "@/lib/date";
 import { taskFormSchema, TaskFormValues } from "@/lib/schemas/task";
 import { TaskWithCategory } from "@/types";
 
+import { useStacks } from "@/hooks/useStacks";
+import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "../atoms/Button";
 import DatePicker from "../molecules/DatePicker";
@@ -30,6 +32,10 @@ import {
 } from "../ui/InputGroup";
 
 export default function NewTaskForm() {
+  const { stackId: urlStackId } = useParams<{ stackId?: string }>();
+
+  const { data: stacks = [] } = useStacks();
+
   const [described, setDescribed] = useState(false);
 
   const taskForm = useForm<TaskFormValues>({
@@ -37,6 +43,7 @@ export default function NewTaskForm() {
     defaultValues: {
       name: "",
       description: "",
+      stackId: urlStackId ?? null,
       categoryId: null,
       dueOn: localDay(),
     },
@@ -49,19 +56,26 @@ export default function NewTaskForm() {
       const response = await axios.post("/api/tasks/new", newTask);
       return response.data;
     },
-    onSuccess: async () => {
+    onSuccess: async (task) => {
       await queryClient.invalidateQueries({ queryKey: ["tasks"] });
       taskForm.reset({
         name: "",
         description: "",
+        stackId: taskForm.getValues("stackId"),
         categoryId: null,
         dueOn: localDay(),
       });
       taskForm.setFocus("name");
       setDescribed(false);
-      toast.success("Task created", {
-        position: "top-center",
-      });
+
+      const here = urlStackId ?? null;
+      const name = stacks.find((s) => s.id === task.stackId)?.name ?? "Inbox";
+      toast.success(
+        task.stackId === here ? "Task created" : `Task added to ${name}`,
+        {
+          position: "top-center",
+        },
+      );
     },
     onError: () => toast.error("Couldn't save task"),
   });
@@ -71,6 +85,9 @@ export default function NewTaskForm() {
   }
 
   const taskName = !taskForm.watch("name").trim().length;
+  const selectedStackId = taskForm.watch("stackId");
+  const stackLabel =
+    stacks.find((s) => s.id === selectedStackId)?.name ?? "Inbox";
 
   return (
     <form
@@ -136,16 +153,48 @@ export default function NewTaskForm() {
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuGroup>
-                <DropdownMenuItem onClick={() => setDescribed(!described)}>
+                <DropdownMenuItem
+                  onClick={() => {
+                    if (described) taskForm.setValue("description", "");
+                    setDescribed(!described);
+                  }}
+                >
                   <AlignLeftIcon /> Description
                 </DropdownMenuItem>
               </DropdownMenuGroup>
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <Button type="button" variant="secondary" className="h-10">
-            <FolderKanbanIcon /> Project
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={
+                <Button type="button" variant="secondary" className="h-10" />
+              }
+            >
+              <FolderKanbanIcon /> {stackLabel}
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuGroup>
+                <DropdownMenuItem
+                  onClick={() => {
+                    taskForm.setValue("stackId", null);
+                  }}
+                >
+                  Inbox
+                </DropdownMenuItem>
+                {stacks.map((stack) => (
+                  <DropdownMenuItem
+                    key={stack.id}
+                    onClick={() => {
+                      taskForm.setValue("stackId", stack.id);
+                    }}
+                  >
+                    {stack.name}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
 
           <Controller
             name="dueOn"

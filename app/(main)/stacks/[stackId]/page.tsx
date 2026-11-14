@@ -18,7 +18,7 @@ export default async function StackPage({ params }: StackPageProps) {
 
   return (
     <div>
-      <PageTitle title={stack.name} />;
+      <PageTitle title={stack.name} />
       <TaskList tasks={tasks} />
     </div>
   );
