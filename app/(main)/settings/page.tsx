@@ -1,8 +1,11 @@
 import { Button } from "@/components/atoms/Button";
 import SignOutSection from "@/components/molecules/SignOutSection";
+import StackSection from "@/components/organisms/StackSection";
 import ThemeSettings from "@/components/organisms/ThemeSettings";
+import { getStacksWithTaskCount } from "@/lib/models/stacks/queries";
 import currentProfile from "@/lib/profile";
 import { getCategoriesCount } from "@/lib/queries/categories";
+
 import { ChevronRight, LayoutGridIcon } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -14,6 +17,7 @@ export default async function SettingsPage() {
   if (!currentUser) redirect("/sign-in");
 
   const categoryCount = await getCategoriesCount(currentUser.userID);
+  const stacksWithTaskCount = await getStacksWithTaskCount(currentUser.userID);
 
   return (
     <Fragment>
@@ -51,6 +55,8 @@ export default async function SettingsPage() {
       </div>
 
       <ThemeSettings />
+
+      <StackSection stacks={stacksWithTaskCount} />
 
       <SignOutSection />
     </Fragment>
