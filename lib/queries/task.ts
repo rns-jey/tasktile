@@ -16,7 +16,7 @@ export function getTodayTasks(userId: string, today: Date) {
         { completedOn: today },
       ],
     },
-    include: { category: true },
+    include: { category: true, stack: true },
     orderBy: [{ createdAt: "asc" }],
   });
 }
@@ -26,7 +26,7 @@ export function getTasks(userId: string) {
     where: {
       userId: userId,
     },
-    include: { category: true },
+    include: { category: true, stack: true },
     orderBy: [{ createdAt: "desc" }],
   });
 }
@@ -59,7 +59,7 @@ export function getTasksForDay(userId: string, dayKey: string) {
   return db.task.findMany({
     where: { userId, completed: true, completedOn: day },
     orderBy: { completedAt: "desc" },
-    include: { category: true },
+    include: { category: true, stack: true },
   });
 }
 
@@ -75,9 +75,7 @@ export function getOnDue(userId: string, today: Date) {
         },
       ],
     },
-    include: {
-      category: true,
-    },
+    include: { category: true, stack: true },
     orderBy: [{ dueOn: "asc" }],
   });
 }
