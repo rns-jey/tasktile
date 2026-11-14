@@ -157,6 +157,7 @@ export default function TaskForm({
                       {...field}
                       id={`${formId}-name`}
                       aria-invalid={fieldState.invalid}
+                      autoComplete="off"
                       placeholder="Add a task name .."
                     />
                   </InputGroup>

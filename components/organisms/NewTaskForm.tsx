@@ -106,6 +106,7 @@ export default function NewTaskForm() {
                   {...field}
                   id="newTaskForm-name"
                   readOnly={addTask.isPending}
+                  autoComplete="off"
                   aria-invalid={fieldState.invalid}
                   placeholder="e.g., Daily stand-up meeting at 930"
                   className="font-medium"
@@ -126,6 +127,7 @@ export default function NewTaskForm() {
                     {...field}
                     id="newTaskForm-description"
                     readOnly={addTask.isPending}
+                    autoComplete="off"
                     aria-invalid={fieldState.invalid}
                     placeholder="Description (optional)"
                     className="text-sm"

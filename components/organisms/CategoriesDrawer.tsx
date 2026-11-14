@@ -58,6 +58,7 @@ export default function CategoriesDrawer({
         <InputGroup>
           <InputGroupInput
             placeholder="Search or create"
+            autoComplete="off"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />

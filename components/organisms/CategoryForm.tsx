@@ -149,6 +149,7 @@ export default function CategoryForm({
                       {...field}
                       id={`${formId}-name`}
                       aria-invalid={fieldState.invalid}
+                      autoComplete="off"
                       placeholder="Name, e.g. Personal"
                       disabled={formPending}
                     />

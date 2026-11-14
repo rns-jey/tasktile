@@ -101,6 +101,7 @@ export default function StackForm({
                     {...field}
                     id={`${formId}-name`}
                     aria-invalid={fieldState.invalid}
+                    autoComplete="off"
                     placeholder="e.g. Work, Groceries, Side project"
                   />
                 </InputGroup>
