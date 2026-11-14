@@ -1,3 +1,4 @@
+import PageTitle from "@/components/atoms/PageTitle";
 import { Fragment } from "react";
 
 export default function TasksLayout({
@@ -8,9 +9,7 @@ export default function TasksLayout({
   return (
     <Fragment>
       <header className="flex flex-col justify-between gap-4 pb-4">
-        <h1 className="flex flex-col">
-          <span className="font-heading text-4xl">Tasks</span>
-        </h1>
+        <PageTitle title="Tasks" />
       </header>
 
       {children}

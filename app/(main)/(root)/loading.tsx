@@ -1,5 +1,6 @@
 "use client";
 
+import PageTitle from "@/components/atoms/PageTitle";
 import { useTodayKey } from "@/components/providers/TodayProvider";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { fromDbDay } from "@/lib/date";
@@ -18,9 +19,7 @@ export default function RootLoading() {
             <span className="text-xs leading-6 font-medium tracking-[.08em] uppercase">
               {format(today, "eeee")}
             </span>
-            <span className="font-heading text-4xl leading-none">
-              {format(today, "LLLL d")}
-            </span>
+            <PageTitle title={format(today, "LLLL d")} />
           </h1>
 
           <Skeleton className="h-5 w-28" />

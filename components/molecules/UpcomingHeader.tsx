@@ -3,6 +3,7 @@
 import { useUpcoming } from "@/hooks/useTasks";
 import { localDay } from "@/lib/date";
 import { format } from "date-fns";
+import PageTitle from "../atoms/PageTitle";
 
 export default function UpcomingHeader() {
   const { data: tasks = [] } = useUpcoming();
@@ -13,7 +14,7 @@ export default function UpcomingHeader() {
         <span className="text-xs leading-6 font-medium tracking-[.08em] uppercase">
           {format(localDay(), "MMMM yyyy")}
         </span>
-        <span className="font-heading text-4xl leading-none">Upcoming</span>
+        <PageTitle title="Upcoming" />
       </h1>
       <p>{tasks.length} tasks planned</p>
     </header>

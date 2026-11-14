@@ -1,4 +1,5 @@
 import { Button } from "@/components/atoms/Button";
+import PageTitle from "@/components/atoms/PageTitle";
 import SignOutSection from "@/components/molecules/SignOutSection";
 import StackSection from "@/components/organisms/StackSection";
 import ThemeSettings from "@/components/organisms/ThemeSettings";
@@ -33,9 +34,7 @@ export default async function SettingsPage() {
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <header className="flex flex-col justify-between gap-4 pb-4">
-        <h1 className="flex flex-col">
-          <span className="font-heading text-4xl">Settings</span>
-        </h1>
+        <PageTitle title="Settings" />
       </header>
 
       <div>
