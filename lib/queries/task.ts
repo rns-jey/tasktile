@@ -31,6 +31,17 @@ export function getTasks(userId: string) {
   });
 }
 
+export function getInbox(userId: string) {
+  return db.task.findMany({
+    where: {
+      userId: userId,
+      stackId: null,
+    },
+    include: { category: true },
+    orderBy: [{ createdAt: "desc" }],
+  });
+}
+
 export function getStackTasks(userId: string, stackId: string) {
   return db.task.findMany({
     where: {

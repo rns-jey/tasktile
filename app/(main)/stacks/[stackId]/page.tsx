@@ -72,7 +72,9 @@ export default async function StackPage({ params }: StackPageProps) {
         </p>
       </header>
 
-      <TaskList tasks={tasks} />
+      <div className="flex flex-col">
+        <TaskList tasks={tasks} />
+      </div>
     </div>
   );
 }

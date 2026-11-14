@@ -4,8 +4,8 @@ import { motion } from "motion/react";
 
 import {
   Calendar,
+  InboxIcon,
   LayoutGridIcon,
-  ListIcon,
   SettingsIcon,
   Sun,
 } from "lucide-react";
@@ -17,7 +17,7 @@ import { cn } from "@/lib/utils";
 const navItems = [
   { href: "/", label: "Today", icon: Sun, also: [] },
   { href: "/upcoming", label: "Upcoming", icon: Calendar, also: [] },
-  { href: "/tasks", label: "Tasks", icon: ListIcon, also: [] },
+  { href: "/inbox", label: "Inbox", icon: InboxIcon, also: [] },
   { href: "/analytics", label: "Analytics", icon: LayoutGridIcon, also: [] },
   {
     href: "/settings",
