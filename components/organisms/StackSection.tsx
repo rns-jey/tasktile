@@ -2,9 +2,10 @@
 
 import { StackWithTaskCount } from "@/lib/models/stacks/types";
 import { cn } from "@/lib/utils";
-import { ChevronRight, Layers, Plus } from "lucide-react";
+import { ChevronRight, Layers } from "lucide-react";
 import { useState } from "react";
 import { Button } from "../atoms/Button";
+import NewStackDrawer from "./NewStackDrawer";
 
 export default function StackSection({
   stacks,
@@ -18,9 +19,7 @@ export default function StackSection({
       <div className="flex items-center">
         <p className="text-label font-medium uppercase">Stack</p>
 
-        <Button type="button" variant="ghost" className="ml-auto size-11">
-          <Plus />
-        </Button>
+        <NewStackDrawer />
 
         <Button
           type="button"
