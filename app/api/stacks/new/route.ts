@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { db } from "@/lib/db";
+import { Prisma } from "@/lib/generated/prisma/client";
 import currentProfile from "@/lib/profile";
 import { z } from "zod";
 
@@ -34,7 +35,17 @@ export async function POST(req: Request) {
 
     return NextResponse.json(task);
   } catch (error) {
-    console.log(error);
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2002"
+    )
+      return NextResponse.json(
+        { error: "You already have a stack with that name" },
+        { status: 409 },
+      );
+
+    console.error(error);
+
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 }

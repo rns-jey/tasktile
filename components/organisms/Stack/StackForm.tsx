@@ -35,7 +35,15 @@ export default function StackForm({
       const response = await axios.post("/api/stacks/new", newStack);
       return response.data;
     },
-    onError: () => toast.error("Couldn't save stack"),
+    onError: (error) => {
+      if (axios.isAxiosError(error) && error.response?.status === 409) {
+        form.setError("name", {
+          message: "You already have a stack with that name",
+        });
+      } else {
+        toast.error("Couldn't create stack");
+      }
+    },
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["stacks"] });
       await queryClient.invalidateQueries({ queryKey: ["tasks"] });
