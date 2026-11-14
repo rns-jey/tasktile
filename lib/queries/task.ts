@@ -37,7 +37,7 @@ export function getInbox(userId: string) {
       userId: userId,
       stackId: null,
     },
-    include: { category: true },
+    include: { category: true, stack: true },
     orderBy: [{ createdAt: "desc" }],
   });
 }
@@ -48,7 +48,7 @@ export function getStackTasks(userId: string, stackId: string) {
       userId: userId,
       stackId: stackId,
     },
-    include: { category: true },
+    include: { category: true, stack: true },
     orderBy: [{ createdAt: "desc" }],
   });
 }
