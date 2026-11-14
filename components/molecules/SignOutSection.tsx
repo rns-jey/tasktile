@@ -1,6 +1,7 @@
 "use client";
 
 import { authClient } from "@/lib/auth/client";
+import { LogOut } from "lucide-react";
 import { redirect } from "next/navigation";
 import { Button } from "../atoms/Button";
 
@@ -16,14 +17,16 @@ export default function SignOutSection() {
         App
       </p>
 
-      <Button
-        variant={"ghost"}
-        type="button"
-        className="flex w-full justify-start"
-        onClick={handleSignOut}
-      >
-        Sign out
-      </Button>
+      <div className="flex min-h-11 w-full flex-col gap-2 rounded-lg bg-white px-4 py-2">
+        <Button
+          variant={"ghost"}
+          type="button"
+          className="flex w-full items-center justify-start gap-4 p-0"
+          onClick={handleSignOut}
+        >
+          <LogOut className="size-6" /> Sign out
+        </Button>
+      </div>
     </div>
   );
 }
