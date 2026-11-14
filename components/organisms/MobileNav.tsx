@@ -15,18 +15,26 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 const navItems = [
-  { href: "/", label: "Today", icon: Sun },
-  { href: "/upcoming", label: "Upcoming", icon: Calendar },
-  { href: "/tasks", label: "Tasks", icon: ListIcon },
-  { href: "/analytics", label: "Analytics", icon: LayoutGridIcon },
-  { href: "/settings", label: "Settings", icon: SettingsIcon },
+  { href: "/", label: "Today", icon: Sun, also: [] },
+  { href: "/upcoming", label: "Upcoming", icon: Calendar, also: [] },
+  { href: "/tasks", label: "Tasks", icon: ListIcon, also: [] },
+  { href: "/analytics", label: "Analytics", icon: LayoutGridIcon, also: [] },
+  {
+    href: "/settings",
+    label: "Settings",
+    icon: SettingsIcon,
+    also: ["/stacks"],
+  },
 ];
 
 type NavItem = (typeof navItems)[number];
 
-function NavLink({ href, label, icon: Icon }: NavItem) {
+function NavLink({ href, label, icon: Icon, also }: NavItem) {
   const pathname = usePathname();
-  const active = pathname === href;
+  const active =
+    href === "/"
+      ? pathname === "/"
+      : [href, ...also].some((path) => pathname.startsWith(path));
 
   return (
     <li className="relative isolate">
