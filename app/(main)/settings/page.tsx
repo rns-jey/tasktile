@@ -5,11 +5,15 @@ import ThemeSettings from "@/components/organisms/ThemeSettings";
 import { getStacksWithTaskCount } from "@/lib/models/stacks/queries";
 import currentProfile from "@/lib/profile";
 import { getCategoriesCount } from "@/lib/queries/categories";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
 
 import { ChevronRight, LayoutGridIcon } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Fragment } from "react";
 
 export default async function SettingsPage() {
   const currentUser = await currentProfile();
@@ -17,10 +21,17 @@ export default async function SettingsPage() {
   if (!currentUser) redirect("/sign-in");
 
   const categoryCount = await getCategoriesCount(currentUser.userID);
-  const stacksWithTaskCount = await getStacksWithTaskCount(currentUser.userID);
+
+  const queryClient = new QueryClient();
+
+  await queryClient.query({
+    queryKey: ["stacks", "list"],
+    queryFn: () => getStacksWithTaskCount(currentUser.userID),
+    staleTime: 1000 * 60, // 1 minute
+  });
 
   return (
-    <Fragment>
+    <HydrationBoundary state={dehydrate(queryClient)}>
       <header className="flex flex-col justify-between gap-4 pb-4">
         <h1 className="flex flex-col">
           <span className="font-heading text-4xl">Settings</span>
@@ -56,9 +67,9 @@ export default async function SettingsPage() {
 
       <ThemeSettings />
 
-      <StackSection stacks={stacksWithTaskCount} />
+      <StackSection />
 
       <SignOutSection />
-    </Fragment>
+    </HydrationBoundary>
   );
 }

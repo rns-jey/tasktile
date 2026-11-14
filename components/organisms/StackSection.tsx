@@ -1,18 +1,16 @@
 "use client";
 
-import { StackWithTaskCount } from "@/lib/models/stacks/types";
+import { useStacks } from "@/hooks/useStacks";
 import { cn } from "@/lib/utils";
 import { ChevronRight, Layers } from "lucide-react";
 import { useState } from "react";
 import { Button } from "../atoms/Button";
 import NewStackDrawer from "./NewStackDrawer";
 
-export default function StackSection({
-  stacks,
-}: {
-  stacks: StackWithTaskCount[];
-}) {
-  const [stackVisible, setStackVisible] = useState(false);
+export default function StackSection() {
+  const { data: stacks = [] } = useStacks();
+
+  const [stackVisible, setStackVisible] = useState(true);
 
   return (
     <div className="mt-6">
@@ -43,7 +41,7 @@ export default function StackSection({
             className="flex h-11 items-center justify-between border-b py-2"
           >
             <span className="inline-flex gap-4">
-              <Layers /> Project 2
+              <Layers /> {stack.name}
             </span>
             <span className="text-muted-foreground tabular-nums">
               {stack._count.tasks}
