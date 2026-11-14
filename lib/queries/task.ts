@@ -31,6 +31,17 @@ export function getTasks(userId: string) {
   });
 }
 
+export function getStackTasks(userId: string, stackId: string) {
+  return db.task.findMany({
+    where: {
+      userId: userId,
+      stackId: stackId,
+    },
+    include: { category: true },
+    orderBy: [{ createdAt: "desc" }],
+  });
+}
+
 export function getTasksForDay(userId: string, dayKey: string) {
   const day = new Date(dayKey + "T00:00:00.000Z");
 

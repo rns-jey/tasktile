@@ -11,6 +11,7 @@ import { StackFormValues } from "@/lib/models/stacks/schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { Layers } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { Fragment } from "react";
 import { Controller, UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
@@ -29,6 +30,7 @@ export default function StackForm({
   onDelete,
 }: StackFormProps) {
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const addStack = useMutation<Stack, Error, StackFormValues>({
     mutationFn: async (newStack) => {
@@ -44,16 +46,11 @@ export default function StackForm({
         toast.error("Couldn't create stack");
       }
     },
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["stacks"] });
-      await queryClient.invalidateQueries({ queryKey: ["tasks"] });
 
+    onSuccess: (stack) => {
+      queryClient.invalidateQueries({ queryKey: ["stacks"] });
       form.reset();
-      setOpen(false);
-
-      toast.success("Stack created", {
-        position: "top-center",
-      });
+      router.push(`/stacks/${stack.id}`);
     },
   });
 
