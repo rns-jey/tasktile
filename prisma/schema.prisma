@@ -76,7 +76,7 @@ model Category {
 model Stack {
   id String @id @default(uuid())
   name String
-  slug String
+  nameKey String
 
   tasks Task[]
 
@@ -86,5 +86,5 @@ model Stack {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@unique([userId,slug])
+  @@unique([userId,nameKey])
 }
