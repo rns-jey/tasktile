@@ -105,7 +105,7 @@ export default function NewTaskDrawer() {
       open={open}
       onOpenChange={(next) => {
         setOpen(next);
-        // if (!next) setSelectingCategory(false);
+        if (next) taskForm.setValue("stackId", urlStackId ?? null);
       }}
     >
       <DrawerTrigger
