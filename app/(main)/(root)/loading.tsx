@@ -1,33 +1,15 @@
 "use client";
 
-import PageTitle from "@/components/atoms/PageTitle";
-import { useTodayKey } from "@/components/providers/TodayProvider";
 import { Skeleton } from "@/components/ui/Skeleton";
-import { fromDbDay } from "@/lib/date";
-import { format } from "date-fns";
 import { Fragment } from "react";
 
 export default function RootLoading() {
-  const todayKey = useTodayKey();
-  const today = fromDbDay(`${todayKey}T00:00:00Z`);
-
   return (
     <Fragment>
       <header className="flex justify-between pb-4">
-        <div>
-          <h1 className="flex flex-col">
-            <span className="text-xs leading-6 font-medium tracking-[.08em] uppercase">
-              {format(today, "eeee")}
-            </span>
-            <PageTitle title={format(today, "LLLL d")} />
-          </h1>
+        <Skeleton className="h-21 w-48" />
 
-          <Skeleton className="h-5 w-28" />
-        </div>
-
-        <div className="font-heading flex size-17 items-center justify-center rounded-[15px] text-[28px]">
-          <Skeleton className="size-10" />
-        </div>
+        <Skeleton className="size-17" />
       </header>
 
       <div className="flex flex-col">

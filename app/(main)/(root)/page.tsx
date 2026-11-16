@@ -13,11 +13,12 @@ import {
 } from "@tanstack/react-query";
 
 export default async function Home() {
-  const currentUser = await currentProfile();
+  const [currentUser, today] = await Promise.all([
+    currentProfile(),
+    getToday(),
+  ]);
 
   if (!currentUser) redirect("/sign-in");
-
-  const today = await getToday();
 
   const queryClient = new QueryClient();
 
