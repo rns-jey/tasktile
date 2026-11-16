@@ -5,7 +5,7 @@ import { getTodayTasks } from "@/lib/queries/task";
 import { getToday } from "@/lib/today";
 
 import TodayHeader from "@/components/organisms/TodayHeader";
-import TodayTaskSection from "@/components/organisms/TodayTaskSection";
+import TodayTaskSection from "@/components/organisms/sections/TodayTaskSection";
 import {
   dehydrate,
   HydrationBoundary,

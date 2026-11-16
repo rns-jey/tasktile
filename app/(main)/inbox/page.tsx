@@ -1,5 +1,5 @@
 import PageTitle from "@/components/atoms/PageTitle";
-import InboxTaskSection from "@/components/organisms/InboxTaskSection";
+import InboxTaskSection from "@/components/organisms/sections/InboxTaskSection";
 import currentProfile from "@/lib/profile";
 import { getInbox } from "@/lib/queries/task";
 import {

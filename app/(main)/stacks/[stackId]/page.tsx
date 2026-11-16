@@ -1,6 +1,7 @@
 import { Button } from "@/components/atoms/Button";
 import PageTitle from "@/components/atoms/PageTitle";
-import TaskList from "@/components/organisms/TaskList";
+import StackTaskSection from "@/components/organisms/sections/StackTaskSection";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -72,9 +73,7 @@ export default async function StackPage({ params }: StackPageProps) {
         </p>
       </header>
 
-      <div className="flex flex-col">
-        <TaskList tasks={tasks} />
-      </div>
+      <StackTaskSection stackId={stackId} />
     </div>
   );
 }

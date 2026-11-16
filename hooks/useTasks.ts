@@ -17,18 +17,6 @@ export function useTodayTasks() {
   });
 }
 
-export function useTasks() {
-  return useQuery<TaskWithCategory[]>({
-    queryKey: ["tasks", "all"],
-    queryFn: async () => {
-      const response = await axios.get("/api/tasks");
-      return response.data;
-    },
-    select: (tasks) => tasks.filter((t) => !isPendingDelete(t.id)),
-    staleTime: 60 * 1000,
-  });
-}
-
 export function useUpcoming() {
   return useQuery<TaskWithCategory[]>({
     queryKey: ["tasks", "upcoming"],
