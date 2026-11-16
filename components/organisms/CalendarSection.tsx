@@ -4,6 +4,7 @@ import { useStats } from "@/hooks/useStats";
 import { getTasksForDayAction } from "@/lib/actions/tasks";
 import { heatClass } from "@/lib/colors";
 import { cn } from "@/lib/utils";
+import { TaskWithCategory } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import {
   addMonths,
@@ -113,7 +114,7 @@ export default function CalendarSection() {
 
   const selectedCount = countsByDay.get(selected) ?? 0;
 
-  const { data: tasks, isLoading } = useQuery({
+  const { data: tasks, isLoading } = useQuery<TaskWithCategory[]>({
     queryKey: ["tasks", "day", selected],
     queryFn: () => getTasksForDayAction(selected),
     staleTime: 5 * 60 * 1000,
