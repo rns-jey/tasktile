@@ -1,46 +1,45 @@
 "use client";
 
 import { useStacks } from "@/hooks/useStacks";
-import { cn } from "@/lib/utils";
-import { ChevronRight, Layers } from "lucide-react";
+import { ChevronsUpDown, Layers } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { Button } from "../atoms/Button";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "../ui/Collapsible";
 import NewStackDrawer from "./NewStackDrawer";
 
 export default function StackSection() {
   const { data: stacks = [] } = useStacks();
 
-  const [stackVisible, setStackVisible] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="mt-6">
+    <Collapsible open={isOpen} onOpenChange={setIsOpen} className="mt-4">
       <div className="flex items-center">
-        <p className="text-label font-medium uppercase">Stack</p>
+        <p className="text-label ml-2 font-medium uppercase">Stack</p>
 
         <NewStackDrawer />
 
-        <Button
-          type="button"
-          variant="ghost"
-          className="size-11"
-          onClick={() => setStackVisible(!stackVisible)}
-        >
-          <ChevronRight />
-        </Button>
+        <CollapsibleTrigger
+          render={
+            <Button variant="ghost" size="icon" className="size-11">
+              <ChevronsUpDown />
+              <span className="sr-only">Toggle stacks</span>
+            </Button>
+          }
+        />
       </div>
 
-      <div
-        className={cn(
-          "min-h-11 w-full flex-col rounded-lg bg-white px-4 py-2 transition-all duration-500",
-          stackVisible ? "flex" : "hidden",
-        )}
-      >
+      <CollapsibleContent className="mt-2 flex flex-col gap-2 rounded-lg bg-white px-4 py-2">
         {stacks.map((stack) => (
           <Link
             key={stack.id}
             href={`/stacks/${stack.id}`}
-            className="flex h-11 items-center justify-between border-b py-2"
+            className="flex h-11 items-center justify-between border-b py-2 last:border-0"
           >
             <span className="inline-flex gap-4">
               <Layers /> {stack.name}
@@ -50,7 +49,7 @@ export default function StackSection() {
             </span>
           </Link>
         ))}
-      </div>
-    </div>
+      </CollapsibleContent>
+    </Collapsible>
   );
 }
