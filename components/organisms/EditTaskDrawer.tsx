@@ -338,25 +338,6 @@ export default function EditTaskDrawer({ task, variant }: EditTaskDrawerProps) {
             }
           />
         </div>
-        {/* <div hidden={newCateg || selectingCategory}>
-          <TaskForm
-            task={task}
-            form={taskForm}
-            formId="form-edit-task"
-            setOpen={setOpen}
-            setNewCateg={setNewCateg}
-            setSelectingCategory={setSelectingCategory}
-            onDelete={handleDelete}
-          />
-        </div> */}
-
-        {/* {selectingCategory && (
-          <CategoriesDrawer
-            onSelect={(id) => taskForm.setValue("categoryId", id)}
-            selectedCategoryId={selectedCategoryId}
-            setSelectingCategory={setSelectingCategory}
-          />
-        )} */}
       </DrawerContent>
     </Drawer>
   );

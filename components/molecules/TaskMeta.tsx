@@ -1,10 +1,13 @@
 import { cn, formatClosedDate, formatDueOn } from "@/lib/utils";
 import { TaskWithCategory } from "@/types";
 import { Calendar, Layers, Tag } from "lucide-react";
+import { usePathname } from "next/navigation";
 import { useTodayKey } from "../providers/TodayProvider";
 
 export default function TaskMeta({ task }: { task: TaskWithCategory }) {
   const todayKey = useTodayKey();
+
+  const pathname = usePathname();
 
   let dateText: string | null = null;
   let overdue = false;
@@ -17,71 +20,7 @@ export default function TaskMeta({ task }: { task: TaskWithCategory }) {
     overdue = due.overdue;
   }
 
-  const items = [
-    task.category && (
-      <span
-        className="inline-flex items-center gap-1"
-        style={{ color: task.category.color }}
-      >
-        <Tag className="size-3" /> {task.category.name}
-      </span>
-    ),
-    dateText && (
-      <span
-        className={cn(
-          overdue ? "text-destructive" : "text-ink/90",
-          "inline-flex items-center gap-1",
-        )}
-      >
-        <Calendar className="size-3" /> {dateText}
-      </span>
-    ),
-  ].filter(Boolean);
-
-  // const items = [
-  //   task.category && (
-
-  //     <span className="inline-flex min-w-0 items-center gap-1.5">
-  //       <span
-  //         className="h-2 w-2 rounded-xs"
-  //         style={{ backgroundColor: task.category.color }}
-  //       />
-  //       <span className="truncate">{task.category.name}</span>
-  //     </span>
-  //   ),
-  //   due && !isCompleted && (
-  //     <span
-  //       className={cn(
-  //         due.overdue
-  //           ? "text-destructive bg-destructive/15 rounded px-1.5 font-semibold"
-  //           : "text-meta",
-  //       )}
-  //     >
-  //       {due.label}
-  //     </span>
-  //   ),
-  //   closed && isCompleted && <span className="text-meta">{closed}</span>,
-  //   task.description && (
-  //     <AlignLeftIcon className="w-4" aria-label="Has description" />
-  //   ),
-  // ].filter(Boolean);
-
   return (
-    // <p className="text-sm">
-    //   {items.map((item, i) => (
-    //     <Fragment key={i}>
-    //       {i > 0 && (
-    //         <span
-    //           aria-hidden="true"
-    //           className="text-muted-foreground/50 mx-1.5"
-    //         >
-    //           ·
-    //         </span>
-    //       )}
-    //       {item}
-    //     </Fragment>
-    //   ))}
-    // </p>
     <div className="relative text-xs">
       <div className="flex flex-col gap-0.5">
         {dateText && (
@@ -105,9 +44,11 @@ export default function TaskMeta({ task }: { task: TaskWithCategory }) {
         )}
       </div>
 
-      <span className="absolute right-0 bottom-0 inline-flex items-center gap-1">
-        <Layers className="size-3" /> {task.stack ? task.stack.name : "Inbox"}
-      </span>
+      {pathname === "/" && (
+        <span className="absolute right-0 bottom-0 inline-flex items-center gap-1">
+          <Layers className="size-3" /> {task.stack ? task.stack.name : "Inbox"}
+        </span>
+      )}
     </div>
   );
 }
