@@ -15,7 +15,6 @@ import {
   startOfWeek,
 } from "date-fns";
 import { useMemo, useState } from "react";
-import { Button } from "../atoms/Button";
 import TaskCard from "../molecules/TaskCard";
 import { useTodayKey } from "../providers/TodayProvider";
 
@@ -94,31 +93,29 @@ export default function UpcomingSection() {
 
   return (
     <div className="flex flex-col gap-4">
-      <div>
+      <div className="space-y-1">
         <div className="grid grid-cols-7 place-content-center text-center">
           {weekDays.map((wd, wdi) => (
-            <div key={wdi} className="w-11">
+            <div key={wdi} className="mx-auto size-6">
               {wd}
             </div>
           ))}
         </div>
         <div className="grid grid-cols-7 place-content-center text-center">
           {days.map((day, day_i) => (
-            <Button
+            <div
               key={day_i}
-              type="button"
-              variant="ghost"
-              disabled={differenceInCalendarDays(today, day.date) > 0}
+              // disabled={differenceInCalendarDays(today, day.date) > 0}
               className={cn(
                 day.key === todayKey && "bg-jade/30 font-bold",
                 day.key === selected &&
                   "ring-offset-paper ring-2 ring-offset-2",
-                "size-11",
+                "mx-auto size-6 rounded-sm text-center",
               )}
               onClick={() => setSelected(day.key)}
             >
               {day.date.getDate()}
-            </Button>
+            </div>
           ))}
         </div>
       </div>
