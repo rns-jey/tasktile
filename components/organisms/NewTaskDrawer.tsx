@@ -5,7 +5,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { format, parseISO } from "date-fns";
 import { AlignLeftIcon, ArrowUp, FolderKanbanIcon, Plus } from "lucide-react";
-import { useParams } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
@@ -41,6 +41,8 @@ export default function NewTaskDrawer() {
 
   const { data: stacks = [] } = useStacks();
 
+  const pathname = usePathname();
+
   const taskForm = useForm<TaskFormValues>({
     resolver: zodResolver(taskFormSchema),
     defaultValues: {
@@ -48,7 +50,7 @@ export default function NewTaskDrawer() {
       description: "",
       stackId: urlStackId ?? null,
       categoryId: null,
-      dueOn: localDay(),
+      dueOn: (pathname === "/" && localDay()) || null,
     },
   });
 
