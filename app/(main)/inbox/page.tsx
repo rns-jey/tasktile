@@ -1,5 +1,5 @@
 import PageTitle from "@/components/atoms/PageTitle";
-import TaskList from "@/components/organisms/TaskList";
+import InboxTaskSection from "@/components/organisms/InboxTaskSection";
 import currentProfile from "@/lib/profile";
 import { getInbox } from "@/lib/queries/task";
 import { QueryClient } from "@tanstack/react-query";
@@ -12,7 +12,7 @@ export default async function InboxPage() {
 
   const queryClient = new QueryClient();
 
-  const tasks = await queryClient.query({
+  await queryClient.query({
     queryKey: ["tasks", "inbox"],
     queryFn: () => getInbox(currentUser.userID),
     staleTime: 1000 * 60, // 1 minute
@@ -24,9 +24,7 @@ export default async function InboxPage() {
         <PageTitle title="Inbox" />
       </header>
 
-      <div className="flex flex-col">
-        <TaskList tasks={tasks} />
-      </div>
+      <InboxTaskSection />
     </div>
   );
 }

@@ -40,3 +40,15 @@ export function useUpcoming() {
     staleTime: 60 * 1000,
   });
 }
+
+export function useInbox() {
+  return useQuery<TaskWithCategory[]>({
+    queryKey: ["tasks", "inbox"],
+    queryFn: async () => {
+      const response = await axios.get("/api/tasks/inbox");
+      return response.data;
+    },
+    select: (tasks) => tasks.filter((t) => !isPendingDelete(t.id)),
+    staleTime: 60 * 1000,
+  });
+}
