@@ -14,6 +14,20 @@ A productivity-focused to-do app that helps you plan work and see your progress 
 - Create an account, manage app preferences, and use the responsive web app on mobile.
 - Includes a web app manifest and platform icons for home-screen installation.
 
+## Mobile-First Experience
+
+TaskTile is a Progressive Web App (PWA) developed with a mobile-first approach. The interface and interactions are primarily designed around mobile usage, prioritizing touch-friendly interactions and an intuitive productivity experience.
+
+The application can be installed on supported devices and accessed directly from the home screen, providing an app-like experience without requiring a traditional app store installation.
+
+Mobile is the primary design and development target. Desktop layout refinements are still ongoing.
+
+Screenshots
+
+Here is a look at TaskTile's mobile experience.
+
+<p align="center">   <img src="docs/screenshots/today.png" width="240" alt="TaskTile Today screen" />   &nbsp;&nbsp;   <img src="docs/screenshots/upcoming.png" width="240" alt="TaskTile Upcoming screen" />   &nbsp;&nbsp;   <img src="docs/screenshots/analytics.png" width="240" alt="TaskTile Analytics screen" /> </p>
+
 ## Tech stack
 
 - Next.js App Router and React
@@ -69,13 +83,13 @@ A productivity-focused to-do app that helps you plan work and see your progress 
 
 ## Available scripts
 
-| Command | Description |
-| --- | --- |
-| `pnpm dev` | Start the development server |
-| `pnpm build` | Create a production build |
-| `pnpm start` | Run the production server |
-| `pnpm storybook` | Start Storybook |
-| `pnpm build-storybook` | Build the Storybook site |
+| Command                | Description                  |
+| ---------------------- | ---------------------------- |
+| `pnpm dev`             | Start the development server |
+| `pnpm build`           | Create a production build    |
+| `pnpm start`           | Run the production server    |
+| `pnpm storybook`       | Start Storybook              |
+| `pnpm build-storybook` | Build the Storybook site     |
 
 ## Database
 
