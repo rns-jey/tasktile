@@ -2,13 +2,14 @@
 
 import { useStacks } from "@/hooks/useStacks";
 import {
+  Calendar,
   Diamond,
+  Inbox,
   Layers,
   LayoutGrid,
-  List,
   PanelLeftIcon,
   Settings,
-  Square,
+  Sun,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -29,25 +30,29 @@ import NewTaskDrawer from "./NewTaskDrawer";
 const navMain = [
   {
     title: "Today",
-    url: "#",
-    icon: Square,
+    url: "/",
+    icon: Sun,
     isActive: true,
   },
   {
-    title: "Tasks",
-    url: "#",
-    icon: List,
+    title: "Upcoming",
+    url: "/upcoming",
+    icon: Calendar,
+  },
+  {
+    title: "Inbox",
+    url: "/inbox",
+    icon: Inbox,
   },
   {
     title: "Analytics",
-    url: "#",
+    url: "/analytics",
     icon: LayoutGrid,
   },
   {
     title: "Settings",
-    url: "#",
+    url: "/settings",
     icon: Settings,
-    badge: "10",
   },
 ];
 
@@ -87,7 +92,7 @@ export default function AppSidebar({ ...props }: AppSidebarProps) {
             <SidebarMenuItem key={nav.title}>
               <SidebarMenuButton
                 isActive={nav.isActive}
-                render={<Link href={"#"} />}
+                render={<Link href={nav.url} />}
               >
                 <nav.icon />
                 <span>{nav.title}</span>
