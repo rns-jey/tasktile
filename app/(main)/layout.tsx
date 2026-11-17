@@ -14,6 +14,7 @@ import TimezoneSync from "@/components/providers/TimezoneSync";
 import { TodayProvider } from "@/components/providers/TodayProvider";
 import { ScrollArea } from "@/components/ui/ScrollArea";
 import { SidebarInset, SidebarProvider } from "@/components/ui/Sidebar";
+import { getStacksWithTaskCount } from "@/lib/models/stacks/queries";
 import { getCategories, getRecentCategories } from "@/lib/queries/categories";
 import {
   dehydrate,
@@ -41,6 +42,10 @@ export default async function MainLayout({
     queryClient.query({
       queryKey: ["categories", "recent"],
       queryFn: () => getRecentCategories(currentUser.userID),
+    }),
+    queryClient.query({
+      queryKey: ["stacks", "list"],
+      queryFn: () => getStacksWithTaskCount(currentUser.userID),
     }),
   ]);
 
