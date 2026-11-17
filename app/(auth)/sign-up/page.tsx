@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/atoms/Button";
+import ComingSoonAuthButtons from "@/components/organisms/ComingSoonAuthButtons";
 import { Field, FieldError, FieldGroup } from "@/components/ui/Field";
 import {
   InputGroup,
@@ -202,15 +203,7 @@ export default function SignUpPage() {
             <div className="h-px w-full bg-linear-to-r from-neutral-300 to-transparent dark:via-neutral-700" />
           </div>
 
-          {/* For future implementation */}
-          <div className="flex w-full gap-2">
-            <Button type="button" className="flex-1">
-              Github
-            </Button>
-            <Button type="button" className="flex-1">
-              Google
-            </Button>
-          </div>
+          <ComingSoonAuthButtons />
         </div>
 
         <div className="mt-12 flex justify-center gap-1">
