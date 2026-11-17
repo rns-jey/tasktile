@@ -1,8 +1,9 @@
 "use client";
 
-import { useCategories } from "@/hooks/useCategories";
+import { useStacks } from "@/hooks/useStacks";
 import {
   Diamond,
+  Layers,
   LayoutGrid,
   List,
   PanelLeftIcon,
@@ -10,6 +11,7 @@ import {
   Square,
 } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   Sidebar,
   SidebarContent,
@@ -51,7 +53,8 @@ const navMain = [
 type AppSidebarProps = React.ComponentProps<typeof Sidebar> & {};
 
 export default function AppSidebar({ ...props }: AppSidebarProps) {
-  const { data: categories } = useCategories();
+  const { data: stacks } = useStacks();
+  const pathname = usePathname();
 
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -88,19 +91,23 @@ export default function AppSidebar({ ...props }: AppSidebarProps) {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Categories</SidebarGroupLabel>
+          <SidebarGroupLabel>Stacks</SidebarGroupLabel>
           <SidebarMenu>
-            {categories?.map((category) => (
-              <SidebarMenuItem key={category.id}>
-                <SidebarMenuButton render={<Link href={"#"} />}>
-                  <span
-                    className="h-4 min-w-4 rounded-xs"
-                    style={{ backgroundColor: category.color }}
-                  />
-                  <span>{category.name}</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
+            {stacks?.map((stack) => {
+              const href = "/stacks/" + stack.id;
+
+              return (
+                <SidebarMenuItem key={stack.id}>
+                  <SidebarMenuButton
+                    isActive={pathname === href}
+                    render={<Link href={href} />}
+                  >
+                    <Layers />
+                    <span>{stack.name}</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              );
+            })}
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
