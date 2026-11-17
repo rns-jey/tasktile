@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TaskTile
 
-## Getting Started
+A productivity-focused to-do app that helps you plan work and see your progress over time with a task-completion heatmap.
 
-First, run the development server:
+[Open TaskTile](https://tasktile.sanerasolutions.com)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Capture tasks in your inbox, plan work for today, and review upcoming due dates.
+- Organize tasks with custom categories and stacks.
+- Track completed tasks in a calendar heatmap, with daily totals and monthly activity.
+- Select a day to review the tasks completed then.
+- See your current and best completion streaks.
+- Create an account, manage app preferences, and use the responsive web app on mobile.
+- Includes a web app manifest and platform icons for home-screen installation.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Tech stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Next.js App Router and React
+- TypeScript and Tailwind CSS
+- Neon Auth for authentication
+- PostgreSQL on Neon, accessed through Prisma
+- TanStack Query for client-side data fetching and caching
 
-## Learn More
+## Prerequisites
 
-To learn more about Next.js, take a look at the following resources:
+- Node.js 22.17.0
+- pnpm
+- A PostgreSQL database and Neon Auth configuration
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Getting started
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Clone the repository and enter the project directory:
 
-## Deploy on Vercel
+   ```bash
+   git clone https://github.com/rns-jey/tasktile.git
+   cd tasktile
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+2. Create a `.env` file in the project root:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   ```env
+   DATABASE_URL="your-postgres-connection-string"
+   NEON_AUTH_BASE_URL="your-neon-auth-base-url"
+   NEON_AUTH_COOKIE_SECRET="your-long-random-secret"
+   ```
+
+   Use your own development database and Neon Auth settings. Keep real credentials out of Git.
+
+3. Install dependencies. The install script generates the Prisma client:
+
+   ```bash
+   pnpm install
+   ```
+
+4. For a new development database, sync the Prisma schema:
+
+   ```bash
+   pnpm exec prisma db push
+   ```
+
+5. Start the development server:
+
+   ```bash
+   pnpm dev
+   ```
+
+   Open [http://localhost:3000](http://localhost:3000).
+
+## Available scripts
+
+| Command | Description |
+| --- | --- |
+| `pnpm dev` | Start the development server |
+| `pnpm build` | Create a production build |
+| `pnpm start` | Run the production server |
+| `pnpm storybook` | Start Storybook |
+| `pnpm build-storybook` | Build the Storybook site |
+
+## Database
+
+The Prisma schema is in `prisma/schema.prisma`. Point `DATABASE_URL` at a development database before running Prisma commands. Avoid running schema changes against a production database unless you intend to update it.
+
+## License
+
+No license file is currently present in the repository.
