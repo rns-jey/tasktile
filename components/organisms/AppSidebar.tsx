@@ -24,6 +24,7 @@ import {
   SidebarRail,
   SidebarTrigger,
 } from "../ui/Sidebar";
+import NewTaskDrawer from "./NewTaskDrawer";
 
 const navMain = [
   {
@@ -72,6 +73,12 @@ export default function AppSidebar({ ...props }: AppSidebarProps) {
                 </div>
               </div>
             </SidebarTrigger>
+          </SidebarMenuItem>
+        </SidebarMenu>
+
+        <SidebarMenu>
+          <SidebarMenuItem key="add-new-task">
+            <NewTaskDrawer />
           </SidebarMenuItem>
         </SidebarMenu>
 
