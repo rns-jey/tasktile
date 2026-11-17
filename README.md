@@ -26,7 +26,7 @@ Screenshots
 
 Here is a look at TaskTile's mobile experience.
 
-<p align="center">   <img src="docs/screenshots/today.png" width="240" alt="TaskTile Today screen" />   &nbsp;&nbsp;   <img src="docs/screenshots/upcoming.png" width="240" alt="TaskTile Upcoming screen" />   &nbsp;&nbsp;   <img src="docs/screenshots/analytics.png" width="240" alt="TaskTile Analytics screen" /> </p>
+<p align="center">   <img src="/public/docs/screenshots/today.png" width="240" alt="TaskTile Today screen" />   &nbsp;&nbsp;   <img src="/public/docs/screenshots/upcoming.png" width="240" alt="TaskTile Upcoming screen" />   &nbsp;&nbsp;   <img src="/public/docs/screenshots/analytics.png" width="240" alt="TaskTile Analytics screen" /> </p>
 
 ## Tech stack
 
