@@ -46,7 +46,7 @@ export default function MoveTask({
       return response.data;
     },
     onError: () => toast.error("Couldn't move task"),
-    onSuccess: async (stack) => {
+    onSuccess: async (_data, stack) => {
       await queryClient.invalidateQueries({ queryKey: ["tasks"] });
 
       const leavesPage = urlStackId !== undefined && stack.id !== urlStackId;

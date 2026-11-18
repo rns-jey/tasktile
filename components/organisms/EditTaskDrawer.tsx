@@ -118,6 +118,7 @@ export default function EditTaskDrawer({ task, variant }: EditTaskDrawerProps) {
 
   const handleDelete = () => {
     pendingDelete.current = true;
+    setOpen(false);
   };
 
   const removeTask = useDeleteTask();
@@ -200,8 +201,8 @@ export default function EditTaskDrawer({ task, variant }: EditTaskDrawerProps) {
                     <Pencil /> Edit
                   </DropdownMenuItem>
                   <DropdownMenuItem
-                    className="text-destructive"
                     onClick={handleDelete}
+                    className="text-destructive"
                   >
                     <Trash /> Delete task
                   </DropdownMenuItem>
