@@ -41,7 +41,7 @@ export default async function StackPage({ params }: StackPageProps) {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
           <Link
             href={"/settings"}

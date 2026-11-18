@@ -9,24 +9,34 @@ import { taskFormSchema, TaskFormValues } from "@/lib/schemas/task";
 import { TaskWithCategory } from "@/types";
 
 import { useCategories, useRecentCategories } from "@/hooks/useCategories";
-import { useStacks } from "@/hooks/useStacks";
 import { toDay } from "@/lib/date";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { format, parseISO } from "date-fns";
-import { ChevronRight, SquareIcon } from "lucide-react";
+import {
+  ChevronRight,
+  Ellipsis,
+  Pencil,
+  SquareIcon,
+  Trash,
+} from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "../atoms/Button";
 import DatePicker from "../molecules/DatePicker";
 import TaskMeta from "../molecules/TaskMeta";
 import {
   Drawer,
-  DrawerClose,
   DrawerContent,
   DrawerHeader,
-  DrawerTitle,
   DrawerTrigger,
 } from "../ui/Drawer";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/DropdownMenu";
 import { Field, FieldError, FieldGroup } from "../ui/Field";
 import {
   InputGroup,
@@ -34,8 +44,8 @@ import {
   InputGroupInput,
   InputGroupTextarea,
 } from "../ui/InputGroup";
-import { Separator } from "../ui/Separator";
 import { ToggleGroup, ToggleGroupItem } from "../ui/ToggleGroup";
+import MoveTask from "./MoveTask";
 
 type EditTaskDrawerProps = {
   task: TaskWithCategory;
@@ -45,14 +55,14 @@ type EditTaskDrawerProps = {
 export default function EditTaskDrawer({ task, variant }: EditTaskDrawerProps) {
   const compact = variant === "compact";
 
-  const { data: stacks = [] } = useStacks();
   const { data: categories } = useCategories();
   const { data: recentCategories } = useRecentCategories();
 
   const [open, setOpen] = useState(false);
-  const [newCateg, setNewCateg] = useState(false);
+
   const [selectingCategory, setSelectingCategory] = useState(false);
   const [selectingStack, setSelectingStack] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   const pendingDelete = useRef(false);
 
@@ -106,10 +116,6 @@ export default function EditTaskDrawer({ task, variant }: EditTaskDrawerProps) {
     },
   });
 
-  const selectedStackId = taskForm.watch("stackId");
-  const stackLabel =
-    stacks.find((s) => s.id === selectedStackId)?.name ?? "Inbox";
-
   const handleDelete = () => {
     pendingDelete.current = true;
   };
@@ -129,6 +135,7 @@ export default function EditTaskDrawer({ task, variant }: EditTaskDrawerProps) {
         if (next) flushPendingDeletes();
         else {
           taskForm.reset();
+          setSelectingStack(false);
           setSelectingCategory(false);
         }
         setOpen(next);
@@ -139,6 +146,7 @@ export default function EditTaskDrawer({ task, variant }: EditTaskDrawerProps) {
           removeTask(task);
         }
       }}
+      showSwipeHandle
     >
       <DrawerTrigger
         render={
@@ -156,22 +164,51 @@ export default function EditTaskDrawer({ task, variant }: EditTaskDrawerProps) {
       />
 
       <DrawerContent className="pb-4" aria-describedby={undefined}>
-        <DrawerHeader className="flex flex-row items-center justify-between py-4">
-          <DrawerClose
-            disabled={formPending}
-            className="text-muted-foreground h-11 px-2 font-medium"
-          >
-            Cancel
-          </DrawerClose>
-          <DrawerTitle>Edit Task</DrawerTitle>
-          <Button
-            className="px-4"
-            type="submit"
-            form={"formEditTask"}
-            disabled={formPending}
-          >
-            Save
-          </Button>
+        <DrawerHeader className="flex flex-row items-center justify-between pt-2 pb-4">
+          <MoveTask
+            selectingStack={selectingStack}
+            setSelectingStack={setSelectingStack}
+            task={task}
+            onMoved={() => setOpen(false)}
+          />
+
+          {isEditing ? (
+            <Button
+              className="px-4"
+              type="submit"
+              form={"formEditTask"}
+              disabled={formPending}
+            >
+              Save
+            </Button>
+          ) : (
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                render={
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="size-11 rounded-lg"
+                  />
+                }
+              >
+                <Ellipsis />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuGroup>
+                  <DropdownMenuItem>
+                    <Pencil /> Edit
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className="text-destructive"
+                    onClick={handleDelete}
+                  >
+                    <Trash /> Delete task
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </DrawerHeader>
 
         <div className="flex flex-col items-center gap-2 px-4">
@@ -197,6 +234,8 @@ export default function EditTaskDrawer({ task, variant }: EditTaskDrawerProps) {
                         aria-invalid={fieldState.invalid}
                         autoComplete="off"
                         placeholder="Add a task name .."
+                        onFocus={() => setIsEditing(true)}
+                        onBlur={() => setIsEditing(false)}
                       />
                     </InputGroup>
 
@@ -220,7 +259,6 @@ export default function EditTaskDrawer({ task, variant }: EditTaskDrawerProps) {
                         aria-invalid={fieldState.invalid}
                         maxLength={120}
                         placeholder="Add a description (optional)"
-                        className="min-h-0"
                       />
                     </InputGroup>
                     {fieldState.invalid && (
@@ -229,34 +267,6 @@ export default function EditTaskDrawer({ task, variant }: EditTaskDrawerProps) {
                   </Field>
                 )}
               />
-
-              <Drawer open={selectingStack} onOpenChange={setSelectingStack}>
-                <DrawerTrigger
-                  render={<Button variant="outline" type="button" />}
-                >
-                  {stackLabel}
-                </DrawerTrigger>
-                <DrawerContent>
-                  <DrawerHeader>
-                    <DrawerTitle>Move to ...</DrawerTitle>
-                  </DrawerHeader>
-                  <div className="flex flex-col">
-                    {stacks.map((stack) => (
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        key={stack.id}
-                        onClick={() => {
-                          taskForm.setValue("stackId", stack.id);
-                          setSelectingStack(!selectingStack);
-                        }}
-                      >
-                        {stack.name}
-                      </Button>
-                    ))}
-                  </div>
-                </DrawerContent>
-              </Drawer>
 
               <Controller
                 name="dueOn"
@@ -321,22 +331,6 @@ export default function EditTaskDrawer({ task, variant }: EditTaskDrawerProps) {
               />
             </FieldGroup>
           </form>
-
-          <Separator className="my-2" />
-
-          <DrawerClose
-            render={
-              <Button
-                className="h-11 w-full cursor-pointer"
-                variant="destructive"
-                type="button"
-                onClick={handleDelete}
-                disabled={formPending}
-              >
-                Delete task
-              </Button>
-            }
-          />
         </div>
       </DrawerContent>
     </Drawer>

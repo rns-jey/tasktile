@@ -44,8 +44,6 @@ export default function NewTaskDrawer() {
         ?.scrollIntoView({ behavior: "smooth", block: "end" }),
     );
 
-  console.log(!isMobile);
-
   if (!isMobile) {
     return (
       <Dialog
