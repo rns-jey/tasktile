@@ -1,5 +1,4 @@
 import { Button } from "@/components/atoms/Button";
-import DatePicker from "@/components/molecules/DatePicker";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,9 +20,11 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { format, parseISO } from "date-fns";
 import { AlignLeftIcon, ArrowUp, FolderKanbanIcon, Plus } from "lucide-react";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Controller, UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
+import CalendarDrawer from "../CalendarDrawer";
 
 type NewTaskFormProps = {
   form: UseFormReturn<TaskFormValues>;
@@ -31,6 +32,7 @@ type NewTaskFormProps = {
 };
 
 export default function NewTaskForm({ form, urlStackId }: NewTaskFormProps) {
+  const pathname = usePathname();
   const [described, setDescribed] = useState(false);
 
   const { data: stacks = [] } = useStacks();
@@ -55,7 +57,7 @@ export default function NewTaskForm({ form, urlStackId }: NewTaskFormProps) {
         description: "",
         stackId: form.getValues("stackId"),
         categoryId: null,
-        dueOn: localDay(),
+        dueOn: (pathname === "/" && localDay()) || null,
       });
       form.setFocus("name");
       setDescribed(false);
@@ -190,7 +192,7 @@ export default function NewTaskForm({ form, urlStackId }: NewTaskFormProps) {
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <DatePicker
+                <CalendarDrawer
                   value={field.value ? parseISO(field.value) : null}
                   onChange={(d) =>
                     field.onChange(d ? format(d, "yyyy-MM-dd") : null)

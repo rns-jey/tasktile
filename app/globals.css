@@ -99,7 +99,7 @@
   --card: oklch(1 0 0);
   --card-foreground: var(--ink);
 
-  --popover: oklch(1 0 0);
+  --popover: var(--paper);
   --popover-foreground: var(--ink);
 
   --muted: var(--paper-2);

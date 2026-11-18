@@ -33,7 +33,7 @@ export default function NewTaskDrawer() {
       description: "",
       stackId: urlStackId ?? null,
       categoryId: null,
-      dueOn: (pathname === "/" && localDay()) || null,
+      dueOn: pathname === "/" ? localDay() : null,
     },
   });
 
@@ -50,7 +50,10 @@ export default function NewTaskDrawer() {
         open={open}
         onOpenChange={(next) => {
           setOpen(next);
-          if (next) taskForm.setValue("stackId", urlStackId ?? null);
+          if (next) {
+            taskForm.setValue("stackId", urlStackId ?? null);
+            taskForm.setValue("dueOn", pathname === "/" ? localDay() : null);
+          }
         }}
       >
         <DialogTrigger
@@ -73,7 +76,10 @@ export default function NewTaskDrawer() {
       open={open}
       onOpenChange={(next) => {
         setOpen(next);
-        if (next) taskForm.setValue("stackId", urlStackId ?? null);
+        if (next) {
+          taskForm.setValue("stackId", urlStackId ?? null);
+          taskForm.setValue("dueOn", pathname === "/" ? localDay() : null);
+        }
       }}
     >
       <DrawerTrigger
