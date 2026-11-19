@@ -22,6 +22,7 @@ model Profile {
   tasks Task[]
   stacks Stack[]
   categories Category[]
+  tags Tag[]
   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -43,6 +44,8 @@ model Task {
 
   categoryId String?
   category Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+
+  tags Tag[]
 
   completedAt DateTime?
   completedOn DateTime? @db.Date
@@ -80,6 +83,22 @@ model Stack {
 
   tasks Task[]
 
+  userId String
+  user Profile @relation(fields: [userId], references: [userID])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId,nameKey])
+}
+
+model Tag {
+  id String @id @default(uuid())
+  name String
+  nameKey String
+
+  tasks Task[]
+  
   userId String
   user Profile @relation(fields: [userId], references: [userID])
 
