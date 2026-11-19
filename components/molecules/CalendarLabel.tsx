@@ -1,4 +1,3 @@
-import { localDay } from "@/lib/date";
 import { differenceInDays, format, parse } from "date-fns";
 import { useMemo } from "react";
 import { useTodayKey } from "../providers/TodayProvider";
@@ -11,8 +10,6 @@ export default function CalendarLabel({ date }: { date: Date | null }) {
   );
 
   if (!date) return "Select a date";
-
-  console.log(localDay(date) === todayKey);
 
   if (differenceInDays(date, today) === 0) return "Today";
 

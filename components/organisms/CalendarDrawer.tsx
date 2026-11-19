@@ -1,3 +1,4 @@
+import { toDay } from "@/lib/date";
 import { TaskWithCategory } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
@@ -32,25 +33,28 @@ export default function CalendarDrawer({
   onChange,
   task,
 }: CalendarDrawerProps) {
+  const [open, setOpen] = useState(false);
   const [date, setDate] = useState<Date | null>(value);
 
   const queryClient = useQueryClient();
 
   const changeDueOn = useMutation({
-    mutationFn: async (dueOn: Date | null) => {
-      const response = await axios.patch(`/api/tasks/${task?.id}`, {
-        dueOn: dueOn,
+    mutationFn: async (task: TaskWithCategory) => {
+      const response = await axios.patch(`/api/tasks/${task.id}`, {
+        dueOn: toDay(date),
       });
       return response.data;
     },
-    onError: () => {},
+    onError: () => {
+      console.error;
+    },
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["tasks"] });
     },
   });
 
   return (
-    <Drawer>
+    <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger
         render={
           <Button
@@ -60,7 +64,7 @@ export default function CalendarDrawer({
           />
         }
       >
-        <CalendarIcon /> {value ? format(value, "dd MMM") : "Date"}
+        <CalendarIcon /> {date ? format(date, "dd MMM") : "Date"}
       </DrawerTrigger>
       <DrawerContent className="h-dvh">
         <DrawerHeader className="grid grid-cols-3 items-center">
@@ -71,8 +75,10 @@ export default function CalendarDrawer({
           <DrawerClose
             render={
               <Button
+                disabled={toDay(value) === toDay(date)}
                 onClick={() => {
                   if (onChange) onChange(date ?? null);
+                  if (task) changeDueOn.mutate(task);
                 }}
               />
             }

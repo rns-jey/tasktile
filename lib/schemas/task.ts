@@ -8,4 +8,6 @@ export const taskFormSchema = z.object({
   dueOn: z.iso.date().nullable(),
 });
 
+export const taskUpdateSchema = taskFormSchema.partial();
+
 export type TaskFormValues = z.infer<typeof taskFormSchema>;

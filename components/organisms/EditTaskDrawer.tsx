@@ -12,7 +12,6 @@ import { useCategories, useRecentCategories } from "@/hooks/useCategories";
 import { toDay } from "@/lib/date";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { format, parseISO } from "date-fns";
 import {
   ChevronRight,
   Ellipsis,
@@ -22,7 +21,6 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "../atoms/Button";
-import DatePicker from "../molecules/DatePicker";
 import TaskMeta from "../molecules/TaskMeta";
 import {
   Drawer,
@@ -45,6 +43,7 @@ import {
   InputGroupTextarea,
 } from "../ui/InputGroup";
 import { ToggleGroup, ToggleGroupItem } from "../ui/ToggleGroup";
+import CalendarDrawer from "./CalendarDrawer";
 import MoveTask from "./MoveTask";
 
 type EditTaskDrawerProps = {
@@ -269,21 +268,7 @@ export default function EditTaskDrawer({ task, variant }: EditTaskDrawerProps) {
                 )}
               />
 
-              <Controller
-                name="dueOn"
-                control={taskForm.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <DatePicker
-                      value={field.value ? parseISO(field.value) : null}
-                      onChange={(d) =>
-                        field.onChange(d ? format(d, "yyyy-MM-dd") : null)
-                      }
-                      disabled={formPending}
-                    />
-                  </Field>
-                )}
-              />
+              <CalendarDrawer value={task.dueOn} task={task} />
 
               <Controller
                 name="categoryId"

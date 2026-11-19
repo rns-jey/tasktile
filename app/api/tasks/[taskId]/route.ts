@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { Prisma } from "@/lib/generated/prisma/client";
 import currentProfile from "@/lib/profile";
-import { taskFormSchema } from "@/lib/schemas/task";
+import { taskUpdateSchema } from "@/lib/schemas/task";
 import { z } from "zod";
 
 type tParams = Promise<{ taskId: string }>;
@@ -39,7 +39,7 @@ export async function PATCH(req: Request, props: { params: tParams }) {
 
     const { taskId } = await props.params;
 
-    const parsed = taskFormSchema.safeParse(await req.json());
+    const parsed = taskUpdateSchema.safeParse(await req.json());
     if (!parsed.success)
       return NextResponse.json(z.treeifyError(parsed.error), { status: 400 });
 
