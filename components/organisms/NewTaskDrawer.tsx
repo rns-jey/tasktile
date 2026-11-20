@@ -34,6 +34,7 @@ export default function NewTaskDrawer() {
       stackId: urlStackId ?? null,
       categoryId: null,
       dueOn: pathname === "/" ? localDay() : null,
+      tags: [],
     },
   });
 

@@ -19,12 +19,19 @@ import { TaskWithCategory } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { format, parseISO } from "date-fns";
-import { AlignLeftIcon, ArrowUp, FolderKanbanIcon, Plus } from "lucide-react";
+import {
+  AlignLeftIcon,
+  ArrowUp,
+  FolderKanbanIcon,
+  Plus,
+  TagIcon,
+} from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Controller, UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
 import CalendarDrawer from "../CalendarDrawer";
+import TagsDrawer from "../TagsDrawer";
 
 type NewTaskFormProps = {
   form: UseFormReturn<TaskFormValues>;
@@ -34,6 +41,7 @@ type NewTaskFormProps = {
 export default function NewTaskForm({ form, urlStackId }: NewTaskFormProps) {
   const pathname = usePathname();
   const [described, setDescribed] = useState(false);
+  const [tagging, setTagging] = useState(false);
 
   const { data: stacks = [] } = useStacks();
 
@@ -42,6 +50,7 @@ export default function NewTaskForm({ form, urlStackId }: NewTaskFormProps) {
     stacks.find((s) => s.id === selectedStackId)?.name ?? "Inbox";
 
   const taskName = !form.watch("name").trim().length;
+  const tags = form.watch("tags");
 
   const queryClient = useQueryClient();
 
@@ -58,6 +67,7 @@ export default function NewTaskForm({ form, urlStackId }: NewTaskFormProps) {
         stackId: form.getValues("stackId"),
         categoryId: null,
         dueOn: (pathname === "/" && localDay()) || null,
+        tags: [],
       });
       form.setFocus("name");
       setDescribed(false);
@@ -128,8 +138,8 @@ export default function NewTaskForm({ form, urlStackId }: NewTaskFormProps) {
         )}
       </FieldGroup>
 
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-1.5">
+      <div className="flex items-center justify-between gap-1.5">
+        <div className="flex items-center gap-1.5 overflow-x-scroll">
           <DropdownMenu>
             <DropdownMenuTrigger
               render={
@@ -142,7 +152,7 @@ export default function NewTaskForm({ form, urlStackId }: NewTaskFormProps) {
             >
               <Plus />
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
+            <DropdownMenuContent finalFocus={!tagging}>
               <DropdownMenuGroup>
                 <DropdownMenuItem
                   onClick={() => {
@@ -152,6 +162,12 @@ export default function NewTaskForm({ form, urlStackId }: NewTaskFormProps) {
                 >
                   <AlignLeftIcon /> Description
                 </DropdownMenuItem>
+
+                {tags.length === 0 && (
+                  <DropdownMenuItem onClick={() => setTagging(true)}>
+                    <TagIcon /> Tags
+                  </DropdownMenuItem>
+                )}
               </DropdownMenuGroup>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -202,6 +218,31 @@ export default function NewTaskForm({ form, urlStackId }: NewTaskFormProps) {
               </Field>
             )}
           />
+
+          <Controller
+            name="tags"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <TagsDrawer
+                open={tagging}
+                setOpen={setTagging}
+                value={field.value}
+                onChange={field.onChange}
+              />
+            )}
+          />
+
+          {tags.length > 0 && (
+            <Button
+              type="button"
+              variant="secondary"
+              className="h-10"
+              onClick={() => setTagging(true)}
+            >
+              <TagIcon />
+              {tags.length === 1 ? tags[0] : tags.length}
+            </Button>
+          )}
         </div>
 
         <Button
