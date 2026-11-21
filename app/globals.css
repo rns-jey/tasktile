@@ -28,7 +28,7 @@
   --color-tile-3: var(--tile-3);
   --color-tile-4: var(--tile-4);
 
-  /* Category colours */
+  /* Tag colours */
   --color-cat-indigo: var(--cat-indigo);
   --color-cat-blue: var(--cat-blue);
   --color-cat-sky: var(--cat-sky);
@@ -194,7 +194,7 @@
   --tile-3: oklch(0.63 0.115 160);
   --tile-4: oklch(0.76 0.13 160);
 
-  /* raise lightness about 0.08 so categories stay readable on dark */
+  /* raise lightness about 0.08 so tags stay readable on dark */
   --cat-indigo: oklch(0.68 0.14 279.91);
   --cat-blue: oklch(0.7 0.13 244.83);
   --cat-sky: oklch(0.71 0.11 225.37);

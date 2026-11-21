@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 import { StackWithTaskCount } from "@/lib/models/stacks/types";
-import { TaskWithCategory } from "@/types";
+import { TaskWithTags } from "@/types";
 import { isPendingDelete } from "./useDeleteTask";
 
 export function useStacks() {
@@ -18,7 +18,7 @@ export function useStacks() {
 }
 
 export function useStackTasks(stackId: string) {
-  return useQuery<TaskWithCategory[]>({
+  return useQuery<TaskWithTags[]>({
     queryKey: ["tasks", stackId],
     queryFn: async () => {
       const response = await axios.get(`/api/stacks/${stackId}/tasks`);

@@ -5,7 +5,6 @@ import StackSection from "@/components/organisms/StackSection";
 import ThemeSettings from "@/components/organisms/ThemeSettings";
 import { getStacksWithTaskCount } from "@/lib/models/stacks/queries";
 import currentProfile from "@/lib/profile";
-import { getCategoriesCount } from "@/lib/queries/categories";
 import {
   dehydrate,
   HydrationBoundary,
@@ -20,8 +19,6 @@ export default async function SettingsPage() {
   const currentUser = await currentProfile();
 
   if (!currentUser) redirect("/sign-in");
-
-  const categoryCount = await getCategoriesCount(currentUser.userID);
 
   const queryClient = new QueryClient();
 
@@ -46,19 +43,17 @@ export default async function SettingsPage() {
           className="flex w-full items-center justify-between bg-white"
           variant={"outline"}
           nativeButton={false}
-          render={<Link href="/settings/categories" />}
+          render={<Link href="/settings/tags" />}
         >
           <div className="flex items-center gap-1">
             <LayoutGridIcon className="size-6" />
             <span className="leading-none [text-box:trim-both_cap_alphabetic]">
-              Categories
+              Tags
             </span>
           </div>
 
           <div className="flex items-center gap-1">
-            <span className="leading-none [text-box:trim-both_cap_alphabetic]">
-              {categoryCount}
-            </span>
+            <span className="leading-none [text-box:trim-both_cap_alphabetic]"></span>
             <ChevronRight />
           </div>
         </Button>

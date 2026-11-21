@@ -2,7 +2,7 @@
 
 import { useUpcoming } from "@/hooks/useTasks";
 import { cn } from "@/lib/utils";
-import { TaskWithCategory } from "@/types";
+import { TaskWithTags } from "@/types";
 import {
   addDays,
   addYears,
@@ -26,7 +26,7 @@ type DayData = {
 type TaskDayData = {
   date: Date;
   key: string;
-  tasks: TaskWithCategory[];
+  tasks: TaskWithTags[];
 };
 
 const weekDays = ["M", "T", "W", "T", "F", "S", "S"];
@@ -60,7 +60,7 @@ export default function UpcomingSection() {
   );
 
   const tasksByDay = useMemo(() => {
-    const map = new Map<string, TaskWithCategory[]>();
+    const map = new Map<string, TaskWithTags[]>();
 
     for (const t of tasks) {
       if (!t.dueOn) continue;

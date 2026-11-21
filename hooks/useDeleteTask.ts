@@ -1,4 +1,4 @@
-import { TaskWithCategory } from "@/types";
+import { TaskWithTags } from "@/types";
 import { useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "sonner";
@@ -13,11 +13,11 @@ export function flushPendingDeletes() {
 export function useDeleteTask() {
   const queryClient = useQueryClient();
 
-  return function removeTask(task: TaskWithCategory) {
+  return function removeTask(task: TaskWithTags) {
     flushPendingDeletes(); // send any earlier delete first
 
     // Remember the task below it, in each list
-    const snapshots = queryClient.getQueriesData<TaskWithCategory[]>({
+    const snapshots = queryClient.getQueriesData<TaskWithTags[]>({
       queryKey: ["tasks"],
     });
     const neighbours = snapshots
@@ -30,9 +30,8 @@ export function useDeleteTask() {
     pendingDeletes.add(task.id);
 
     // Optimistically remove the task from every list
-    queryClient.setQueriesData<TaskWithCategory[]>(
-      { queryKey: ["tasks"] },
-      (old) => old?.filter((t) => t.id !== task.id),
+    queryClient.setQueriesData<TaskWithTags[]>({ queryKey: ["tasks"] }, (old) =>
+      old?.filter((t) => t.id !== task.id),
     );
 
     let undone = false;
@@ -65,7 +64,7 @@ export function useDeleteTask() {
       pendingCommits.delete(task.id);
 
       neighbours.forEach(({ key, nextId }) => {
-        queryClient.setQueryData<TaskWithCategory[]>(key, (old = []) => {
+        queryClient.setQueryData<TaskWithTags[]>(key, (old = []) => {
           const at = old.findIndex((t) => t.id === nextId);
           const next = [...old];
           next.splice(at < 0 ? next.length : at, 0, task);

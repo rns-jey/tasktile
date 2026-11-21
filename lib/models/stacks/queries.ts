@@ -7,9 +7,6 @@ export function getStacks(userId: string) {
     },
     include: {
       tasks: {
-        include: {
-          category: true,
-        },
         orderBy: {
           createdAt: "asc",
         },
@@ -27,9 +24,6 @@ export function getStack(userId: string, stackId: string) {
     },
     include: {
       tasks: {
-        include: {
-          category: true,
-        },
         orderBy: {
           createdAt: "asc",
         },

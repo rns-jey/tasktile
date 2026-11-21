@@ -2,14 +2,14 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 
 import { localDay, localTz } from "@/lib/date";
-import { TaskWithCategory } from "@/types";
+import { TaskWithTags } from "@/types";
 import { Checkbox } from "../atoms/Checkbox";
 
-export default function ToggleTask({ task }: { task: TaskWithCategory }) {
+export default function ToggleTask({ task }: { task: TaskWithTags }) {
   const queryClient = useQueryClient();
 
   const toggleTask = useMutation({
-    mutationFn: async (task: TaskWithCategory) => {
+    mutationFn: async (task: TaskWithTags) => {
       const response = await axios.patch(`/api/tasks/${task.id}/toggle`, {
         completed: !task.completed,
         localDay: localDay(),
@@ -22,12 +22,12 @@ export default function ToggleTask({ task }: { task: TaskWithCategory }) {
       await queryClient.cancelQueries({ queryKey: ["tasks"] });
 
       // Snapshot previous value
-      const previous = queryClient.getQueriesData<TaskWithCategory[]>({
+      const previous = queryClient.getQueriesData<TaskWithTags[]>({
         queryKey: ["tasks"],
       });
 
       // Optimistically toggle the task from cache immediately
-      queryClient.setQueriesData<TaskWithCategory[]>(
+      queryClient.setQueriesData<TaskWithTags[]>(
         { queryKey: ["tasks"] },
         (old) =>
           old?.map((t) =>

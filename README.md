@@ -7,7 +7,7 @@ A productivity-focused to-do app that helps you plan work and see your progress 
 ## Features
 
 - Capture tasks in your inbox, plan work for today, and review upcoming due dates.
-- Organize tasks with custom categories and stacks.
+- Organize tasks with custom tags and stacks.
 - Track completed tasks in a calendar heatmap, with daily totals and monthly activity.
 - Select a day to review the tasks completed then.
 - See your current and best completion streaks.

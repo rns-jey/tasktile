@@ -1,6 +1,6 @@
 "use client";
 
-import { TaskWithCategory } from "@/types";
+import { TaskWithTags } from "@/types";
 import {
   DndContext,
   DragEndEvent,
@@ -20,7 +20,7 @@ import { Fragment, useEffect, useId, useMemo, useRef, useState } from "react";
 import TaskCard from "../molecules/TaskCard";
 
 type TaskListProps = {
-  tasks: TaskWithCategory[];
+  tasks: TaskWithTags[];
   variant?: "full" | "compact";
 };
 

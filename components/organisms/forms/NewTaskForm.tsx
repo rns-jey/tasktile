@@ -16,7 +16,7 @@ import { useStacks } from "@/hooks/useStacks";
 import { useTags } from "@/hooks/useTags";
 import { localDay } from "@/lib/date";
 import { TaskFormValues } from "@/lib/schemas/task";
-import { TaskWithCategory } from "@/types";
+import { TaskWithTags } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { format, parseISO } from "date-fns";
@@ -56,7 +56,7 @@ export default function NewTaskForm({ form, urlStackId }: NewTaskFormProps) {
 
   const queryClient = useQueryClient();
 
-  const addTask = useMutation<TaskWithCategory, Error, TaskFormValues>({
+  const addTask = useMutation<TaskWithTags, Error, TaskFormValues>({
     mutationFn: async (newTask) => {
       const response = await axios.post("/api/tasks/new", newTask);
       return response.data;
@@ -67,7 +67,6 @@ export default function NewTaskForm({ form, urlStackId }: NewTaskFormProps) {
         name: "",
         description: "",
         stackId: form.getValues("stackId"),
-        categoryId: null,
         dueOn: (pathname === "/" && localDay()) || null,
         tags: [],
       });

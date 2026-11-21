@@ -24,12 +24,12 @@ export default function Loading() {
           variant={"outline"}
           nativeButton={false}
           disabled
-          render={<Link href="/settings/categories" />}
+          render={<Link href="/settings/tags" />}
         >
           <div className="flex items-center gap-1">
             <LayoutGridIcon className="size-6" />
             <span className="leading-none [text-box:trim-both_cap_alphabetic]">
-              Categories
+              Tags
             </span>
           </div>
 

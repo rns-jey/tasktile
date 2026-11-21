@@ -1,5 +1,5 @@
 import { toDay } from "@/lib/date";
-import { TaskWithCategory } from "@/types";
+import { TaskWithTags } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { format } from "date-fns";
@@ -25,7 +25,7 @@ type CalendarDrawerProps = {
   value: Date | null;
   onChange?: (value: Date | null) => void;
   disabled?: boolean;
-  task?: TaskWithCategory;
+  task?: TaskWithTags;
 };
 
 export default function CalendarDrawer({
@@ -39,7 +39,7 @@ export default function CalendarDrawer({
   const queryClient = useQueryClient();
 
   const changeDueOn = useMutation({
-    mutationFn: async (task: TaskWithCategory) => {
+    mutationFn: async (task: TaskWithTags) => {
       const response = await axios.patch(`/api/tasks/${task.id}`, {
         dueOn: toDay(date),
       });

@@ -1,12 +1,12 @@
 "use client";
 
-import { TaskWithCategory } from "@/types";
+import { TaskWithTags } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { isPendingDelete } from "./useDeleteTask";
 
 export function useTodayTasks() {
-  return useQuery<TaskWithCategory[]>({
+  return useQuery<TaskWithTags[]>({
     queryKey: ["tasks", "today"],
     queryFn: async () => {
       const response = await axios.get("/api/tasks/today");
@@ -18,7 +18,7 @@ export function useTodayTasks() {
 }
 
 export function useUpcoming() {
-  return useQuery<TaskWithCategory[]>({
+  return useQuery<TaskWithTags[]>({
     queryKey: ["tasks", "upcoming"],
     queryFn: async () => {
       const response = await axios.get("/api/tasks/upcoming");
@@ -30,7 +30,7 @@ export function useUpcoming() {
 }
 
 export function useInbox() {
-  return useQuery<TaskWithCategory[]>({
+  return useQuery<TaskWithTags[]>({
     queryKey: ["tasks", "inbox"],
     queryFn: async () => {
       const response = await axios.get("/api/tasks/inbox");

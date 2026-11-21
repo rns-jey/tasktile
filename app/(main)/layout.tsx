@@ -15,7 +15,6 @@ import { TodayProvider } from "@/components/providers/TodayProvider";
 import { ScrollArea } from "@/components/ui/ScrollArea";
 import { SidebarInset, SidebarProvider } from "@/components/ui/Sidebar";
 import { getStacksWithTaskCount } from "@/lib/models/stacks/queries";
-import { getCategories, getRecentCategories } from "@/lib/queries/categories";
 import {
   dehydrate,
   HydrationBoundary,
@@ -35,14 +34,6 @@ export default async function MainLayout({
 
   const queryClient = new QueryClient();
   await Promise.all([
-    queryClient.query({
-      queryKey: ["categories"],
-      queryFn: () => getCategories(currentUser.userID),
-    }),
-    queryClient.query({
-      queryKey: ["categories", "recent"],
-      queryFn: () => getRecentCategories(currentUser.userID),
-    }),
     queryClient.query({
       queryKey: ["stacks", "list"],
       queryFn: () => getStacksWithTaskCount(currentUser.userID),

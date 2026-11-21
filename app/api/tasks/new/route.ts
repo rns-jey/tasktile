@@ -25,7 +25,7 @@ export async function POST(req: Request) {
           connect: tags.map((id) => ({ id, userId: profile.userID })),
         },
       },
-      include: { category: true },
+      include: { tags: true },
     });
 
     return NextResponse.json(task);

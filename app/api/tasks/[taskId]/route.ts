@@ -43,22 +43,20 @@ export async function PATCH(req: Request, props: { params: tParams }) {
     if (!parsed.success)
       return NextResponse.json(z.treeifyError(parsed.error), { status: 400 });
 
-    const { dueOn, ...rest } = parsed.data;
-
-    if (rest.categoryId) {
-      const owns = await db.category.findFirst({
-        where: { id: rest.categoryId, userId: profile.userID },
-      });
-      if (!owns) return new NextResponse("Invalid category", { status: 400 });
-    }
+    const { dueOn, tags, ...rest } = parsed.data;
 
     const task = await db.task.update({
       where: { id: taskId, userId: profile.userID },
       data: {
         ...rest,
-        dueOn: dueOn ? new Date(`${dueOn}T00:00:00Z`) : null,
+        ...(dueOn !== undefined && {
+          dueOn: dueOn ? new Date(`${dueOn}T00:00:00Z`) : null,
+        }),
+        ...(tags && {
+          tags: { set: tags.map((id) => ({ id, userId: profile.userID })) },
+        }),
       },
-      include: { category: true },
+      include: { stack: true, tags: true },
     });
 
     return NextResponse.json(task);

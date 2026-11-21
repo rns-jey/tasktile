@@ -21,7 +21,6 @@ model Profile {
 
   tasks Task[]
   stacks Stack[]
-  categories Category[]
   tags Tag[]
   
   createdAt DateTime @default(now())
@@ -42,9 +41,6 @@ model Task {
   stackId String?
   stack Stack? @relation(fields: [stackId], references: [id], onDelete: SetNull)
 
-  categoryId String?
-  category Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
-
   tags Tag[]
 
   completedAt DateTime?
@@ -57,23 +53,7 @@ model Task {
   @@index([userId, dueOn])
   @@index([userId, completedOn])
   @@index([userId, createdAt])
-  @@index([categoryId])
-}
-
-model Category {
-  id String @id @default(uuid())
-  name String
-  nameKey String
-  color String
-  tasks Task[]
-
-  userId String
-  user Profile @relation(fields: [userId], references: [userID])
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([userId, nameKey])
+  @@index([stackId])
 }
 
 model Stack {

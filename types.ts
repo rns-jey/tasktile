@@ -1,12 +1,8 @@
-import { Category, Stack, Task } from "./lib/generated/prisma/client";
+import { Stack, Tag, Task } from "./lib/generated/prisma/client";
 
-export type TaskWithCategory = Task & { category: Category | null } & {
+export type TaskWithTags = Task & {
+  tags: Tag[];
   stack: Stack | null;
-};
-
-export type CategoryWithCounts = Category & {
-  openCount: number;
-  closedCount: number;
 };
 
 export type CalendarDay = {

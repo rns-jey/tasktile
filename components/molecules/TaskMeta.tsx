@@ -1,10 +1,10 @@
 import { cn, formatClosedDate, formatDueOn } from "@/lib/utils";
-import { TaskWithCategory } from "@/types";
-import { Calendar, Layers, Tag } from "lucide-react";
+import { TaskWithTags } from "@/types";
+import { Calendar, Layers } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useTodayKey } from "../providers/TodayProvider";
 
-export default function TaskMeta({ task }: { task: TaskWithCategory }) {
+export default function TaskMeta({ task }: { task: TaskWithTags }) {
   const todayKey = useTodayKey();
 
   const pathname = usePathname();
@@ -31,15 +31,6 @@ export default function TaskMeta({ task }: { task: TaskWithCategory }) {
             )}
           >
             <Calendar className="size-3" /> {dateText}
-          </span>
-        )}
-
-        {task.category && (
-          <span
-            className="inline-flex items-center gap-1"
-            style={{ color: task.category.color }}
-          >
-            <Tag className="size-3" /> {task.category.name}
           </span>
         )}
       </div>

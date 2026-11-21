@@ -2,7 +2,7 @@
 
 import { useStacks } from "@/hooks/useStacks";
 import { Stack } from "@/lib/generated/prisma/client";
-import { TaskWithCategory } from "@/types";
+import { TaskWithTags } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { Check, ChevronsUpDownIcon, X } from "lucide-react";
@@ -21,7 +21,7 @@ import {
 type MoveTaskProps = {
   selectingStack: boolean;
   setSelectingStack: React.Dispatch<React.SetStateAction<boolean>>;
-  task: TaskWithCategory;
+  task: TaskWithTags;
   onMoved: () => void;
 };
 
@@ -37,7 +37,7 @@ export default function MoveTask({
 
   const queryClient = useQueryClient();
 
-  const moveTask = useMutation<TaskWithCategory, Error, Stack>({
+  const moveTask = useMutation<TaskWithTags, Error, Stack>({
     mutationFn: async (stack) => {
       const response = await axios.patch(`/api/tasks/${task.id}/move`, {
         stackId: stack.id,

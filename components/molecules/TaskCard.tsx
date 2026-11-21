@@ -2,7 +2,7 @@
 import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
-import { TaskWithCategory } from "@/types";
+import { TaskWithTags } from "@/types";
 import { useSortable } from "@dnd-kit/sortable";
 import EditTaskDrawer from "../organisms/EditTaskDrawer";
 import ToggleTask from "./ToggleTask";
@@ -19,7 +19,7 @@ const taskCardVariants = cva("flex items-center gap-3.5 hover:bg-white px-2", {
 
 type TaskCardProps = {
   priority: number;
-  task: TaskWithCategory;
+  task: TaskWithTags;
 } & VariantProps<typeof taskCardVariants>;
 
 export default function TaskCard({ task }: TaskCardProps) {

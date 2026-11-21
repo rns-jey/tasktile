@@ -6,7 +6,7 @@ import { Prisma } from "@/lib/generated/prisma/client";
 import currentProfile from "@/lib/profile";
 
 const bodySchema = z.object({
-  name: z.string().trim().min(2, "Category name is required"),
+  name: z.string().trim().min(1, "Tag name is required"),
 });
 
 export async function POST(req: Request) {
