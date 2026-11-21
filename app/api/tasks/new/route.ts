@@ -14,13 +14,16 @@ export async function POST(req: Request) {
     if (!parsed.success)
       return new NextResponse("Invalid body", { status: 400 });
 
-    const { dueOn, ...rest } = parsed.data;
+    const { dueOn, tags, ...rest } = parsed.data;
 
     const task = await db.task.create({
       data: {
         ...rest,
         userId: profile.userID,
         dueOn: dueOn ? new Date(`${dueOn}T00:00:00Z`) : null,
+        tags: {
+          connect: tags.map((id) => ({ id, userId: profile.userID })),
+        },
       },
       include: { category: true },
     });

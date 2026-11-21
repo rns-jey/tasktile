@@ -6,7 +6,7 @@ export const taskFormSchema = z.object({
   stackId: z.string().nullable(),
   categoryId: z.string().nullable(),
   dueOn: z.iso.date().nullable(),
-  tags: z.array(z.string()),
+  tags: z.array(z.string().trim().min(1)),
 });
 
 export const taskUpdateSchema = taskFormSchema.partial();

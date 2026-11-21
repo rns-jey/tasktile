@@ -13,6 +13,7 @@ import {
   InputGroupTextarea,
 } from "@/components/ui/InputGroup";
 import { useStacks } from "@/hooks/useStacks";
+import { useTags } from "@/hooks/useTags";
 import { localDay } from "@/lib/date";
 import { TaskFormValues } from "@/lib/schemas/task";
 import { TaskWithCategory } from "@/types";
@@ -44,13 +45,14 @@ export default function NewTaskForm({ form, urlStackId }: NewTaskFormProps) {
   const [tagging, setTagging] = useState(false);
 
   const { data: stacks = [] } = useStacks();
+  const { data: tags = [] } = useTags();
 
   const selectedStackId = form.watch("stackId");
   const stackLabel =
     stacks.find((s) => s.id === selectedStackId)?.name ?? "Inbox";
 
   const taskName = !form.watch("name").trim().length;
-  const tags = form.watch("tags");
+  const taskTags = form.watch("tags");
 
   const queryClient = useQueryClient();
 
@@ -74,6 +76,7 @@ export default function NewTaskForm({ form, urlStackId }: NewTaskFormProps) {
 
       const here = urlStackId ?? null;
       const name = stacks.find((s) => s.id === task.stackId)?.name ?? "Inbox";
+
       toast.success(
         task.stackId === here ? "Task created" : `Task added to ${name}`,
         {
@@ -163,7 +166,7 @@ export default function NewTaskForm({ form, urlStackId }: NewTaskFormProps) {
                   <AlignLeftIcon /> Description
                 </DropdownMenuItem>
 
-                {tags.length === 0 && (
+                {taskTags.length === 0 && (
                   <DropdownMenuItem onClick={() => setTagging(true)}>
                     <TagIcon /> Tags
                   </DropdownMenuItem>
@@ -232,7 +235,7 @@ export default function NewTaskForm({ form, urlStackId }: NewTaskFormProps) {
             )}
           />
 
-          {tags.length > 0 && (
+          {taskTags.length > 0 && (
             <Button
               type="button"
               variant="secondary"
@@ -240,7 +243,9 @@ export default function NewTaskForm({ form, urlStackId }: NewTaskFormProps) {
               onClick={() => setTagging(true)}
             >
               <TagIcon />
-              {tags.length === 1 ? tags[0] : tags.length}
+              {taskTags.length === 1
+                ? tags.find((tag) => tag.id === taskTags[0])?.name
+                : taskTags.length}
             </Button>
           )}
         </div>
